@@ -1,0 +1,9 @@
+tag,scenario,q_limit,evals,phase1,phase2,feasible,seeds_feasible,seeds_total,max_lc1_mm,max_lc1_seed,min_hard,min_hard_feasible,sigma_max_feas,qn_max_feas,eta_min_feas,numerical,model_error,binding
+qn1,A58_relaxed,1.0,4400,4400,0,0,0,10,nan,,0.18197924966377715,nan,nan,nan,nan,0,0,l_c1 < 14 мм
+qn1,A58_strict,1.0,4400,4400,0,0,0,10,nan,,0.19852646215507608,nan,nan,nan,nan,0,0,l_c1 < 14 мм
+qn1,A87_relaxed,1.0,4400,4400,0,0,0,10,nan,,0.18197924966377715,nan,nan,nan,nan,0,0,l_c1 < 14 мм
+qn1,A87_strict,1.0,4400,4400,0,0,0,10,nan,,0.19852646215507608,nan,nan,nan,nan,0,0,l_c1 < 14 мм
+qn1,B58_relaxed,1.0,4400,4400,0,0,0,10,nan,,0.1132288169115458,nan,nan,nan,nan,0,0,l_c1 < 14 мм
+qn1,B58_strict,1.0,4400,4400,0,0,0,10,nan,,0.1132288169115458,nan,nan,nan,nan,0,0,l_c1 < 14 мм
+qn1,B87_relaxed,1.0,4400,4400,0,0,0,10,nan,,0.1132288169115458,nan,nan,nan,nan,0,0,l_c1 < 14 мм
+qn1,B87_strict,1.0,4400,4400,0,0,0,10,nan,,0.1132288169115458,nan,nan,nan,nan,0,0,l_c1 < 14 мм

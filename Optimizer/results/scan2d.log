@@ -1,0 +1,11 @@
+A87_relaxed D_вт×w2: hard_min=0.173, l_max=17.71, len14=189, len+rho=0, feasible=0
+A87_relaxed w1×α1_2: hard_min=0.184, l_max=12.22, len14=0, len+rho=0, feasible=0
+A87_relaxed κ1×w1: hard_min=0.165, l_max=12.21, len14=0, len+rho=0, feasible=0
+A87_relaxed n×D_вт: hard_min=0.176, l_max=21.32, len14=245, len+rho=0, feasible=0
+A87_relaxed α1_1×α1_2: hard_min=0.187, l_max=13.22, len14=0, len+rho=0, feasible=0
+B87_relaxed D_вт×w2: hard_min=0.099, l_max=17.07, len14=187, len+rho=1, feasible=0
+B87_relaxed w1×α1_2: hard_min=0.113, l_max=13.68, len14=0, len+rho=0, feasible=0
+B87_relaxed κ1×w1: hard_min=0.106, l_max=13.64, len14=0, len+rho=0, feasible=0
+B87_relaxed n×D_вт: hard_min=0.115, l_max=20.92, len14=240, len+rho=18, feasible=0
+B87_relaxed α1_1×α1_2: hard_min=0.113, l_max=13.88, len14=0, len+rho=0, feasible=0
+сохранено: /home/jovyan/work/Turbinis-Curs/Optimizer/results/scan2d.csv, REPORT_SCAN2D.md

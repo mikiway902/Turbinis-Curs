@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import json
 import math
+import sys
 import warnings
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -31,6 +32,10 @@ warnings.filterwarnings("ignore", category=RuntimeWarning)
 ПАПКА_CYCLE = ПРОЕКТ / "Turbinis-Cycle"
 ПАПКА_РЕЗУЛЬТАТОВ = Path(__file__).resolve().parent / "results"
 ПАПКА_РЕЗУЛЬТАТОВ.mkdir(exist_ok=True)
+
+# единый источник книжных ограничений и оцифрованных рис. 18/19
+sys.path.insert(0, str(ПАПКА_CALC))
+import constraints as cs  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Исправление внешнего итератора расхода G в ячейке 16.
@@ -173,7 +178,7 @@ def cycle_point(m: Model, pi: float = 11.0, T_g: float = 1250.0, N: float = 1100
 КНИГА = {
     "D": [0.915, 0.97, 1.0], "lD": 0.26,
     "a1": [11.2, 13.8, 19.5], "w": [0.86, 0.87, 1.0],
-    "k": [1.12, 1.04, 1.02], "sigma": 285.0, "phi": 0.965, "psi": 0.95,
+    "k": [1.12, 1.04, 1.02], "sigma": 290.0, "phi": 0.965, "psi": 0.95,
 }
 
 
@@ -194,11 +199,17 @@ def _имена(cfg):
 
 def границы(cfg):
     b = {
-        "D1": (0.50, 1.00), "D2": (0.60, 1.00), "lD": (0.20, 1.0 / 3.0),
-        "a11": (9.0, 20.0), "a12": (9.0, 20.0), "a13": (10.0, 24.0),
+        # lD: широкий поиск 1/9…1/3 (таблица с. 58); книжная рекомендация
+        # последней ступени 0.25…1/3 (с. 58 и с. 87) — проверяется отдельно,
+        # но не сужает поиск.
+        "D1": (0.50, 1.00), "D2": (0.60, 1.00), "lD": (1.0 / 9.0, 1.0 / 3.0),
+        # α1: книга с. 35/73 — малые турбины 11…14°; ниже 11° не ищем
+        "a11": (11.0, 20.0), "a12": (11.0, 20.0), "a13": (11.0, 24.0),
         "w1": (0.60, 1.20), "w2": (0.60, 1.20),
-        "k1": (0.95, 1.40), "k2": (0.95, 1.30), "k3": (0.95, 1.30),
-        "sigma": (250.0, 400.0), "pi": (6.0, 18.0), "N": (80000.0, 500000.0),
+        # κ > 1 — проектное условие l_л1=l_л2 (с. 62); ниже 1.0 не ищем
+        "k1": (1.00, 1.40), "k2": (1.00, 1.30), "k3": (1.00, 1.30),
+        # σ: книга с. 57 — 120…200 обычные, ≤300 особо напряжённые; 400 не книга
+        "sigma": (120.0, 300.0), "pi": (6.0, 18.0), "N": (80000.0, 500000.0),
         "Tg": (1100.0, 1450.0),
     }
     return np.array([b[n] for n in _имена(cfg)], dtype=float)
@@ -245,6 +256,10 @@ def декодировать(x, cfg):
 # ---------------------------------------------------------------------------
 def evaluate(x, m: Model, cfg, full: bool = False) -> dict[str, Any]:
     p = декодировать(x, cfg)
+    if cfg.get("D_override"):
+        p["D"] = [float(v) for v in cfg["D_override"]]
+    if cfg.get("lD_override") is not None:
+        p["lD"] = float(cfg["lD_override"])
     c = cycle_point(m, p["pi"], p["Tg"], p["N"])
     ns = dict(m.base)
     ns["T_г_полн"] = p["Tg"]
@@ -252,6 +267,13 @@ def evaluate(x, m: Model, cfg, full: bool = False) -> dict[str, Any]:
     ns["g_охл"] = c["g_ohl"]
     ns["g_воз"] = c["g_voz"]
     exec(compile(m.code[m.param_idx], "параметры", "exec"), ns)
+    # проектные допущения, которые не должны быть «книжными» константами
+    ns["q_n"] = float(cfg.get("q_n", 0.995))
+    seal = str(cfg.get("seal_type", "honeycomb"))
+    if seal == "honeycomb":
+        ns["δ_отн"], ns["δ_мин"] = 0.005, 0.2e-3
+    else:
+        ns["δ_отн"], ns["δ_мин"] = 0.0085, 0.5e-3
     ns.update({
         "π_к": c["pi"], "p_г_полн": c["p_g"], "p_т": c["p_t"],
         "G_в": c["G"], "G_c1": c["G"] * c["g_t"],
@@ -297,7 +319,53 @@ def evaluate(x, m: Model, cfg, full: bool = False) -> dict[str, Any]:
         res["alpha1_root"] = [float(df.loc["α₁, град", "корень"]) for df in _профили(ns)]
         res["phi_ref"] = [float(v) for v in ns["решётки_df"].loc["φ уточнённый"]]
         res["psi_ref"] = [float(v) for v in ns["решётки_df"].loc["ψ уточнённый"]]
+        res["geom"] = ns.get("геом", [])
     return res
+
+
+def evaluate_sizing(m: Model, cfg: dict, full: bool = True, max_iter: int = 6, tol: float = 1e-3) -> dict[str, Any]:
+    """Новый путь: D_ср, l, D_вт — из A и l/D; D_вт = const подбирается λ_i.
+
+    cfg["lam"] — начальные l/D по ступеням; cfg["D_hub"] — цель (если None,
+    берётся среднее D_вт первой итерации). Возвращает res с полем "sizing".
+    """
+    import sizing as sz
+
+    cfg = dict(cfg)
+    cfg["geometry"] = "sizing"
+    lam = [float(v) for v in cfg.get("lam", [0.25, 0.25, 0.25])]
+    x = warm_start(cfg)
+    r = evaluate(x, m, cfg, full=full)
+    target = cfg.get("D_hub")
+    for _ in range(max_iter):
+        st = r["stages"]
+        if target is None:
+            target = sum(s["D_л"] - s["l_л"] for s in st) / len(st)
+        new_lam, D = [], []
+        for s in st:
+            A2 = s["G_л"] * s["v2"] / s["c2a"]
+            l = sz.solve_lam_for_hub(A2, target)
+            new_lam.append(l)
+            D.append(math.sqrt(A2 / (math.pi * l)))
+        D_last = D[-1]
+        cfg2 = dict(cfg)
+        cfg2["D_override"] = [d / D_last for d in D]
+        cfg2["lD_override"] = new_lam[-1]
+        r2 = evaluate(x, m, cfg2, full=full)
+        hub = [s["D_л"] - s["l_л"] for s in r2["stages"]]
+        spread = max(hub) - min(hub)
+        r, lam = r2, new_lam
+        if spread <= tol * max(hub):
+            break
+    r["sizing"] = dict(
+        lam=lam, target=target,
+        D_hub=[s["D_л"] - s["l_л"] for s in r["stages"]],
+        D_mean=[s["D_л"] for s in r["stages"]],
+        l_l=[s["l_л"] for s in r["stages"]],
+        u_c0=[0.5 * (s["u1"] + s["u2"]) / math.sqrt(2.0 * s["H0"]) for s in r["stages"]],
+        u_c0_opt=[cs.uc0_opt_from_rho(s["ρ"]) for s in r["stages"]],
+    )
+    return r
 
 
 def _профили(ns):
@@ -328,9 +396,12 @@ def validate(res: dict, cfg, full: bool = False) -> list[dict[str, Any]]:
     # геометрия и компоновка
     add("z = 3", len(st), "3", len(st) == 3, "hard")
     D = res["p"]["D"]
-    add("D1 <= D2 <= D3=1", "/".join(f"{v:.3f}" for v in D), "не убывают, D3=1",
-        D[0] <= D[1] + 1e-9 and abs(D[2] - 1.0) < 1e-9, "project",
-        max(0.0, D[0] - D[1]))
+    if cfg.get("geometry") == "sizing":
+        add("D_ср (sizing)", "/".join(f"{v:.3f}" for v in D), "из A и l/D", True, "info", 0.0)
+    else:
+        add("D1 <= D2 <= D3=1", "/".join(f"{v:.3f}" for v in D), "не убывают, D3=1",
+            D[0] <= D[1] + 1e-9 and abs(D[2] - 1.0) < 1e-9, "project",
+            max(0.0, D[0] - D[1]))
     add("l_т/D_т <= 1/3", f"{res['p']['lD']:.4f}", "<= 0.3333", res["p"]["lD"] <= 1 / 3 + 1e-9, "project",
         max(0.0, res["p"]["lD"] - 1 / 3))
 
@@ -370,13 +441,27 @@ def validate(res: dict, cfg, full: bool = False) -> list[dict[str, Any]]:
     add("σ_р max <= σ_л", f"{res['sigma_max']:.1f} МПа", f"<= {sig_dop:.0f} МПа",
         res["sigma_max"] <= sig_dop * (1.0 + 1e-4), "hard",
         max(0.0, (res["sigma_max"] - sig_dop) / sig_dop))
-    add("u_т <= 400 м/с", f"{res['u_t']:.1f} м/с", "<= 400", res["u_t"] <= 400.0 + 1e-9, "hard",
-        max(0.0, (res["u_t"] - 400.0) / 400.0))
+    lD = res["p"]["lD"]
+    # с. 59: 300…400 обычные; 400…450 при коротких лопатках. Порог l/D<1/6 — проектное допущение.
+    u_max = float(L.get("u_max_short", 450.0)) if lD < 1 / 6 else float(L.get("u_max", 400.0))
+    add("u_т <= u_max (с. 59)", f"{res['u_t']:.1f} м/с", f"<= {u_max:.0f}",
+        res["u_t"] <= u_max + 1e-9, "hard", max(0.0, (res["u_t"] - u_max) / u_max))
+
+    # нижняя граница l_т/D_т: с. 58 даёт 1/4…1/3,5; с. 87 п. 45 — 1/3,5…1/3.
+    add("l_т/D_т >= 0.25 (с. 58)", f"{lD:.4f}", ">= 0.25", lD >= 0.25 - 1e-9,
+        "recommendation", max(0.0, (0.25 - lD) / 0.25))
+    # σ_л: с. 57 — 120…200 обычные, ≤300 особо напряжённые; 400 МПа книгой не подтверждено
+    add("σ_л <= 300 МПа (с. 57)", f"{sig_dop:.0f} МПа", "<= 300", sig_dop <= 300.0 + 1e-9,
+        "project", max(0.0, (sig_dop - 300.0) / 300.0))
+    # n < n_max: q_n = sqrt(σ_р_max/σ_л); при q_n=0.995 запас ≈1 % по напряжениям
+    q_n_eff = math.sqrt(max(res["sigma_max"], 0.0) / sig_dop) if sig_dop > 0 else 1.0
+    add("n < n_max (q_n)", f"q_n = {q_n_eff:.3f}", "< 1", q_n_eff < 1.0 - 1e-9, "hard",
+        max(0.0, q_n_eff - 1.0))
 
     # длины лопаток
     lengths = [v for pair in zip(res["lc"], res["ll"]) for v in pair]
-    ok_len = all(b >= a - 1e-12 for a, b in zip(lengths, lengths[1:]))
-    add("длины лопаток не убывают", " -> ".join(f"{v*1e3:.1f}" for v in lengths), "не убывают", ok_len,
+    ok_len = all(b >= a * 0.999 for a, b in zip(lengths, lengths[1:]))  # 0.1 % — сходимость G/A_т
+    add("длины лопаток не убывают", " -> ".join(f"{v*1e3:.1f}" for v in lengths), "не убывают (0.1 % — сходимость)", ok_len,
         "project", 0.0 if ok_len else 0.1)
     add("l_с1 >= 14 мм (проект)", f"{res['lc1']*1e3:.2f} мм", ">= 14 мм", res["lc1"] >= 0.014 - 1e-12, "project",
         max(0.0, (0.014 - res["lc1"]) / 0.014))
@@ -409,9 +494,10 @@ def validate(res: dict, cfg, full: bool = False) -> list[dict[str, Any]]:
     if full:
         add("γ <= 25°", f"{res.get('gamma_max', 0):.1f}°", "<= 25°", res.get("gamma_max", 0) <= 25.0,
             "hard", max(0.0, (res.get("gamma_max", 0) - 25.0) / 25.0))
+        rmin = float(L.get("rho_root_min", 0.05))
         for i, v in enumerate(res.get("rho_root", []), 1):
-            add(f"ρ корня ст.{i} >= 0.05", f"{v:.3f}", ">= 0.05", v >= 0.05, "hard",
-                max(0.0, (0.05 - v) / 0.05))
+            add(f"ρ корня ст.{i} >= {rmin:g}", f"{v:.3f}", f">= {rmin:g}", v >= rmin,
+                "hard", max(0.0, (rmin - v) / rmin))
         for i, v in enumerate(res.get("lambda_c1", []), 1):
             add(f"λ_c1 ст.{i} <= 1.05", f"{v:.3f}", "<= 1.05", v <= 1.05, "hard",
                 max(0.0, (v - 1.05) / 1.05))
@@ -419,11 +505,65 @@ def validate(res: dict, cfg, full: bool = False) -> list[dict[str, Any]]:
         for i, v in enumerate(res.get("alpha1_root", []), 1):
             add(f"α1 у корня ст.{i} >= 11°", f"{v:.2f}°", ">= 11°", v >= 11.0 - 1e-9, "hard",
                 max(0.0, (11.0 - v) / 11.0))
+
+    # --- единый модуль constraints: геометрия, рис. 18/19, φ/ψ, δ ---
+    rho_root_all = res.get("rho_root") or []
+    phi_ref_all = res.get("phi_ref") or []
+    psi_ref_all = res.get("psi_ref") or []
+    for i, s in enumerate(st):
+        u_sr = 0.5 * (s["u1"] + s["u2"])
+        norm = dict(
+            D_c=s["D_c"], D_l=s["D_л"], l_c=s["l_c"], l_l=s["l_л"],
+            alpha1=s["α1"], alpha2=s["α2"], pi=s["π_ст"], sigma=s["σ_р"],
+            sigma_allow=sig_dop, u=u_sr, rho=s["ρ"],
+            rho_root=(rho_root_all[i] if i < len(rho_root_all) else None),
+            x_uc0=u_sr / math.sqrt(2.0 * s["H0"]) if s["H0"] > 0 else None,
+            x_uc1=u_sr / s["c1"] if s["c1"] > 0 else None,
+            eta_u=s["η_u"], delta=s.get("δ_л"),
+            phi=res["p"]["phi"], psi=res["p"]["psi"],
+            phi_ref=(phi_ref_all[i] if i < len(phi_ref_all) else None),
+            psi_ref=(psi_ref_all[i] if i < len(psi_ref_all) else None),
+            last=(i == len(st) - 1), lD=(s["l_л"] / s["D_л"] if s["D_л"] else None),
+        )
+        for chk in cs.stage_checks(norm, cfg):
+            if chk["key"].startswith(("geom_", "uc0_", "uc1_", "eta_u_")) or \
+               chk["key"] in ("phi_ref", "psi_ref", "delta_abs", "delta_rel"):
+                c.append(chk)
+
+    # l/b_a и b_a — из геометрии венцов (яч. 22); в DE (full=False) недоступны
+    geom = res.get("geom") or []
+    if geom:
+        for i, (s, g) in enumerate(zip(st, geom), 1):
+            lbc = s["l_c"] / g["b_c"]
+            lbl = s["l_л"] / g["b_л"]
+            add(f"l/b_a СА ст.{i}", f"{lbc:.2f}", "1.0…2.5",
+                1.0 - 1e-9 <= lbc <= 2.5 + 1e-9, "recommendation",
+                _interval_amount(lbc, 1.0, 2.5))
+            add(f"l/b_a РК ст.{i}", f"{lbl:.2f}", "1.5…3.0",
+                1.5 - 1e-9 <= lbl <= 3.0 + 1e-9, "recommendation",
+                _interval_amount(lbl, 1.5, 3.0))
+            add(f"b_a СА ст.{i} >= 5 мм", f"{g['b_c']*1e3:.1f} мм", ">= 5 мм",
+                g["b_c"] >= 0.005 - 1e-12, "project",
+                max(0.0, (0.005 - g["b_c"]) / 0.005))
+            add(f"b_a РК ст.{i} >= 5 мм", f"{g['b_л']*1e3:.1f} мм", ">= 5 мм",
+                g["b_л"] >= 0.005 - 1e-12, "project",
+                max(0.0, (0.005 - g["b_л"]) / 0.005))
+    else:
+        c.append(dict(name="l/b_a, b_a_min", value="нет в полном расчёте (full=False)",
+                      limit="NOT_CHECKED", ok=True, kind="info", amount=0.0,
+                      status="not_checked", source="[1] с. 61", page=61,
+                      note="проверяется при full=True; в DE не считается"))
+    k = res["p"]["k"]
+    c.append(dict(name="κ = c2a/c1a", value="/".join(f"{v:.2f}" for v in k),
+                  limit=">1 — частный случай l_л1=l_л2", ok=all(v > 1.0 for v in k),
+                  kind="info", amount=0.0, status="book_recommendation",
+                  source="[1] с. 62", page=62,
+                  note="в модели D_c=D_л; κ>1 не является универсальным требованием"))
     return c
 
 
 def penalty(checks, res, cfg) -> float:
-    w = {"hard": 1000.0, "project": 100.0, "target": 1.0, "info": 0.0}
+    w = {"hard": 1000.0, "project": 100.0, "recommendation": 1.0, "target": 1.0, "info": 0.0}
     p = sum(w[c["kind"]] * c["amount"] for c in checks if not c["ok"])
     p += 1.0 * max(0.0, 1.0 - res["lc1"] / cfg.get("lc1_target", 0.020))
     p += 0.2 * max(0.0, 1.0 - res["eta"] / cfg.get("eta_target", 0.90))
