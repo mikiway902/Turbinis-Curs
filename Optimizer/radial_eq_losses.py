@@ -54,14 +54,20 @@ def book_p(st, law, R, φ, r):
     return p0 * (1 - (c1 / φ) ** 2 / (2 * cp * T0)) ** (k / (k - 1))
 
 
-def solve(st, n, law, R, φ, npts=401):
+def solve(st, n, law, R, φ, npts=401, closure="M1"):
     r_c = st["D_c"] / 2
     r = np.linspace(r_c - 0.5 * st["l_c"], r_c + 0.5 * st["l_c"], npts)
     u, cu, ca, c1, T = fields(st, n, law, R, φ, r)
     # энтропия: h_c/T, h_c — потери СА по действующей модели
-    hc = (1 / φ ** 2 - 1) * c1 ** 2 / 2
-    s = hc / T
-    dsdr = np.gradient(s, r)
+    dsdr = np.zeros_like(r)              # M0: s = const (изоэнтропический контроль)
+    if closure == "M2":
+        hc = (1 / φ ** 2 - 1) * ca ** 2 / 2   # потери по осевому напору
+        s = hc / T
+        dsdr = np.gradient(s, r)
+    elif closure == "M1":
+        hc = (1 / φ ** 2 - 1) * c1 ** 2 / 2   # потери по полному напору
+        s = hc / T
+        dsdr = np.gradient(s, r)
     dlnp = cu ** 2 / (R * T * r) - dsdr / R
     mid = npts // 2
     integ = np.concatenate(([0.0], np.cumsum(0.5 * (dlnp[1:] + dlnp[:-1]) * np.diff(r))))
@@ -87,6 +93,7 @@ def solve(st, n, law, R, φ, npts=401):
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--law1", default="Γ", choices=["Γ", "α1"])
+    ap.add_argument("--closure", default="M1", choices=["M0", "M1", "M2"])
     args = ap.parse_args()
     m = oc.load_model()
     ns, _ = oe.build_ns(m, 0.995, 0.995 ** 2 * oe.SIGMA_LIM)
@@ -106,8 +113,8 @@ def main() -> None:
     laws = [args.law1, "α1", "Γ"]
     rows = []
     for i, (s_, law) in enumerate(zip(st, laws), 1):
-        d = solve(s_, x[0], law, R, φ)
-        rows.append(dict(stage=i, law=law,
+        d = solve(s_, x[0], law, R, φ, closure=args.closure)
+        rows.append(dict(stage=i, law=law, closure=args.closure,
                          G_book=d["G_book"], G_loss=d["G_loss"], G_stage=s_["G_c"],
                          eps_book=d["G_book"] / s_["G_c"] - 1,
                          eps_loss=d["G_loss"] / s_["G_c"] - 1,
