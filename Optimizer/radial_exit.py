@@ -63,9 +63,11 @@ def rotor_exit(st, n, law, R, φ, npts=401):
     dp = np.gradient(p2, r2)
     dsdr = np.gradient(s2, r2)
     eq = dp - rho2 * (cu2 ** 2 / r2 - T2 * dsdr)
+    # невязка нормируется на max|dp| по всему сечению: поточечное деление
+    # взрывается там, где dp/dr проходит через ноль
     return dict(G=G, G_stage=st["G_л"],
                 eps_G=G / st["G_л"] - 1,
-                eq_rel=float(np.max(np.abs(eq) / np.maximum(np.abs(dp), 1e-9))),
+                eq_rel=float(np.max(np.abs(eq)) / max(float(np.max(np.abs(dp))), 1e-9)),
                 rho_hub=float(rho2[0]), rho_tip=float(rho2[-1]),
                 p_hub=float(p2[0]), p_tip=float(p2[-1]),
                 T_hub=float(T2[0]), T_tip=float(T2[-1]),
