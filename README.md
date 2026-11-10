@@ -29,12 +29,19 @@ averaged. Only the user promotes an equation from `EXPERIMENTAL` to `ACCEPTED`.
 
 | Path | Role |
 |---|---|
-| `turbine/` | new calculation core; currently `radial/` (equilibrium, entropy budget, rotor-exit) with package placeholders elsewhere |
-| `turbine/radial/equilibrium.py` | accepted static-pressure radial equilibrium |
+| `turbine_engine/` | new extracted calculation package: stateless single-point cycle (`cycle.py`), gas properties (`gas.py`), scalar meanline stage (`stage.py`), root reaction relation (`reaction.py`), constant-hub three-stage orchestration (`orchestration.py`), turbine expansion iteration and preliminary sizing (`expansion.py`), meridional flowpath geometry (`geometry.py`), turbine aggregate performance (`performance.py`), the conventional multi-stage patched cell-16 baseline (`baseline.py`), and opt-in explicit 0D reference cycles for the three selected architectures (`architecture_cycle.py`); the architecture cycles are not physical validation and the package is not a 3D model |
+| `turbine_engine/README.md` | package scope, provenance, and current limitations |
 | `Turbinis-Cycle/Turbinis-Cycle.ipynb` | cycle boundary conditions: flow, pressure ratio, temperatures, power |
 | `Turbinis-Calc/Main_Turbinis_Calc_Book.ipynb` | legacy `book_approx` meanline, reproducible until each equation is migrated |
 | `Optimizer/` | search and diagnostics that must call the shared core; owns no private copies of physical equations |
 | `reference/baselines/` | frozen JSON baselines (`BOOK-APPROX-001`, `RADIAL-ANALYTIC-001`) |
+
+The extracted package now includes an opt-in explicit 0D reference cycle for
+each of the three selected architectures, but it does not include the accepted
+static-pressure radial-equilibrium implementation, full stage/meanline
+architecture closure, or 3D validation. Those authority/implementation paths
+are absent from this checkout; the verifier reports their absence as a warning,
+not as completed work.
 
 `Optimizer/` and the notebooks remain `book_approx`; they are not closed
 three-dimensional physics.
@@ -43,7 +50,26 @@ three-dimensional physics.
 
 ```bash
 python scripts/verify.py
+python -m unittest discover -s scripts -p "test_*.py" -v
+python -m unittest discover -s turbine_engine/tests -p "test_*.py" -v
 ```
+
+The `scripts` suite covers the verifier and existing regression anchors; the
+`turbine_engine` suite covers the extracted cycle, gas, stage, reaction,
+const-hub orchestration, turbine expansion/sizing, meridional flowpath
+geometry, turbine aggregate-performance modules, and the conventional
+multi-stage cell-16 baseline. These tests check repository structure and
+software-drift anchors only; they do not run an optimizer search or establish
+calculation correctness.
+
+`turbine_engine/baseline.py` copies the *currently executed patched* notebook
+cell 16, including its stable-flow reset wrapper `_N_of(G)`, iteration limits,
+tolerances, clamps, failure handling, stage sequence and iteration log. It
+changes no equations or physical assumptions. `_evaluate(stage_core=True)`
+skips the notebook cell and installs the module outputs; the cell's pandas
+presentation tables and `display` calls are omitted on that path.
+`_evaluate(stage_core=False)` still executes the patched notebook cell in full
+as the independent comparison path.
 
 In the project container:
 
@@ -55,9 +81,74 @@ podman exec -i -w /home/jovyan/work/Turbinis-Curs jupyter \
 `--allow-baseline-changes` exists for setup/review only; it is never an
 approval of changed physics.
 
+## Python environment
+
+`pyproject.toml` is the dependency manifest. It does not make this repository
+an importable package: the source tree uses hyphenated directories and
+path-based imports, so no package or CLI entry point is declared.
+
+Runtime dependencies for the calculation and optimizer core:
+
+- Python 3.10 or newer (developed and checked with 3.12).
+- `numpy` (`Optimizer/`, `Turbinis-Calc/constraints.py`).
+- `scipy` (`Optimizer/optimizer_core.py`, `Optimizer/optimize_extended.py`,
+  `Optimizer/rotor_exit_solve.py`, `Turbinis-Calc/constraints.py`).
+- `pandas` (`Optimizer/optimizer_core.py` and the JSON/CSV helper scripts).
+
+Optional groups:
+
+| Group | Packages | Needed for |
+|---|---|---|
+| `plot` | `matplotlib` | `Optimizer/scan2d.py`, `Optimizer/stage6.py`, and notebook plots |
+| `notebook` | `jupyterlab`, `nbconvert`, `ipykernel`, `openpyxl`, `jinja2`, `matplotlib` | executing the notebooks; `openpyxl` is used by the workbook export and `jinja2` by pandas `Styler` |
+| `digitize` | `Pillow` | `Turbinis-Calc/plot_user_digitization.py` |
+| `parquet` | `pyarrow>=14` | streaming RAW Parquet export; JSONL remains available without it |
+| `jax` | `jax>=0.12` | optional float64 kernel validation; see `docs/BACKENDS.md` |
+
+The validated CUDA path uses the user-local WSL2 environment described in
+`docs/BACKENDS.md`, not the Windows CPU-only JAX install.
+
+Windows PowerShell:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -e ".[plot,notebook]"
+```
+
+Linux/macOS:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e ".[plot,notebook]"
+```
+
+If you prefer not to install the metadata-only project, install the libraries
+directly:
+
+```bash
+python -m pip install numpy scipy pandas matplotlib
+python -m pip install jupyterlab nbconvert ipykernel openpyxl jinja2
+```
+
+The documented dependency set was installed in the repository-local `.venv` on
+Windows with Python 3.12.10. The calculation dependencies resolved to NumPy
+2.5.4, SciPy 1.18.1, and pandas 3.1.1. No lock file is checked in, so fresh
+installs may resolve different versions; notebook execution has not yet been
+validated end to end.
+
 ## Model status
 
-- Static-pressure radial equilibrium: `ACCEPTED`.
+- Architecture-specific 0D cycles: `REFERENCE` only. `turbine_engine/architecture_cycle.py`
+  closes the explicit uncooled/no-bleed variant for single-shaft single-CC,
+  single-shaft dual-CC and free-power-turbine topologies, including the
+  GG -> FPT total-state transfer and pre-reducer power sizing. It is not
+  physically validated and does not supply compressor maps, blading, stage
+  inventory, cooling, gear ratio, or propeller load.
+- Static-pressure radial equilibrium: `ACCEPTED` as a governing relation, but
+  its implementation (`turbine_engine/radial/equilibrium.py`) is absent from
+  this checkout.
 - Equivalent thermodynamic and general radial residuals: `ACCEPTED` as
   independent implementations (they are not extra momentum terms).
 - Rotor energy relation and coupled rotor-exit system B: `EXPERIMENTAL`;

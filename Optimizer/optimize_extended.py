@@ -32,6 +32,7 @@ sys.path.insert(0, str(ROOT / "Optimizer"))
 sys.path.insert(0, str(ROOT / "Turbinis-Calc"))
 import optimizer_core as oc  # noqa: E402
 import constraints as cs  # noqa: E402
+from turbine_engine.orchestration import build_const_hub_orchestration  # noqa: E402
 
 RESULTS = Path(__file__).resolve().parent / "results"
 RESULTS.mkdir(exist_ok=True)
@@ -40,6 +41,9 @@ SIGMA_LIM = 300.0
 LC1_MIN = 0.014
 N_TARGET = 110e3
 U_MAX = 400.0
+# Отсутствие необязательной диагностики рис. 18 не делает точку лучше:
+# в soft-ранжировании такие точки штрафуются консервативно.
+SOFT_MISSING_DIAGNOSTIC_PENALTY = 1e3
 
 SCENARIOS = {
     "A87_strict":  dict(a2=[(70, 90), (70, 90), (80, 90)], lD=(None, 1 / 3.5)),
@@ -79,9 +83,71 @@ def _линейно(x, xp, fp):
     return (fp[i + 1] - fp[i]) / (xp[i + 1] - xp[i]) * (x - xp[i]) + fp[i]
 
 
+def _graph_diagnostic(rho: float) -> tuple[float | None, str, str]:
+    """Необязательный оптимум (u/c0) по рис. 18 без экстраполяции.
+
+    Выход за оцифрованный диапазон ρ — это ``NOT_CHECKED``, а не отказ
+    физического расчёта. Неожиданные ошибки не перехватываются: они должны
+    остаться видимыми, а уже посчитанная физика — сохраниться вызывающим кодом.
+    """
+
+    try:
+        return float(cs.uc0_opt_from_rho(rho)), "ok", ""
+    except ValueError as exc:
+        return None, "NOT_CHECKED", str(exc)
+
+
+def _const_hub_provenance(st: list[dict], requested_a1) -> dict:
+    """Запрошенные и фактические параметры const-hub кандидата.
+
+    ``ρ`` здесь не вход, а результат внутренней итерации; ``α1`` передаётся
+    явно. Ветка не запускает ячейку-14 ``ступень_авто``, поэтому её инженерные
+    подборы ρ/α1 не приписываются этому результату. При этом const-hub сам
+    является инженерным замыканием, а не подтверждением RAW.
+    """
+
+    actual_a1 = [float(s["α1"]) for s in st]
+    actual_rho = [float(s["ρ"]) for s in st]
+    return {
+        "model_variant": "extended_const_hub",
+        "a1_requested": [float(v) for v in requested_a1],
+        "a1_actual": actual_a1,
+        "rho_requested": None,
+        "rho_actual": actual_rho,
+        "engineering_adjustment": {
+            "active": False,
+            "legacy_cell14_repair": False,
+            "model_construction": ["const_hub_reaction_fixed_point"],
+            "mechanisms": [],
+            "requested": {"a1": [float(v) for v in requested_a1], "rho": None},
+            "actual": {"a1": actual_a1, "rho": actual_rho},
+            "note": (
+                "ρ получен внутренней итерацией const-hub, а не входом; "
+                "ячейка-14 ступень_авто здесь не используется. "
+                "Это не утверждение о полном RAW."
+            ),
+        },
+    }
+
+
 def build_ns(m: oc.Model, q_n_limit: float = 0.995, sigma_lim: float = SIGMA_LIM,
-             fast: bool = True) -> tuple[dict, dict]:
-    """Пространство имён модели + функции const-hub из блокнота."""
+             fast: bool = True, orchestration_core: bool = True) -> tuple[dict, dict]:
+    """Пространство имён модели + функции const-hub.
+
+    ``orchestration_core=True`` (по умолчанию) сразу после исполнения
+    исходных ячеек подменяет четыре физические функции их извлечёнными
+    адаптерами: ``газ``/``H0_по_p`` (ячейка 7), ``ступень`` (ячейка 12) и
+    ``ρ_корня`` (ячейка 14). Следующие ячейки (16 и 20) читают подменённые
+    определения из пространства имён так же, как в
+    ``optimizer_core._evaluate(stage_core=True)``. Дополнительно заменяются
+    три функции ``ступень_const_hub`` / ``турбина_const_hub`` /
+    ``распределить_π_const_hub`` на извлечённую реализацию
+    ``turbine_engine.orchestration``. Ячейка блокнота всё равно исполняется:
+    её ``ρ_таблица`` используется извлечённой реализацией, а при
+    ``orchestration_core=False`` её определения остаются независимым
+    эталоном (никаких подмен). Верхний семиточечный перебор ``D_hub`` из
+    ячейки в обоих случаях исключён (источник обрезается до ``rows = []``).
+    """
     c = oc.cycle_point(m, 11.0, 1250.0, 110e3)
     ns = dict(m.base)
     ns["T_г_полн"] = 1250.0
@@ -109,8 +175,35 @@ def build_ns(m: oc.Model, q_n_limit: float = 0.995, sigma_lim: float = SIGMA_LIM
     ns.update({"D_ст": [0.67, 1.0, 1.0], "l_т_D_т": 0.250586,
                "α1_ст": [11.0, 11.0, 19.0], "π_веса": [0.91, 0.89, 1.0],
                "κ_ст": [1.38, 1.12, 1.15], "φ": 0.97, "ψ": 0.96})
+    gas_cell = stage_cell = reaction_cell = None
+    if orchestration_core:
+        # семантические маркеры — те же, что в optimizer_core._evaluate
+        gas_cell = next(
+            (i for i in m.core_idx
+             if "def газ(" in m.code[i] and "def H0_по_p(" in m.code[i]),
+            None,
+        )
+        stage_cell = next((i for i in m.core_idx if "def ступень(" in m.code[i]), None)
+        reaction_cell = next(
+            (i for i in m.core_idx if "def ρ_корня(" in m.code[i]), None
+        )
+        if gas_cell is None:
+            raise RuntimeError("notebook gas cell (cell 7) not found in core_idx")
+        if stage_cell is None:
+            raise RuntimeError("notebook stage cell not found in core_idx")
+        if reaction_cell is None:
+            raise RuntimeError("notebook root-reaction cell (cell 14) not found in core_idx")
     for i in m.core_idx:
         exec(compile(m.code[i], f"ядро {i}", "exec"), ns)
+        # те же адаптеры и тот же порядок, что в _evaluate(stage_core=True):
+        # ячейки 16/20 дальше видят уже подменённые определения
+        if orchestration_core and i == gas_cell:
+            ns["газ"] = oc._газ_ядро(ns)
+            ns["H0_по_p"] = oc._h0_по_p_ядро(ns)
+        if orchestration_core and i == stage_cell:
+            ns["ступень"] = oc._ступень_ядро(ns)
+        if orchestration_core and i == reaction_cell:
+            ns["ρ_корня"] = oc._ρ_корня_ядро(ns)
     # базовый расход — из цикла, не из старого G-фита
     ns["G_в"] = c["G"]
     ns["G_c1"] = c["G"] * c["g_t"]
@@ -131,6 +224,16 @@ def build_ns(m: oc.Model, q_n_limit: float = 0.995, sigma_lim: float = SIGMA_LIM
         ns["газ"] = lru_cache(maxsize=8192)(ns["газ"])
         ns["cp_k_ступени"] = lru_cache(maxsize=8192)(ns["cp_k_ступени"])
         ns["H0_по_p"] = lru_cache(maxsize=8192)(ns["H0_по_p"])
+    if orchestration_core:
+        # те же формулы/порядок/допуски; зависимости читаются из ns на каждом
+        # вызове, поэтому π_веса/α1_ст/κ_ст/G_* и подменённый ступень видны
+        # ровно так же, как у блокнотных функций.
+        orchestration = build_const_hub_orchestration(
+            ns,
+            interp=_линейно if fast else np.interp,
+            clip=np.clip,
+        )
+        orchestration.install()
     return ns, c
 
 
@@ -142,17 +245,22 @@ def eval_candidate(x, ns: dict, scenario: str, q_n_limit: float, soft: bool = Fa
     ns["π_веса"] = [w1, w2, 1.0]
     ns["α1_ст"] = [a11, a12, a13]
     ns["κ_ст"] = [k1, k2, k3]
+    requested_a1 = (a11, a12, a13)
+    st: list[dict] | None = None
+    opt: list[float | None] = []
+    opt_status: list[str] = []
+    opt_reason: list[str] = []
     try:
         # каждый кандидат — от фиксированного расхода цикла, не от предыдущего
         baseG = tuple(ns["G_base"]) if "G_base" in ns else (ns["G_в"], ns["G_c1"], ns["G_л_ост"])
-        st = None
-        # масштабирование расхода до N=110 кВт; сходимся, а не фиксированные 4 шага
+        # масштабирование расхода до N=110 кВт на входе редуктора
+        # (η_р не входит в целевую плоскость)
         converged = False
         for _ in range(20):
             ns["G_в"], ns["G_c1"], ns["G_л_ост"] = baseG
             _, st = ns["распределить_π_const_hub"](n, Dh, ns["π_т"] ** (1 / ns["z"]))
             N = (sum(s["G_c"] * s["L_т"] for s in st) * ns["η_м"]
-                 - ns["G_в"] * ns["L_к"]) * ns["η_р"]
+                 - ns["G_в"] * ns["L_к"])
             if not np.isfinite(N) or N <= 0:
                 raise FloatingPointError(f"N={N}")
             if abs(N / N_TARGET - 1.0) < 1e-12:
@@ -164,7 +272,7 @@ def eval_candidate(x, ns: dict, scenario: str, q_n_limit: float, soft: bool = Fa
             ns["G_в"], ns["G_c1"], ns["G_л_ост"] = baseG
             _, st = ns["распределить_π_const_hub"](n, Dh, ns["π_т"] ** (1 / ns["z"]))
             N = (sum(s["G_c"] * s["L_т"] for s in st) * ns["η_м"]
-                 - ns["G_в"] * ns["L_к"]) * ns["η_р"]
+                 - ns["G_в"] * ns["L_к"])
         lc1 = st[0]["l_c"]
         a2 = [s["α2"] for s in st]
         sig_all = [s["σ_р"] for s in st]
@@ -187,8 +295,19 @@ def eval_candidate(x, ns: dict, scenario: str, q_n_limit: float, soft: bool = Fa
         eta_below = max(0.0, 0.90 - eta_t) / 0.90
         eta_ok = bool(eta_t >= 0.90 - 1e-9)
         uc0 = [0.5 * (s["u1"] + s["u2"]) / math.sqrt(2 * s["H0"]) for s in st]
-        opt = [cs.uc0_opt_from_rho(s["ρ"]) for s in st]
-        uc_dev = [abs(v / o - 1.0) for v, o in zip(uc0, opt)]
+        opt = []
+        opt_status = []
+        opt_reason = []
+        for s in st:
+            value, status, reason = _graph_diagnostic(s["ρ"])
+            opt.append(value)
+            opt_status.append(status)
+            opt_reason.append(reason)
+        uc_dev = [
+            (abs(v / o - 1.0) if o is not None else None)
+            for v, o in zip(uc0, opt)
+        ]
+        missing_opt = [i for i, value in enumerate(opt) if value is None]
         rho_cp = [s["ρ"] for s in st]
         rho_pen = sum(max(0.0, 0.30 - r) / 0.30 + max(0.0, r - 0.35) / 0.35 for r in rho_cp)
         # корневая реактивность — только α1=const (ст.1/2); ст.3 Γ — NOT_CHECKED
@@ -205,9 +324,11 @@ def eval_candidate(x, ns: dict, scenario: str, q_n_limit: float, soft: bool = Fa
             en.append(abs(s["L_u"] - s["cp"] * (s["T0"] - T2p)) / max(abs(s["L_u"]), 1e-9))
         en_max = max(en)
         p2z = abs(st[-1]["p2"] / ns["p_т"] - 1.0)
-        # NaN-защита: все критические величины должны быть конечными
+        # NaN-защита: критические физические величины должны быть конечными.
+        # Необязательная диагностика uc0_opt сюда не входит: её отсутствие —
+        # NOT_CHECKED, а не физический/численный отказ.
         crit = [lc1, sig, u, lD, qn, qn_sigma, N, cont, en_max, p2z, eta_t,
-                *a2, *rho_cp, *rho_root, *uc0, *opt]
+                *a2, *rho_cp, *rho_root, *uc0]
         if not all(np.isfinite(v) for v in crit):
             bad = [name for name, v in zip(
                 ["lc1", "sig", "u", "lD", "qn", "qn_sigma", "N", "cont", "en", "p2z", "eta_t"],
@@ -218,9 +339,14 @@ def eval_candidate(x, ns: dict, scenario: str, q_n_limit: float, soft: bool = Fa
                         lc1=float("nan"), a2=[float("nan")] * 3, sigma=float("nan"),
                         u=float("nan"), lD=float("nan"), qn=float("nan"), N=float("nan"),
                         eta_t=float("nan"), eta_ok=False, eta_below=float("nan"),
-                        uc0=[], uc0_opt=[], rho=[], rho_root=[], cont=float("nan"),
+                        uc0=[], uc0_opt=opt, rho=[], rho_root=[], cont=float("nan"),
                         energy=float("nan"), p2z=float("nan"), violations=[],
-                        hard_max=1e9, violation_count=0)
+                        hard_max=1e9, violation_count=0,
+                        stages=[dict(s) for s in st],
+                        uc0_opt_status=opt_status,
+                        uc0_opt_reason=opt_reason,
+                        scoring_status="not_scored",
+                        **_const_hub_provenance(st, requested_a1))
         # нарушения: имя, значение, предел, нормированная величина
         violations = []
 
@@ -247,7 +373,7 @@ def eval_candidate(x, ns: dict, scenario: str, q_n_limit: float, soft: bool = Fa
         if u > U_MAX:
             vadd("u > 400 м/с", u, "<=400", (u - U_MAX) / U_MAX)
         if abs(N / N_TARGET - 1.0) > 1e-4:
-            vadd("N != 110 кВт", N / 1e3, "110 кВт", abs(N / N_TARGET - 1.0))
+            vadd("N != 110 кВт (вход редуктора)", N / 1e3, "110 кВт", abs(N / N_TARGET - 1.0))
         if p2z > 1e-6:
             vadd("p2z != p_т", p2z, "<=1e-6", p2z)
         if cont > 1e-6:
@@ -268,8 +394,16 @@ def eval_candidate(x, ns: dict, scenario: str, q_n_limit: float, soft: bool = Fa
         # u/c0 и ρ_ср — диагностика; в цель входят только с --soft.
         score2 = (1e6 * hard + 1e6 * eta_below
                   + 1.0 * (1.0 - lc1 / 0.020))
+        scoring_status = "ok"
+        score2_soft_applied = False
         if soft:
-            score2 += 1.0 * sum(uc_dev) + 0.2 * rho_pen
+            score2_soft_applied = True
+            score2 += 1.0 * sum(d for d in uc_dev if d is not None) + 0.2 * rho_pen
+            if missing_opt:
+                # Не превращаем отсутствие диагностики в хороший soft-балл:
+                # такие точки не должны выигрывать условное ранжирование.
+                score2 += SOFT_MISSING_DIAGNOSTIC_PENALTY * len(missing_opt)
+                scoring_status = "unavailable_diagnostic"
         return dict(
             score=score1, score1=float(score1), score2=float(score2),
             feasible=bool(hard <= 1e-9), hard=float(hard), hard_max=float(hard),
@@ -281,6 +415,13 @@ def eval_candidate(x, ns: dict, scenario: str, q_n_limit: float, soft: bool = Fa
             uc0=uc0, uc0_opt=opt, rho=rho_cp, rho_root=rho_root,
             cont=cont, energy=en_max, p2z=p2z,
             violations=violations, err="",
+            stages=[dict(s) for s in st],
+            uc0_opt_status=opt_status,
+            uc0_opt_reason=opt_reason,
+            uc0_opt_missing=missing_opt,
+            scoring_status=scoring_status,
+            soft_score_applied=score2_soft_applied,
+            **_const_hub_provenance(st, requested_a1),
         )
     except Exception as e:  # noqa: BLE001
         return dict(score=1e9, score1=1e9, score2=1e9, feasible=False, hard=1e9,
@@ -289,9 +430,14 @@ def eval_candidate(x, ns: dict, scenario: str, q_n_limit: float, soft: bool = Fa
                     lc1=float("nan"), a2=[float("nan")] * 3, sigma=float("nan"),
                     u=float("nan"), lD=float("nan"), qn=float("nan"), N=float("nan"),
                     eta_t=float("nan"), eta_ok=False, eta_below=float("nan"),
-                    uc0=[], uc0_opt=[], rho=[], rho_root=[], cont=float("nan"),
+                    uc0=[], uc0_opt=opt, rho=[], rho_root=[], cont=float("nan"),
                     energy=float("nan"), p2z=float("nan"), violations=[],
-                    hard_max=1e9, violation_count=0)
+                    hard_max=1e9, violation_count=0,
+                    stages=[dict(s) for s in (st or [])],
+                    uc0_opt_status=opt_status,
+                    uc0_opt_reason=opt_reason,
+                    scoring_status="not_scored",
+                    **_const_hub_provenance(st or [], requested_a1))
 
 
 def run_scenario(m, scenario: str, seeds: int, maxiter: int, popsize: int,
@@ -406,7 +552,9 @@ def main():
                     "n", "D_hub", "w1", "w2", "a1", "k", "lc1", "a2", "sigma",
                     "u", "lD", "qn", "N", "eta_t", "eta_ok", "eta_below",
                     "uc0", "uc0_opt", "rho", "rho_root", "cont", "energy", "p2z",
-                    "violations", "err", "x"])
+                    "violations", "err", "x", "model_variant", "a1_requested",
+                    "a1_actual", "rho_actual", "uc0_opt_status", "uc0_opt_reason",
+                    "scoring_status", "stages"])
         for r in all_rows:
             xstr = ";".join(f"{v:.17g}" for v in r.get("x", []))
             w.writerow([
@@ -421,6 +569,11 @@ def main():
                 r["cont"], r["energy"], r["p2z"],
                 "; ".join(f"{v['name']}:{v['amount']:.3f}" for v in r.get("violations", [])),
                 r["err"], xstr,
+                r.get("model_variant", ""),
+                r.get("a1_requested", ""), r.get("a1_actual", ""),
+                r.get("rho_actual", ""), r.get("uc0_opt_status", ""),
+                r.get("uc0_opt_reason", ""), r.get("scoring_status", ""),
+                json.dumps(r.get("stages", []), ensure_ascii=False, default=float),
             ])
     print(f"\nсохранено: {out}")
 

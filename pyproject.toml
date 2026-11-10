@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "turbinis-curs"
+version = "0.1.0"
+description = "Engineering study and optimizer for a three-stage TPE331-class turbine"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "scipy",
+    "pandas",
+]
+
+[project.optional-dependencies]
+plot = [
+    "matplotlib",
+]
+notebook = [
+    "ipykernel",
+    "jinja2",
+    "jupyterlab",
+    "matplotlib",
+    "nbconvert",
+    "openpyxl",
+]
+digitize = [
+    "Pillow",
+]
+parquet = [
+    "pyarrow>=14",
+]
+jax = [
+    "jax>=0.12",
+]
+
+# The source tree is not an importable package: modules live in hyphenated
+# directories and add their own paths with sys.path. This metadata installs
+# dependencies only, so no console entry points are declared.
+[tool.setuptools]
+packages = []
+py-modules = []
