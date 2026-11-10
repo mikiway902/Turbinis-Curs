@@ -1,0 +1,832 @@
+{
+  "case": {
+    "label": "EXPERIMENTAL clearance variant, explicit user-requested diagnostic",
+    "delta_rel": 0.003,
+    "delta_min_m": 0.00015,
+    "legacy_delta_rel": 0.005,
+    "legacy_delta_min_m": 0.0002,
+    "applied_delta_rule": "max(delta_rel*l_RK, delta_min)",
+    "crossover_m_relative_branch": 0.049999999999999996,
+    "legacy_crossover_m_relative_branch": 0.04,
+    "explicit_user_request": true,
+    "diagnostic_entry_point_only": true,
+    "global_default_migrated": false
+  },
+  "control_point": {
+    "x": [
+      90000.0,
+      0.062,
+      0.7,
+      0.8125,
+      13.10000000000003,
+      20.0,
+      23.0,
+      1.012439470328332,
+      1.04375,
+      1.25
+    ],
+    "n_rpm": 90000.0,
+    "D_hub_m": 0.062,
+    "w1": 0.7,
+    "w2": 0.8125,
+    "alpha1_stage1_deg": 13.10000000000003,
+    "scenario": "A87_relaxed",
+    "q_n_limit": 0.995,
+    "power_target_W": 110000.0,
+    "power_tolerance_relative": 1e-10,
+    "fixed_controls_not_fixed_solution": true
+  },
+  "model_classification": {
+    "applied_gap": "SOFTWARE ASSUMPTION: user-prescribed 0.003 / 0.15 mm; not a verified manufacturing limit",
+    "hz_correlation": "EMPIRICAL CORRELATION / EXPERIMENTAL: Main_Turbinis_Calc_Book points 113-115, formula unchanged; applicability and uncertainty not verified",
+    "friction_loss_and_energy_coupling": "EXPERIMENTAL legacy book_approx",
+    "ideal_gas_state": "ACCEPTED",
+    "new_unknowns": 0,
+    "new_equations": 0,
+    "new_solver": false
+  },
+  "frozen": {
+    "stages": [
+      {
+        "inputs": {
+          "T0": 1250.0,
+          "p0": 1048333.44,
+          "H0": 218593.9645642716,
+          "ρ": 0.3051174352827479,
+          "D_c": 0.07319649716899385,
+          "D_л": 0.07478269560502816,
+          "G_c": 0.6454104119416648,
+          "G_л": 0.6454104119416648,
+          "α1": 13.10000000000003,
+          "n_rpm": 90000.0,
+          "κ": 1.012439470328332
+        },
+        "old": {
+          "delta_m": 0.0002,
+          "hz_J_kg": 7272.952184968058,
+          "l_rotor_m": 0.01278269622409513,
+          "T1_K": 1128.4889811790695,
+          "T2_K": 1077.5660961613316,
+          "L_u_J_kg": 194408.14477404466,
+          "alpha1_deg": 13.10000000000003,
+          "alpha2_deg": 71.1104056729226
+        },
+        "new": {
+          "delta_m": 0.00015,
+          "hz_J_kg": 5454.714138726043,
+          "l_rotor_m": 0.01278269622409513,
+          "T1_K": 1128.4889811790695,
+          "T2_K": 1077.5660961613316,
+          "L_u_J_kg": 194408.14477404466,
+          "alpha1_deg": 13.10000000000003,
+          "alpha2_deg": 71.1104056729226
+        },
+        "ratio": 0.7499999999999999,
+        "floor_branch": true,
+        "local_fields_unchanged": true
+      },
+      {
+        "inputs": {
+          "T0": 1091.5218902616073,
+          "p0": 554457.7759489063,
+          "H0": 218205.5187367684,
+          "ρ": 0.3299787508064839,
+          "D_c": 0.07477087906276741,
+          "D_л": 0.07669935072232364,
+          "G_c": 0.6512521789556384,
+          "G_л": 0.6512521789556384,
+          "α1": 20.000000000000004,
+          "n_rpm": 90000.0,
+          "κ": 1.04375
+        },
+        "old": {
+          "delta_m": 0.0002,
+          "hz_J_kg": 6264.454030174572,
+          "l_rotor_m": 0.014699351529292297,
+          "T1_K": 971.0972921080715,
+          "T2_K": 914.5547093853257,
+          "L_u_J_kg": 184196.11120621837,
+          "alpha1_deg": 20.000000000000007,
+          "alpha2_deg": 81.1589461052588
+        },
+        "new": {
+          "delta_m": 0.00015,
+          "hz_J_kg": 4698.340522630929,
+          "l_rotor_m": 0.014699351529292297,
+          "T1_K": 971.0972921080715,
+          "T2_K": 914.5547093853257,
+          "L_u_J_kg": 184196.11120621837,
+          "alpha1_deg": 20.000000000000007,
+          "alpha2_deg": 81.1589461052588
+        },
+        "ratio": 0.75,
+        "floor_branch": true,
+        "local_fields_unchanged": true
+      },
+      {
+        "inputs": {
+          "T0": 936.1676588821869,
+          "p0": 272587.5805826244,
+          "H0": 224677.56742710248,
+          "ρ": 0.3993843450333858,
+          "D_c": 0.08121776196582337,
+          "D_л": 0.08261015627444096,
+          "G_c": 0.6512521789556384,
+          "G_л": 0.6512521789556384,
+          "α1": 23.0,
+          "n_rpm": 90000.0,
+          "κ": 1.25
+        },
+        "old": {
+          "delta_m": 0.0002,
+          "hz_J_kg": 4858.051701391585,
+          "l_rotor_m": 0.02061015771684235,
+          "T1_K": 821.6192543391921,
+          "T2_K": 748.1356671896829,
+          "L_u_J_kg": 178131.96122420338,
+          "alpha1_deg": 23.0,
+          "alpha2_deg": 89.6428215764997
+        },
+        "new": {
+          "delta_m": 0.00015,
+          "hz_J_kg": 3643.538776043688,
+          "l_rotor_m": 0.02061015771684235,
+          "T1_K": 821.6192543391921,
+          "T2_K": 748.1356671896829,
+          "L_u_J_kg": 178131.96122420338,
+          "alpha1_deg": 23.0,
+          "alpha2_deg": 89.6428215764997
+        },
+        "ratio": 0.7499999999999998,
+        "floor_branch": true,
+        "local_fields_unchanged": true
+      }
+    ],
+    "all_unchanged": true,
+    "max_ratio_error": 1.1102230246251565e-16
+  },
+  "meanline": {
+    "old": {
+      "x": [
+        90000.0,
+        0.062,
+        0.7,
+        0.8125,
+        13.10000000000003,
+        20.0,
+        23.0,
+        1.012439470328332,
+        1.04375,
+        1.25
+      ],
+      "stage_inputs": [
+        {
+          "T0": 1250.0,
+          "p0": 1048333.44,
+          "H0": 218593.9645642716,
+          "ρ": 0.3051174352827479,
+          "D_c": 0.07319649716899385,
+          "D_л": 0.07478269560502816,
+          "G_c": 0.6454104119416648,
+          "G_л": 0.6454104119416648,
+          "α1": 13.10000000000003,
+          "n_rpm": 90000.0,
+          "κ": 1.012439470328332
+        },
+        {
+          "T0": 1091.5218902616073,
+          "p0": 554457.7759489063,
+          "H0": 218205.5187367684,
+          "ρ": 0.3299787508064839,
+          "D_c": 0.07477087906276741,
+          "D_л": 0.07669935072232364,
+          "G_c": 0.6512521789556384,
+          "G_л": 0.6512521789556384,
+          "α1": 20.000000000000004,
+          "n_rpm": 90000.0,
+          "κ": 1.04375
+        },
+        {
+          "T0": 936.1676588821869,
+          "p0": 272587.5805826244,
+          "H0": 224677.56742710248,
+          "ρ": 0.3993843450333858,
+          "D_c": 0.08121776196582337,
+          "D_л": 0.08261015627444096,
+          "G_c": 0.6512521789556384,
+          "G_л": 0.6512521789556384,
+          "α1": 23.0,
+          "n_rpm": 90000.0,
+          "κ": 1.25
+        }
+      ],
+      "N_W": 110000.00000004198,
+      "N_rel": 3.816946758661288e-13,
+      "eta_t": 0.9043496331127326,
+      "eta_ok": true,
+      "G_air_kg_s": 0.6490852237748447,
+      "G_stator_kg_s": [
+        0.6454104119416648,
+        0.6512521789556384,
+        0.6512521789556384
+      ],
+      "G_rotor_kg_s": [
+        0.6454104119416648,
+        0.6512521789556384,
+        0.6512521789556384
+      ],
+      "heights_m": [
+        0.01278269622409513,
+        0.014699351529292299,
+        0.02061015771684235
+      ],
+      "delta_m": [
+        0.0002,
+        0.0002,
+        0.0002
+      ],
+      "hz_J_kg": [
+        7272.952184968058,
+        6264.454030174573,
+        4858.051701391585
+      ],
+      "L_u_J_kg": [
+        194408.14477404466,
+        184196.1112062184,
+        178131.96122420338
+      ],
+      "L_t_J_kg": [
+        186400.3272517637,
+        177462.11613376203,
+        172903.21692466846
+      ],
+      "T0_K": [
+        1250.0,
+        1091.5218902616073,
+        936.1676588821869
+      ],
+      "p0_Pa": [
+        1048333.44,
+        554457.7759489063,
+        272587.5805826244
+      ],
+      "T1_K": [
+        1128.4889811790695,
+        971.0972921080715,
+        821.6192543391921
+      ],
+      "p1_Pa": [
+        670931.142875466,
+        337738.0333802974,
+        159279.5180510919
+      ],
+      "T2_K": [
+        1077.5660961613316,
+        914.5547093853257,
+        748.1356671896829
+      ],
+      "p2_Pa": [
+        542505.7849637904,
+        258103.47325844187,
+        106365.00000000514
+      ],
+      "p_static_heated_Pa": [
+        542505.7849637904,
+        258103.47325844187,
+        106365.00000000514
+      ],
+      "T_static_heated_K": [
+        1084.374366311775,
+        920.4497964686203,
+        752.852892490504
+      ],
+      "rho_static_heated_kg_m3": [
+        1.7407578693013197,
+        0.9756790481355063,
+        0.49158866149263886
+      ],
+      "mass_static_heated_signed_rel_error": [
+        -0.0062785236925142485,
+        -0.006404572097154393,
+        -0.006265799531188776
+      ],
+      "T_total_heated_K": [
+        1091.5218902616073,
+        936.1676588821869,
+        780.1792642033786
+      ],
+      "p_total_heated_Pa": [
+        557289.9047332535,
+        276071.3508081964,
+        122044.46550046254
+      ],
+      "alpha1_deg": [
+        13.10000000000003,
+        20.000000000000004,
+        23.0
+      ],
+      "alpha2_deg": [
+        71.1104056729226,
+        81.15894610525879,
+        89.6428215764997
+      ],
+      "strict_alpha2": true,
+      "sigma_max_MPa": 294.617515757728,
+      "q_n": 0.9909885901760389,
+      "u_max_m_s": 389.2911900955327,
+      "u_mean_m_s": 363.85717260748476,
+      "residual_mass_unheated": 2.8881969408932865e-16,
+      "residual_energy_unheated": 8.982287390446619e-16,
+      "residual_p2z": 4.8183679268731794e-14,
+      "eval_feasible": false,
+      "eval_violations": [
+        "l_c1 < 14 мм:0.20025",
+        "ρ_корня_1 < 0.05:0.042813"
+      ],
+      "rho_root_stages_1_2": [
+        0.04785935247014139,
+        0.06730415825678615
+      ]
+    },
+    "new": {
+      "x": [
+        90000.0,
+        0.062,
+        0.7,
+        0.8125,
+        13.10000000000003,
+        20.0,
+        23.0,
+        1.012439470328332,
+        1.04375,
+        1.25
+      ],
+      "stage_inputs": [
+        {
+          "T0": 1250.0,
+          "p0": 1048333.44,
+          "H0": 218635.73094706383,
+          "ρ": 0.30199436006846614,
+          "D_c": 0.07300354185900328,
+          "D_л": 0.07454867690437507,
+          "G_c": 0.6330157827619669,
+          "G_л": 0.6330157827619669,
+          "α1": 13.100000000000028,
+          "n_rpm": 90000.0,
+          "κ": 1.012439470328332
+        },
+        {
+          "T0": 1090.0552165410684,
+          "p0": 554463.0144389453,
+          "H0": 217948.15816820486,
+          "ρ": 0.3264553906399657,
+          "D_c": 0.07454781049889425,
+          "D_л": 0.07642176771838663,
+          "G_c": 0.6387453629649552,
+          "G_л": 0.6387453629649552,
+          "α1": 19.999999999999996,
+          "n_rpm": 90000.0,
+          "κ": 1.04375
+        },
+        {
+          "T0": 933.6098083606433,
+          "p0": 272640.83295964345,
+          "H0": 224093.0256712196,
+          "ρ": 0.3949706823728722,
+          "D_c": 0.08088681392222508,
+          "D_л": 0.08220728163267393,
+          "G_c": 0.6387453629649552,
+          "G_л": 0.6387453629649552,
+          "α1": 22.999999999999996,
+          "n_rpm": 90000.0,
+          "κ": 1.25
+        }
+      ],
+      "N_W": 109999.9999999397,
+      "N_rel": -5.482281295599023e-13,
+      "eta_t": 0.9105622809428977,
+      "eta_ok": true,
+      "G_air_kg_s": 0.6366200225542643,
+      "G_stator_kg_s": [
+        0.6330157827619669,
+        0.6387453629649552,
+        0.6387453629649552
+      ],
+      "G_rotor_kg_s": [
+        0.6330157827619669,
+        0.6387453629649552,
+        0.6387453629649552
+      ],
+      "heights_m": [
+        0.01254867783076701,
+        0.014421768394864951,
+        0.020207282917649186
+      ],
+      "delta_m": [
+        0.00015,
+        0.00015,
+        0.00015
+      ],
+      "hz_J_kg": [
+        5524.568404943163,
+        4750.9409863697865,
+        3674.720470642305
+      ],
+      "L_u_J_kg": [
+        194387.19656553198,
+        183884.86692970985,
+        177446.76003466238
+      ],
+      "L_t_J_kg": [
+        188124.84224659667,
+        178662.99496009308,
+        173402.08977364562
+      ],
+      "T0_K": [
+        1250.0,
+        1090.0552165410684,
+        933.6098083606433
+      ],
+      "p0_Pa": [
+        1048333.44,
+        554463.0144389453,
+        272640.83295964345
+      ],
+      "T1_K": [
+        1127.9191707496125,
+        969.1092896170923,
+        818.4683943183617
+      ],
+      "p1_Pa": [
+        669449.7329855859,
+        336772.29756703007,
+        158621.84872570605
+      ],
+      "T2_K": [
+        1077.5452920028313,
+        913.2604657484225,
+        745.9838737392892
+      ],
+      "p2_Pa": [
+        542431.6096015056,
+        258064.95049985303,
+        106365.00000000348
+      ],
+      "p_static_heated_Pa": [
+        542431.6096015056,
+        258064.95049985303,
+        106365.00000000348
+      ],
+      "T_static_heated_K": [
+        1082.8695803505248,
+        917.8329732894222,
+        749.6344922533452
+      ],
+      "rho_static_heated_kg_m3": [
+        1.7429385353903806,
+        0.9783147572383962,
+        0.4936991954676311
+      ],
+      "mass_static_heated_signed_rel_error": [
+        -0.004916832501629664,
+        -0.004981851463248255,
+        -0.00486986464974748
+      ],
+      "T_total_heated_K": [
+        1090.0552165410684,
+        933.6098083606433,
+        777.1014063272592
+      ],
+      "p_total_heated_Pa": [
+        557314.1544906022,
+        276147.22112873563,
+        122192.89840941134
+      ],
+      "alpha1_deg": [
+        13.100000000000028,
+        19.999999999999996,
+        22.999999999999996
+      ],
+      "alpha2_deg": [
+        71.056933385073,
+        81.26546800107451,
+        89.86927270882944
+      ],
+      "strict_alpha2": true,
+      "sigma_max_MPa": 287.44980195910006,
+      "q_n": 0.978859543821448,
+      "u_max_m_s": 387.39268807319337,
+      "u_mean_m_s": 362.5522741925013,
+      "residual_mass_unheated": 1.4756470103149385e-16,
+      "residual_energy_unheated": 6.560577482744362e-16,
+      "residual_p2z": 3.26405569239796e-14,
+      "eval_feasible": false,
+      "eval_violations": [
+        "l_c1 < 14 мм:0.214033",
+        "ρ_корня_1 < 0.05:0.032843"
+      ],
+      "rho_root_stages_1_2": [
+        0.04835785227038447,
+        0.06733383896997747
+      ]
+    }
+  },
+  "comparison": {
+    "eta_old": 0.9043496331127326,
+    "eta_new": 0.9105622809428977,
+    "delta_abs": 0.006212647830165063,
+    "delta_points": 0.6212647830165063,
+    "delta_rel_pct": 0.6869741085404613,
+    "power_old_kW": 110.00000000004198,
+    "power_new_kW": 109.9999999999397
+  },
+  "protected": {
+    "before": {
+      "Mathcad_ST_cooling_Jupyter.ipynb": "095c31129b88d0f21b1e4b058ca7213416fd979074607a47a367815bd3b6161f",
+      "Anton-Mathcad_ST_cooling_Jupyter (2).ipynb": "6804c290b2f243e6b0f47458145c3cbef3ccbd324442df82f4e658805bc0c651",
+      "Sergey-TVD_pi6_sequential.ipynb": "f24d18fa4928c30fda67057ae2ef65dc9f57f94633c72115e2e55d172c295352",
+      "Turbinis-Cycle/Turbinis-Cycle.ipynb": "e0fa542d7d2b5f02c01a926a24ffe9b0eb96e93ff7e85cb4823fd03a65f7f34a",
+      "Turbinis-Calc/Main_Turbinis_Calc_Book.ipynb": "494c97d4acf8fafa14e196aeb874d0cd7eab362f934b93290845f2aea2375728",
+      "Optimizer/optimize_extended.py": "85677873bb2f9344a83a58abf70ffd245ebbe9f3c0b4bac1766aa89a9f2cce53",
+      "Optimizer/optimizer_core.py": "b5d8226a18dd011d2544c4968491b19b6a74046062463901ada4d71e1c9ac7b4",
+      "Optimizer/rotor_exit_coupled.py": "75879e2b4aa7baca0df34badff44e85775d4cb2d1431225538c912c001498df6",
+      "turbine/radial/__init__.py": "c447dd0d95c8a8474a43c551f83d1946777647b35c17e579057df630063ca8f7",
+      "turbine/radial/entropy_budget.py": "dd99114a864aae7179f16a20e4e0c5364ac56ef737a1bd68b4f6adf5a651191c",
+      "turbine/radial/equilibrium.py": "381bfa2d9b13cf565eae7f7c90bf3770aef96e04604d467fc35aaae899d16eaf",
+      "turbine/radial/rotor_exit.py": "aed63962802750313d43f3930c4a97723539955ecf45ef515887008810564c64",
+      "reference/baselines/book_approx_control_001.json": "0db0e5e0275e08d806cc03839111337a4be80647d8284a51a31f8314a1359af9",
+      "reference/baselines/radial_analytic_001.json": "70c8dadb051aa1e623256cb6525fd1c8f20c2ff0c37ae7595d3d3f04cb03a7c4",
+      "Optimizer/results/stage6b45b_entropy_audit.json": "3426ce0e92e68380961a64261070e29119a6aa552b2da51b69fe06e0883b1ab9",
+      "Optimizer/results/stage6b45b_entropy_audit.md": "46ff5a472d084f7a6d4a5b2383c7e834c16e50870cad424bd99737f99a6e5624",
+      "Optimizer/results/stage6b45b_report.md": "b57575f96e28c71320e6ad09673b554835a039cf053b767905f38580534e2c35",
+      "Optimizer/results/stage6b45b_results.json": "0430003a53023174d80f3eff260df9eb6a0981a4f51863c9d854371e9e72beb1",
+      "Optimizer/results/stage6b45b_runs.csv": "4d3ade1c6715f327ec4f1e6ee722e6b66db914510c58902c9fc016cd3b3b39db",
+      "Optimizer/results/stage6b45b_stage_summary.csv": "189acfbf19accd88cd8a236e8662ad4435df3c3ae954db966324d7373bb6d1a2"
+    },
+    "after": {
+      "Mathcad_ST_cooling_Jupyter.ipynb": "095c31129b88d0f21b1e4b058ca7213416fd979074607a47a367815bd3b6161f",
+      "Anton-Mathcad_ST_cooling_Jupyter (2).ipynb": "6804c290b2f243e6b0f47458145c3cbef3ccbd324442df82f4e658805bc0c651",
+      "Sergey-TVD_pi6_sequential.ipynb": "f24d18fa4928c30fda67057ae2ef65dc9f57f94633c72115e2e55d172c295352",
+      "Turbinis-Cycle/Turbinis-Cycle.ipynb": "e0fa542d7d2b5f02c01a926a24ffe9b0eb96e93ff7e85cb4823fd03a65f7f34a",
+      "Turbinis-Calc/Main_Turbinis_Calc_Book.ipynb": "494c97d4acf8fafa14e196aeb874d0cd7eab362f934b93290845f2aea2375728",
+      "Optimizer/optimize_extended.py": "85677873bb2f9344a83a58abf70ffd245ebbe9f3c0b4bac1766aa89a9f2cce53",
+      "Optimizer/optimizer_core.py": "b5d8226a18dd011d2544c4968491b19b6a74046062463901ada4d71e1c9ac7b4",
+      "Optimizer/rotor_exit_coupled.py": "75879e2b4aa7baca0df34badff44e85775d4cb2d1431225538c912c001498df6",
+      "turbine/radial/__init__.py": "c447dd0d95c8a8474a43c551f83d1946777647b35c17e579057df630063ca8f7",
+      "turbine/radial/entropy_budget.py": "dd99114a864aae7179f16a20e4e0c5364ac56ef737a1bd68b4f6adf5a651191c",
+      "turbine/radial/equilibrium.py": "381bfa2d9b13cf565eae7f7c90bf3770aef96e04604d467fc35aaae899d16eaf",
+      "turbine/radial/rotor_exit.py": "aed63962802750313d43f3930c4a97723539955ecf45ef515887008810564c64",
+      "reference/baselines/book_approx_control_001.json": "0db0e5e0275e08d806cc03839111337a4be80647d8284a51a31f8314a1359af9",
+      "reference/baselines/radial_analytic_001.json": "70c8dadb051aa1e623256cb6525fd1c8f20c2ff0c37ae7595d3d3f04cb03a7c4",
+      "Optimizer/results/stage6b45b_entropy_audit.json": "3426ce0e92e68380961a64261070e29119a6aa552b2da51b69fe06e0883b1ab9",
+      "Optimizer/results/stage6b45b_entropy_audit.md": "46ff5a472d084f7a6d4a5b2383c7e834c16e50870cad424bd99737f99a6e5624",
+      "Optimizer/results/stage6b45b_report.md": "b57575f96e28c71320e6ad09673b554835a039cf053b767905f38580534e2c35",
+      "Optimizer/results/stage6b45b_results.json": "0430003a53023174d80f3eff260df9eb6a0981a4f51863c9d854371e9e72beb1",
+      "Optimizer/results/stage6b45b_runs.csv": "4d3ade1c6715f327ec4f1e6ee722e6b66db914510c58902c9fc016cd3b3b39db",
+      "Optimizer/results/stage6b45b_stage_summary.csv": "189acfbf19accd88cd8a236e8662ad4435df3c3ae954db966324d7373bb6d1a2"
+    }
+  },
+  "rho_root_method": {
+    "method": "approximate_geometry_exponent_estimate",
+    "source": "Optimizer/optimize_extended.py:194-199 -> rho_root = 1 - (1-rho) * (D_c/(D_c-l_c))**(2*cos(alpha1)**2)",
+    "assumption": "alpha1 = const on stages 1-2; D_c and l_c from meanline geometry; geometric exponent estimate, not a radial field",
+    "not_a_radial_profile": true,
+    "same_as_baseline": false,
+    "baseline_id": "BOOK-APPROX-001",
+    "baseline_stored_first_two_rounded": [
+      0.0609,
+      0.0673
+    ],
+    "baseline_changed": false,
+    "note": "Stage-1 estimate differs from the law-specific baseline diagnostic 0.0609 (stage 2 agrees to 0.0673). Values are reported as-is, never averaged or substituted; the physical model and the baseline are unchanged."
+  },
+  "engineering": {
+    "pass": false,
+    "status": "EXPERIMENTAL - not accepted design evidence",
+    "reasons": [
+      "Category E is not satisfied at this control point: l_RK1 < 16 mm and root reaction 1 < 0.05",
+      "the 0.003 / 0.15 mm gap is a user software assumption, not a thermal or mechanical approval",
+      "radial closure, stage-3 root reaction and stator-exit closure are not validated"
+    ],
+    "standard_verifier_baseline_gate": "FAIL in this working tree (reference/ untracked); verify.py not rerun here",
+    "verified_claim": false
+  },
+  "not_checked": [
+    "stage-3 root reaction is NOT_CHECKED (the estimate covers stages 1-2 only and is not a radial profile)",
+    "stator exit closure and stator radial fields are NOT_CHECKED",
+    "radial closure and mesh refinement (801-point grid) were not rerun for this case",
+    "multiple starts of any radial solver were not performed",
+    "material, temperature-dependent strength, creep/resource, thermal stress and cooling are NOT_CHECKED",
+    "thermal and mechanical approval of the 0.15 mm minimum gap, and life/durability, are NOT_CHECKED",
+    "full Category E feasibility cannot pass at this control point",
+    "no optimization, geometry search or real blade profile was performed"
+  ],
+  "provenance": {
+    "python": "3.11.10",
+    "python_full": "3.11.10 | packaged by conda-forge | (main, Oct 16 2024, 01:27:36) [GCC 13.3.0]",
+    "numpy": "2.0.2",
+    "scipy": "1.14.1",
+    "platform": "Linux-7.2.15-300.fc45.x86_64-x86_64-with-glibc2.39",
+    "machine": "x86_64"
+  },
+  "checks": [
+    {
+      "name": "power_old",
+      "pass": true,
+      "detail": "N_rel=3.817e-13; from N_W=3.817e-13",
+      "limit": "<=1e-10"
+    },
+    {
+      "name": "power_new",
+      "pass": true,
+      "detail": "N_rel=-5.482e-13; from N_W=-5.482e-13",
+      "limit": "<=1e-10"
+    },
+    {
+      "name": "frozen_hz_ratio_expected",
+      "pass": true,
+      "detail": "max|ratio-expected|=1.110e-16; expected 0.75 on the floor branch",
+      "limit": "<=1e-12"
+    },
+    {
+      "name": "frozen_delta_prescribed",
+      "pass": true,
+      "detail": "old 0.2 mm, new 0.15 mm at current heights; declared floor branch matches",
+      "limit": ""
+    },
+    {
+      "name": "frozen_local_fields_unchanged",
+      "pass": true,
+      "detail": "T1, T2, L_u, alpha1, alpha2 identical in both namespaces",
+      "limit": ""
+    },
+    {
+      "name": "frozen_inputs_match_meanline",
+      "pass": true,
+      "detail": "frozen rows reproduce the raw old stage inputs and their local fields",
+      "limit": ""
+    },
+    {
+      "name": "same_control_point_x",
+      "pass": true,
+      "detail": "one fixed x for both cases",
+      "limit": ""
+    },
+    {
+      "name": "finite_positive_fields",
+      "pass": true,
+      "detail": "all reported inputs/outputs finite and positive",
+      "limit": ""
+    },
+    {
+      "name": "protected_hashes_unchanged",
+      "pass": true,
+      "detail": "20 protected files",
+      "limit": ""
+    }
+  ],
+  "constraints": [
+    {
+      "name": "old: N=110 kW",
+      "pass": true,
+      "detail": "110.000000000 kW",
+      "limit": ""
+    },
+    {
+      "name": "old: alpha2 strict",
+      "pass": true,
+      "detail": "71.11041, 81.15895, 89.64282",
+      "limit": "70..90,70..90,80..90"
+    },
+    {
+      "name": "old: sigma<=300 MPa",
+      "pass": true,
+      "detail": "294.617516 MPa",
+      "limit": ""
+    },
+    {
+      "name": "old: q_n<=0.995",
+      "pass": true,
+      "detail": "0.990988590 (linked to sigma, not independent)",
+      "limit": ""
+    },
+    {
+      "name": "old: u<=400 m/s",
+      "pass": true,
+      "detail": "389.291190 m/s",
+      "limit": ""
+    },
+    {
+      "name": "old: eta_t>=0.90",
+      "pass": true,
+      "detail": "0.904349633",
+      "limit": ""
+    },
+    {
+      "name": "old: l_rk1>=16 mm",
+      "pass": false,
+      "detail": "12.782696 mm",
+      "limit": ""
+    },
+    {
+      "name": "old: heights increasing",
+      "pass": true,
+      "detail": "12.782696, 14.699352, 20.610158 mm",
+      "limit": ""
+    },
+    {
+      "name": "old: rho_root_1>=0.05 (approximate geometry exponent estimate)",
+      "pass": false,
+      "detail": "0.047859",
+      "limit": ""
+    },
+    {
+      "name": "old: rho_root_2>=0.05 (approximate geometry exponent estimate)",
+      "pass": true,
+      "detail": "0.067304",
+      "limit": ""
+    },
+    {
+      "name": "old: existing eval_candidate feasible",
+      "pass": false,
+      "detail": "l_c1 < 14 мм:0.20025; ρ_корня_1 < 0.05:0.042813",
+      "limit": ""
+    },
+    {
+      "name": "new: N=110 kW",
+      "pass": true,
+      "detail": "110.000000000 kW",
+      "limit": ""
+    },
+    {
+      "name": "new: alpha2 strict",
+      "pass": true,
+      "detail": "71.05693, 81.26547, 89.86927",
+      "limit": "70..90,70..90,80..90"
+    },
+    {
+      "name": "new: sigma<=300 MPa",
+      "pass": true,
+      "detail": "287.449802 MPa",
+      "limit": ""
+    },
+    {
+      "name": "new: q_n<=0.995",
+      "pass": true,
+      "detail": "0.978859544 (linked to sigma, not independent)",
+      "limit": ""
+    },
+    {
+      "name": "new: u<=400 m/s",
+      "pass": true,
+      "detail": "387.392688 m/s",
+      "limit": ""
+    },
+    {
+      "name": "new: eta_t>=0.90",
+      "pass": true,
+      "detail": "0.910562281",
+      "limit": ""
+    },
+    {
+      "name": "new: l_rk1>=16 mm",
+      "pass": false,
+      "detail": "12.548678 mm",
+      "limit": ""
+    },
+    {
+      "name": "new: heights increasing",
+      "pass": true,
+      "detail": "12.548678, 14.421768, 20.207283 mm",
+      "limit": ""
+    },
+    {
+      "name": "new: rho_root_1>=0.05 (approximate geometry exponent estimate)",
+      "pass": false,
+      "detail": "0.048358",
+      "limit": ""
+    },
+    {
+      "name": "new: rho_root_2>=0.05 (approximate geometry exponent estimate)",
+      "pass": true,
+      "detail": "0.067334",
+      "limit": ""
+    },
+    {
+      "name": "new: existing eval_candidate feasible",
+      "pass": false,
+      "detail": "l_c1 < 14 мм:0.214033; ρ_корня_1 < 0.05:0.032843",
+      "limit": ""
+    }
+  ],
+  "feasible": false,
+  "classification": {
+    "software_pass": true,
+    "problems": [],
+    "diagnostic_checks_pass": true,
+    "engineering_pass": false,
+    "engineering_status": "EXPERIMENTAL - not accepted design evidence",
+    "scope": "diagnostic project checks only; not a full Category E acceptance",
+    "verified_claim": false
+  }
+}

@@ -4,6 +4,7 @@
 и сравнение с Turbinis-Cycle."""
 import json
 import math
+import os
 import sys
 import types
 
@@ -17,7 +18,7 @@ sys.modules.setdefault("numpy", np)
 CELLS = [4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 33]
 
 
-def load(path='../_compare/TVD_pi6.ipynb'):
+def load(path=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'TVD_pi6.ipynb')):
     nb = json.load(open(path, encoding='utf-8'))
     ns = {'__name__': 'tvd6', 'math': math, 'np': np}
     for i in CELLS[:10]:

@@ -109,7 +109,7 @@
 На общей точке расхождение 1.0 % (`C_e`) и 0.6 п.п. (`η_e`), но `T*т` расходится на **42 К**.
 В точке блокнота расхождение больше (4.6 %) — там сказываются `η_т = 0.9` и остаточная скорость.
 
-![C_e(π*к) для двух моделей при T*г = 1440 и 1250 К](_compare/CE_vs_pi.png)
+![C_e(π*к) для двух моделей при T*г = 1440 и 1250 К](../../archive/comparisons/legacy_workbench/CE_vs_pi.png)
 
 ---
 
@@ -230,13 +230,13 @@ Mathcad делит турбину на две: ТГГ (работа из бал�
 
 | Файл | Что делает |
 |---|---|
-| `_compare/xmcd2txt.py` | разбирает `.xmcd` (Mathcad 14 XML) в читаемый текст вместе с сохранёнными результатами |
-| `_compare/mathcad_750kW_T1440.xmcd` | копия присланного файла (750 кВт, 1440 К — версия, отличная от `Turbinis-Calc/…xmcd`) |
-| `_compare/att.txt` | результат разбора присланного файла (389 областей) |
-| `_compare/compare.py` | две модели (Mathcad и блокнот) + проверка по сохранённым числам |
-| `_compare/run.py` | таблицы §2, §3, пофакторная атрибуция |
-| `_compare/fix.py` | вариант с исправленной `c_p` (§5.1) |
-| `_compare/chart.py` | график `C_e(π*к)` |
+| `archive/comparisons/legacy_workbench/xmcd2txt.py` | разбирает `.xmcd` (Mathcad 14 XML) в читаемый текст вместе с сохранёнными результатами |
+| `archive/comparisons/legacy_workbench/mathcad_750kW_T1440.xmcd` | копия присланного файла (750 кВт, 1440 К — версия, отличная от `Turbinis-Calc/…xmcd`) |
+| `archive/comparisons/legacy_workbench/att.txt` | результат разбора присланного файла (389 областей) |
+| `archive/comparisons/legacy_workbench/compare.py` | две модели (Mathcad и блокнот) + проверка по сохранённым числам |
+| `archive/comparisons/legacy_workbench/run.py` | таблицы §2, §3, пофакторная атрибуция |
+| `archive/comparisons/legacy_workbench/fix.py` | вариант с исправленной `c_p` (§5.1) |
+| `archive/comparisons/legacy_workbench/chart.py` | график `C_e(π*к)` |
 
 Проверка моделей: Mathcad-порт совпадает с сохранёнными числами файла в пределах **0.05 %**
 на π = 7…11 (по 13 величинам), Python-порт воспроизводит выводы ячеек блокнота
