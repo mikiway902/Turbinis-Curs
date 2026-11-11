@@ -17,6 +17,7 @@ for _path in (ROOT, ROOT / "Optimizer", ROOT / "scripts"):
         sys.path.insert(0, str(_path))
 
 import architecture_coupled_stage_smoke as smoke  # noqa: E402
+import architecture_flow_sizing_smoke as flow_smoke  # noqa: E402
 import architecture_stage_smoke as stage_smoke  # noqa: E402
 from turbine_engine.dataset import (  # noqa: E402
     DatasetError, compare_candidates, load_manifest, read_records)
@@ -45,6 +46,62 @@ def _fake_success_outputs() -> dict:
     }
 
 
+PI4_A3_AIR = 1.1069144083442255
+PI4_A3_CANDIDATE = (
+    "cand_8557c187058710328e826efefbfaa3766603400f4cc23bfaa80fb980626068b5")
+C2_CANDIDATE = (
+    "cand_282a1d7353cce3a6f894d652e2f7e351846d211e12616f52974063a8c88f190b")
+C2_AIR = 0.6892386929451052
+REQUIRE_DOMAIN = smoke.REACTION_TABLE_POLICY_REQUIRE_FINAL_SOURCE_DOMAIN
+LEGACY_CLIPPED = smoke.REACTION_TABLE_POLICY_LEGACY_CLIPPED
+
+
+def _saved_payload(relative: str, candidate_id: str):
+    """Return an optional retained payload without making the fixture required."""
+    path = ROOT / relative / "dataset.jsonl"
+    if not path.is_file():
+        return None
+    with path.open(encoding="utf-8") as handle:
+        for line in handle:
+            record = json.loads(line)
+            if record.get("candidate_id") == candidate_id:
+                return record["payload"]
+    return None
+
+
+def _pi4_a3_payload() -> dict:
+    """Real source-limited A3 point: pi=4 split, 78k/0.07, explicit air."""
+    payload = smoke.with_compressor_pressure_ratios(
+        smoke.plan_payloads()[2], [2.0, 2.0])
+    payload["stage_controls"]["operating_points"] = {
+        "main": {"speed_rpm": 78_000.0, "hub_diameter_m": 0.07}}
+    payload["air_mass_flow_kg_s"] = PI4_A3_AIR
+    return payload
+
+
+def _c2_payload() -> dict:
+    """Retained C GG2/FPT1 refinement point with all final l/D inside."""
+    payload = smoke.with_compressor_pressure_ratios(
+        smoke.plan_payloads()[9], [10.0])
+    payload["stage_controls"]["design_overrides"] = {
+        "gas_generator": {
+            "alpha1_deg": [11.0, 11.0], "kappa": [1.38, 1.12],
+            "pi_weights": [1.0, 1.0]},
+        "free_power": {
+            "alpha1_deg": [11.0], "kappa": [1.38], "pi_weights": [1.0]}}
+    payload["stage_controls"]["operating_points"] = {
+        "gas_generator": {"speed_rpm": 76_000.0, "hub_diameter_m": 0.073},
+        "free_power": {"speed_rpm": 61_000.0, "hub_diameter_m": 0.08}}
+    payload["air_mass_flow_kg_s"] = C2_AIR
+    return payload
+
+
+def _with_policy(payload: dict) -> dict:
+    changed = copy.deepcopy(payload)
+    changed["stage_controls"]["reaction_table_policy"] = REQUIRE_DOMAIN
+    return changed
+
+
 class ArchitectureCoupledStageSmokeTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -66,6 +123,10 @@ class ArchitectureCoupledStageSmokeTests(unittest.TestCase):
             if record.payload["point_index"] == index:
                 return record
         self.fail(f"missing record {index}")
+
+    def _table_bounds(self):
+        return smoke._reaction_table_bounds(
+            {"ρ_таблица": self.constants["reaction_table"]})
 
     def test_fixed_plan_has_fifteen_unique_explicit_points(self):
         points, payloads = smoke.plan_points(), smoke.plan_payloads()
@@ -218,6 +279,107 @@ class ArchitectureCoupledStageSmokeTests(unittest.TestCase):
         self.assertEqual(output["overall_engineering_feasibility_status"],
                          "NOT_CHECKED")
 
+    def test_explicit_lower_static_bracket_ab_single_stage_diagnostic(self):
+        diagnostic_bracket = [60_000.0, 120_000.0]
+        provenance = (
+            "Explicit lower-static-pressure diagnostic; no automatic bracket "
+            "widening; no flow/geometry/speed adjustment")
+        expected_net = {0: 87_508.02147234694, 3: 87_598.49500288698}
+        plan = smoke.plan_payloads()
+        for index in (0, 3):
+            with self.subTest(point_index=index):
+                source_payload = plan[index]
+                source_cycle = smoke.calculate_architecture_cycle(
+                    smoke.payload_to_input(
+                        source_payload["architecture_cycle_source"]))
+                original = copy.deepcopy(source_payload)
+                payload = copy.deepcopy(source_payload)
+                payload["brackets"]["main"] = list(diagnostic_bracket)
+                payload["brackets"]["provenance"] = provenance
+                expected_payload = copy.deepcopy(original)
+                expected_payload["brackets"]["main"] = list(diagnostic_bracket)
+                expected_payload["brackets"]["provenance"] = provenance
+                self.assertEqual(payload, expected_payload)
+                self.assertEqual(plan[index], original)
+
+                outcome = smoke.evaluate_coupled_payload(payload)
+                self.assertIs(outcome.status, CalculationStatus.SUCCESS)
+                self.assertIsNone(outcome.failure_stage)
+                self.assertIsNone(outcome.failure_reason)
+                output = outcome.outputs
+                boundary = output["actual_boundary"]
+                closure = boundary["closure"]
+                power = output["power"]
+
+                self.assertEqual(
+                    boundary["target_outlet_total_pressure_Pa"], 150_000.0)
+                self.assertEqual(
+                    boundary["source_0d_outlet_total_pressure_Pa"], 150_000.0)
+                actual_outlet = boundary["actual_outlet_total_pressure_Pa"]
+                self.assertEqual(actual_outlet, closure["actual_metric"])
+                self.assertLessEqual(
+                    abs(actual_outlet - 150_000.0) / 150_000.0, 1e-6)
+                self.assertEqual(closure["controls"]["static_pressure_bracket_Pa"],
+                                 diagnostic_bracket)
+                solved_static = closure["solved_static_pressure_Pa"]
+                self.assertGreater(solved_static, diagnostic_bracket[0])
+                self.assertLess(solved_static, diagnostic_bracket[1])
+                self.assertLess(solved_static, 120_000.0)
+
+                stages = closure["actual_stages"]
+                self.assertEqual(len(stages), 1)
+                self.assertEqual(closure["source_point"]["stage_count"],
+                                 payload["stage_counts"]["main"])
+                self.assertEqual(closure["controls"]["n_rpm"], 84_000.0)
+                self.assertEqual(closure["controls"]["D_hub_m"], 0.065)
+                self.assertEqual(payload["stage_controls"]["speed_rpm"], 84_000.0)
+                self.assertEqual(payload["stage_controls"]["hub_diameter_m"], 0.065)
+                self.assertEqual(payload["stage_controls"]["reference_exit_mach"],
+                                 0.3379)
+                source_flow = float(source_cycle.gas_mass_flow)
+                for stage in stages:
+                    self.assertEqual(stage["G_c"], source_flow)
+                self.assertEqual(
+                    output["source_input_sha256"],
+                    smoke.canonical_hash(
+                        payload["architecture_cycle_source"]))
+
+                stage_gas = sum(stage["G_c"] * stage["L_т"]
+                                for stage in stages)
+                efficiency = float(
+                    source_cycle.shaft.mechanical_efficiencies[0])
+                mechanical = efficiency * stage_gas
+                compressor = float(source_cycle.compressor.power)
+                recomputed_net = mechanical - compressor
+                self.assertAlmostEqual(power["stage_gas_power_W"], stage_gas,
+                                       places=9)
+                self.assertEqual(power["mechanical_efficiency"], efficiency)
+                self.assertEqual(power["compressor_power_W"], compressor)
+                self.assertAlmostEqual(
+                    power["net_mechanical_power_W"], recomputed_net, places=6)
+                self.assertGreater(recomputed_net, 0.0)
+                self.assertLess(recomputed_net, 110_000.0)
+                self.assertAlmostEqual(recomputed_net, expected_net[index],
+                                       delta=1e-6 * expected_net[index])
+                self.assertFalse(power["engine_power_closed"])
+                self.assertEqual(power["engine_power_label"],
+                                 smoke.POWER_NOT_CLOSED_LABEL)
+                self.assertIsNone(output["overall_engineering_feasibility"])
+                self.assertEqual(
+                    output["overall_engineering_feasibility_status"],
+                    "NOT_CHECKED")
+
+        self.assertEqual(len(self.records), 15)
+        self.assertEqual(self.summary["status_counts"],
+                         {"NUMERICAL_FAILURE": 2, "SUCCESS": 13})
+        for index in (0, 3):
+            record = self._record(index)
+            self.assertIs(record.calculation_status,
+                          CalculationStatus.NUMERICAL_FAILURE)
+            self.assertEqual(record.failure_reason, "boundary_not_bracketed")
+            self.assertEqual(record.payload["brackets"]["main"],
+                             [120_000.0, 150_000.0])
+
     def test_c_gg3_fpt1_actual_output_regression_from_stage_metrics(self):
         record = self._record(12)
         self.assertIs(record.calculation_status, CalculationStatus.SUCCESS)
@@ -287,6 +449,223 @@ class ArchitectureCoupledStageSmokeTests(unittest.TestCase):
         self.assertIsNone(record.outputs["overall_engineering_feasibility"])
         self.assertEqual(record.outputs["rho_065_posthoc"]["status"],
                          "NOT_APPLIED")
+
+    def test_pi4_a3_legacy_success_outside_table_optin_source_error(self):
+        payload = _pi4_a3_payload()
+        lo, hi = self._table_bounds()
+        saved = _saved_payload(
+            "reference/architecture_stage_smoke/"
+            "2026-11-11-pi3-13-sized-coarse", PI4_A3_CANDIDATE)
+        if saved is not None:
+            self.assertEqual(smoke.canonical_hash(saved),
+                             smoke.canonical_hash(payload))
+            payload = copy.deepcopy(saved)
+        legacy = smoke.evaluate_coupled_payload(payload)
+        self.assertIs(legacy.status, CalculationStatus.SUCCESS)
+        self.assertNotIn("reaction_table_source_domain", legacy.outputs)
+        self.assertEqual(legacy.outputs["rho_065_posthoc"],
+                         {"status": "NOT_APPLIED"})
+        stages = legacy.outputs["actual_boundary"]["closure"]["actual_stages"]
+        actuals = [stage["l_л"] / stage["D_л"] for stage in stages]
+        self.assertEqual(len(actuals), 3)
+        self.assertTrue(all(value > hi for value in actuals))
+        self.assertEqual(legacy.outputs["power"]["sized_air_mass_flow_kg_s"],
+                         PI4_A3_AIR)
+
+        outcome = smoke.evaluate_coupled_payload(_with_policy(payload))
+        self.assertIs(outcome.status, CalculationStatus.MODEL_ERROR)
+        self.assertIsNot(outcome.status, CalculationStatus.NUMERICAL_FAILURE)
+        self.assertIsNot(outcome.status, CalculationStatus.NON_PHYSICAL_STATE)
+        self.assertEqual(outcome.failure_stage, "reaction_table_source_domain")
+        self.assertEqual(outcome.failure_reason, "reaction_table_source_domain")
+        self.assertEqual(
+            outcome.outputs["actual_boundary"]["closure"]["actual_stages"],
+            stages)
+        self.assertEqual(outcome.outputs["power"], legacy.outputs["power"])
+        self.assertEqual(
+            outcome.outputs["flow_sizing"]["trial_air_mass_flow_kg_s"],
+            PI4_A3_AIR)
+        domain = outcome.diagnostics["source_domain"]
+        self.assertEqual(domain["role"], "main")
+        self.assertEqual(domain["table_bounds"], [lo, hi])
+        self.assertEqual(domain["actual_l_over_D"], actuals)
+        self.assertTrue(all(margin < 0.0 for margin in domain["signed_margins"]))
+        self.assertEqual(domain["actual_closure"]["actual_stages"], stages)
+        self.assertEqual(
+            domain["flow_metadata"]["trial_air_mass_flow_kg_s"], PI4_A3_AIR)
+        self.assertEqual(outcome.last_valid_state["role"], "main")
+        self.assertEqual(
+            outcome.last_valid_state["input"]["stage_controls"]
+            ["reaction_table_policy"], REQUIRE_DOMAIN)
+        self.assertNotIn("reaction_table_policy",
+                         payload["stage_controls"])
+
+        self.assertEqual(self.summary["status_counts"],
+                         {"NUMERICAL_FAILURE": 2, "SUCCESS": 13})
+        for default in smoke.plan_payloads():
+            self.assertNotIn("reaction_table_policy", default["stage_controls"])
+
+    def test_c2_refined_optin_success_matches_legacy_and_verifies_table(self):
+        payload = _c2_payload()
+        lo, hi = self._table_bounds()
+        saved = _saved_payload(
+            "reference/architecture_stage_smoke/"
+            "2026-11-11-c-independent-refinement", C2_CANDIDATE)
+        if saved is not None:
+            self.assertEqual(smoke.canonical_hash(saved),
+                             smoke.canonical_hash(payload))
+            payload = copy.deepcopy(saved)
+        legacy = smoke.evaluate_coupled_payload(payload)
+        optin = smoke.evaluate_coupled_payload(_with_policy(payload))
+        self.assertIs(legacy.status, CalculationStatus.SUCCESS)
+        self.assertIs(optin.status, CalculationStatus.SUCCESS)
+        self.assertNotIn("reaction_table_source_domain", legacy.outputs)
+        self.assertEqual(optin.outputs["power"], legacy.outputs["power"])
+        self.assertEqual(optin.outputs["actual_boundary"],
+                         legacy.outputs["actual_boundary"])
+        self.assertEqual(optin.outputs["flow_sizing"],
+                         legacy.outputs["flow_sizing"])
+        continuity = optin.outputs["actual_boundary"][
+            "gas_generator_to_free_power_continuity"]
+        self.assertTrue(continuity["flow_exact"])
+        self.assertTrue(continuity["flow_matches_sized"])
+        self.assertEqual(
+            continuity["sized_gas_flow_kg_s"],
+            optin.outputs["flow_sizing"]["trial_gas_mass_flow_kg_s"])
+        domain = optin.outputs["reaction_table_source_domain"]
+        self.assertTrue(domain["final_domain_verified"])
+        self.assertEqual(domain["status"], "FINAL_SOURCE_DOMAIN_VERIFIED")
+        self.assertEqual(domain["table_bounds"], [lo, hi])
+        self.assertEqual(domain["intermediate_clipping"],
+                         "NUMERICAL_INITIALIZATION_ONLY_NOT_VALIDATED_STATES")
+        self.assertEqual(set(domain["roles"]),
+                         {"gas_generator", "free_power"})
+        for role in domain["roles"].values():
+            self.assertTrue(role["final_domain_verified"])
+            self.assertEqual(role["table_bounds"], [lo, hi])
+            for actual in role["actual_l_over_D"]:
+                self.assertGreaterEqual(
+                    actual, lo - smoke.REACTION_TABLE_DOMAIN_TOL)
+                self.assertLessEqual(
+                    actual, hi + smoke.REACTION_TABLE_DOMAIN_TOL)
+
+    def test_synthetic_c_gg_domain_failure_skips_fpt_and_keeps_gg(self):
+        payload = _with_policy(smoke.plan_payloads()[12])
+        closure = copy.deepcopy(
+            self._record(12).outputs["actual_boundary"]["gas_generator"]
+            ["closure"])
+        for stage in closure["actual_stages"]:
+            stage["l_л"] = 0.5 * stage["D_л"]
+        with mock.patch.object(
+                ConstHubOrchestration, "solve_prescribed_mechanical_power",
+                return_value=closure) as gg_call, mock.patch.object(
+                    ConstHubOrchestration, "solve_total_outlet_pressure",
+                    side_effect=AssertionError("FPT must not be computed")):
+            outcome = smoke.evaluate_coupled_payload(payload)
+        self.assertIs(outcome.status, CalculationStatus.MODEL_ERROR)
+        self.assertEqual(outcome.failure_reason, "reaction_table_source_domain")
+        self.assertEqual(gg_call.call_count, 1)
+        self.assertIn("gas_generator", outcome.outputs)
+        self.assertNotIn("free_power", outcome.outputs)
+        self.assertEqual(
+            outcome.outputs["gas_generator"]["closure"]["actual_stages"],
+            closure["actual_stages"])
+
+    def test_synthetic_c_fpt_domain_failure_preserves_both_closures(self):
+        payload = _with_policy(smoke.plan_payloads()[12])
+        boundary = self._record(12).outputs["actual_boundary"]
+        gg_closure = copy.deepcopy(boundary["gas_generator"]["closure"])
+        fpt_closure = copy.deepcopy(boundary["free_power"]["closure"])
+        with mock.patch.object(
+                ConstHubOrchestration, "solve_prescribed_mechanical_power",
+                return_value=gg_closure), mock.patch.object(
+                    ConstHubOrchestration, "solve_total_outlet_pressure",
+                    return_value=fpt_closure):
+            outcome = smoke.evaluate_coupled_payload(payload)
+        self.assertIs(outcome.status, CalculationStatus.MODEL_ERROR)
+        self.assertEqual(outcome.failure_reason, "reaction_table_source_domain")
+        self.assertEqual(outcome.diagnostics["source_domain"]["role"],
+                         "free_power")
+        self.assertEqual(
+            outcome.outputs["gas_generator"]["closure"]["actual_stages"],
+            gg_closure["actual_stages"])
+        self.assertEqual(
+            outcome.outputs["free_power"]["closure"]["actual_stages"],
+            fpt_closure["actual_stages"])
+
+    def test_invalid_reaction_table_policy_enum_is_rejected(self):
+        base = smoke.plan_payloads()[2]
+        for bad in ("legacy", "", None, 1, True, ["require_final_source_domain"]):
+            payload = copy.deepcopy(base)
+            payload["stage_controls"]["reaction_table_policy"] = bad
+            with self.subTest(policy=bad):
+                outcome = smoke.evaluate_coupled_payload(payload)
+                self.assertIs(outcome.status, CalculationStatus.MODEL_ERROR)
+                self.assertEqual(outcome.failure_stage, "payload_validation")
+                with self.assertRaises(
+                        (smoke.ArchitectureCoupledSmokeError,
+                         ValueError, TypeError, KeyError)):
+                    smoke._validate_plan([payload] * 15)
+        for good in (LEGACY_CLIPPED, REQUIRE_DOMAIN):
+            payload = copy.deepcopy(base)
+            payload["stage_controls"]["reaction_table_policy"] = good
+            self.assertEqual(smoke._validate_payload(payload).index, 2)
+
+    def test_engineering_pi_outside_table_inside_stays_success(self):
+        payload = _with_policy(smoke.plan_payloads()[12])
+        boundary = self._record(12).outputs["actual_boundary"]
+        gg_closure = copy.deepcopy(boundary["gas_generator"]["closure"])
+        fpt_closure = copy.deepcopy(boundary["free_power"]["closure"])
+        for stage in fpt_closure["actual_stages"]:
+            stage["l_л"] = 0.2 * stage["D_л"]
+        with mock.patch.object(
+                ConstHubOrchestration, "solve_prescribed_mechanical_power",
+                return_value=gg_closure), mock.patch.object(
+                    ConstHubOrchestration, "solve_total_outlet_pressure",
+                    return_value=fpt_closure):
+            outcome = smoke.evaluate_coupled_payload(payload)
+        self.assertIs(outcome.status, CalculationStatus.SUCCESS)
+        acceptance = outcome.outputs["posthoc_pi_acceptance"]["gas_generator"]
+        self.assertFalse(acceptance["pass"])
+        self.assertTrue(any(stage["status"] == "FAIL"
+                            for stage in acceptance["stages"]))
+        self.assertEqual(outcome.outputs["rho_065_posthoc"],
+                         {"status": "NOT_APPLIED"})
+        domain = outcome.outputs["reaction_table_source_domain"]
+        self.assertTrue(domain["final_domain_verified"])
+        for role in domain["roles"].values():
+            for actual in role["actual_l_over_D"]:
+                self.assertGreaterEqual(
+                    actual, domain["table_bounds"][0]
+                    - smoke.REACTION_TABLE_DOMAIN_TOL)
+                self.assertLessEqual(
+                    actual, domain["table_bounds"][1]
+                    + smoke.REACTION_TABLE_DOMAIN_TOL)
+
+    def test_reaction_table_bounds_use_actual_namespace_not_hardcoded(self):
+        custom = {"ρ_таблица": ([0.2, 0.4], [0.3, 0.5])}
+        self.assertEqual(smoke._reaction_table_bounds(custom), (0.2, 0.4))
+        stage = copy.deepcopy(
+            self._record(12).outputs["actual_boundary"]["gas_generator"]
+            ["closure"]["actual_stages"][0])
+        stage["l_л"] = 0.35 * stage["D_л"]
+        closure = {"actual_stages": [stage]}
+        record, outside = smoke._reaction_table_domain_record(
+            "main", closure, custom, policy=REQUIRE_DOMAIN)
+        self.assertEqual(outside, [])
+        self.assertEqual(record["table_bounds"], [0.2, 0.4])
+        self.assertTrue(record["final_domain_verified"])
+        actual, actual_outside = smoke._reaction_table_domain_record(
+            "main", closure,
+            {"ρ_таблица": self.constants["reaction_table"]},
+            policy=REQUIRE_DOMAIN)
+        self.assertEqual(actual_outside, [1])
+        self.assertEqual(actual["table_bounds"], list(self._table_bounds()))
+        for bad in (([0.4, 0.2], [0.3, 0.5]),
+                    ([0.2, float("inf")], [0.3, 0.5]), ([], [])):
+            with self.subTest(table=bad):
+                with self.assertRaises(smoke.ArchitectureCoupledSmokeError):
+                    smoke._reaction_table_bounds({"ρ_таблица": bad})
 
     def test_no_flow_speed_hub_or_stage_count_tuning(self):
         seen = set()
@@ -500,6 +879,69 @@ class ArchitectureCoupledStageSmokeTests(unittest.TestCase):
                 record.outputs["actual_boundary"]["free_power"]["closure"],
                 sort_keys=True) for record in rows}
             self.assertEqual(len(fpt_values), 3)
+
+
+class ReactionTablePolicyFlowConfigTests(unittest.TestCase):
+    """Synthetic flow-config checks; no expensive real flow fixture is run."""
+
+    def _case(self, policy):
+        payload = copy.deepcopy(smoke.plan_payloads()[2])
+        payload["stage_controls"]["reaction_table_policy"] = policy
+        result = smoke.calculate_architecture_cycle(
+            smoke.payload_to_input(payload["architecture_cycle_source"]))
+        return {
+            "case": f"POLICY_{policy}", "source_point_index": 2,
+            "assembly": payload["assembly"], "coupling": payload["coupling"],
+            "architecture": payload["architecture"],
+            "source_payload": payload,
+            "source_payload_sha256": smoke.canonical_hash(payload),
+            "source_air_mass_flow_kg_s": float(result.air_mass_flow),
+            "source_gas_mass_flow_kg_s": float(result.gas_mass_flow),
+            "source_fuel_mass_flow_kg_s": float(result.fuel_mass_flow),
+            "air_flow_bracket_kg_s": [0.5, 0.9],
+            "target_gearbox_input_power_W": flow_smoke.TARGET,
+            "outer_relative_tolerance": flow_smoke.OUTER_RELATIVE_TOL,
+            "outer_max_iterations": flow_smoke.OUTER_MAX_ITER}
+
+    def test_policy_is_locked_and_resume_rejects_changed_policy(self):
+        required = self._case(REQUIRE_DOMAIN)
+        legacy = self._case(LEGACY_CLIPPED)
+        expected = smoke.with_compressor_pressure_ratios(
+            smoke.plan_payloads()[2],
+            required["source_payload"]["architecture_cycle_source"][
+                "compressor_pressure_ratios"])
+        self.assertTrue(flow_smoke._same_physical_base(
+            required["source_payload"], expected))
+        config = flow_smoke.make_run_config([required], {}, "0" * 64)
+        item = config["cases"][0]
+        self.assertEqual(item["reaction_table_policy"], REQUIRE_DOMAIN)
+        self.assertIn("stage_controls_sha256", item)
+        other = flow_smoke.make_run_config([legacy], {}, "0" * 64)
+        self.assertNotEqual(config["plan_sha256"], other["plan_sha256"])
+
+        absent = copy.deepcopy(required)
+        del absent["source_payload"]["stage_controls"]["reaction_table_policy"]
+        absent["source_payload_sha256"] = smoke.canonical_hash(
+            absent["source_payload"])
+        absent_config = flow_smoke.make_run_config([absent], {}, "0" * 64)
+        self.assertNotIn("reaction_table_policy",
+                         absent_config["cases"][0])
+        self.assertNotIn("stage_controls_sha256",
+                         absent_config["cases"][0])
+
+        temporary = tempfile.TemporaryDirectory(
+            prefix="reaction-table-policy-config-")
+        self.addCleanup(temporary.cleanup)
+        destination = Path(temporary.name) / "dataset"
+        evaluator = lambda payload: EvaluationOutcome.success(
+            outputs=_fake_success_outputs())
+        flow_smoke.run_plan(
+            destination, cases=[required], evaluator=evaluator,
+            constants={}, model_digest="0" * 64, reproduce=False)
+        with self.assertRaises(DatasetError):
+            flow_smoke.run_plan(
+                destination, resume=True, cases=[legacy], evaluator=evaluator,
+                constants={}, model_digest="0" * 64, reproduce=False)
 
 
 if __name__ == "__main__":

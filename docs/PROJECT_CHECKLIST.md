@@ -1,6 +1,6 @@
 # Turbinis-Calc Project Checklist
 
-Last updated: 2026-11-11
+Last updated: 2026-11-12
 Master prompt: `Super-Promt-Autonomous.md` (§37.1 checklist structure; §35 autonomous loop; §36 priority rule)
 Progress source of truth: this file. `docs/PROJECT_STATE.md` is the short operative state and
 `docs/PROJECT_GUIDE.md` describes the actual checkout.
@@ -13,14 +13,14 @@ Status legend:
 - `[B]` BLOCKED by external information/access
 - `[S]` SKIPPED — reason required
 
-## Counted progress snapshot — after caloric correction
+## Counted progress snapshot — after actual-flow sizing and bounded controls
 
 Count of top-level task bullets within M0–M8 (not milestone-table rows): 134.
-DONE: 78; IN PROGRESS: 25; TODO: 29; BLOCKED: 0; SKIPPED: 2.
-Thus 54 task bullets remain unclosed. This is an unweighted checklist count,
+DONE: 88; IN PROGRESS: 31; TODO: 13; BLOCKED: 0; SKIPPED: 2.
+Thus 44 task bullets remain unclosed. This is an unweighted checklist count,
 not an estimate of remaining effort or a claim of 60% physical readiness.
-Open counts by milestone: M0=0, M1=1, M2=4, M3=4, M4=7, M5=6,
-M6=9, M7=15, M8=8. Completed reduced-model tasks retain their explicit scope;
+Open counts by milestone: M0=0, M1=1, M2=4, M3=3, M4=7, M5=4,
+M6=6, M7=11, M8=8. Completed reduced-model tasks retain their explicit scope;
   they do not close production or stage-validation gates.
 
 Mandatory execution order is revised in `AUTONOMOUS_EXECUTION.md` under the user's
@@ -61,7 +61,7 @@ Recommended profile id in future annotations: `RHO065` (acceptance ceiling only)
 | M3 | §37.1 | `[~]` | Immutable RAW and typed failures integrated with opt-in architecture cycles; bounded saved smoke/reproduce/resume verified; full stage integration remains open |
 | M4 | §37.1 | `[ ]` | Performance path |
 | M5 | §37.1 | `[~]` | Generic durable writer and bounded 13-point architecture smoke verified; no production engine sweep |
-| M6 | §37.1 | `[ ]` | Production design-space calculation |
+| M6 | §37.1 | `[~]` | Actual sized pi3..13 coarse families calculated; production coverage/validation incomplete |
 | M7 | §37.1 | `[~]` | Conservative analysis infrastructure exists; no validated production architecture comparison |
 | M8 | §37.1 | `[ ]` | Final audit and delivery |
 
@@ -453,6 +453,10 @@ evidence. The N boundary and active-path A/B/C/D classification are closed.
   outlet; C solves the GG ratio from prescribed work and uses the resulting state for the
   independent FPT ratio. No stage-count split is assumed.
 - [~] Подтвердить/исправить stage-count assumptions.
+  — Latest: actual air-flow sizing now closes A/B MAIN3 and C GG2/FPT1 at pi=11/12
+  within the four audited profiles; no automatic integer selection or full compressor
+  inventory is inferred. Strict-source-domain reference verification is saved (18
+  trials, six roots). `SIZED_STAGE_FINDINGS.md` states scope and missing checks.
   — Original part-1 p.87 item 54 visually checked; its unrounded estimate is reused
   through `baseline.estimate_stage_count`. Explicit 1/2/3-stage alternatives for
   A MAIN, B MAIN, C GG and C FPT are saved with full existing meanline results.
@@ -489,6 +493,9 @@ evidence. The N boundary and active-path A/B/C/D classification are closed.
   — Solver exhaustion now raises typed `NumericalConvergenceError`; namespace
   `НетРешения` remains for invalid evaluated states. Legacy stage construction still
   contains engineering repair, so the full active path is not yet pure calculation.
+  — Opt-in final reaction-table-domain mode now reports unsupported final states as
+  MODEL_ERROR with complete computed partials, distinct from physical impossibility
+  and engineering-profile failure. Default legacy interpolation remains reproducible.
 - [~] Разделить calculation_status и constraint_status.
   — `raw.py` and `analysis.py` implement distinct calculation/constraint statuses and
   conservative feasibility levels; they are not yet wired into the legacy optimizer.
@@ -501,10 +508,14 @@ evidence. The N boundary and active-path A/B/C/D classification are closed.
 - [x] Добавить run_id/candidate_id/architecture/sampling_method.
   — Deterministic IDs and run configuration are enforced by `raw.py`; tests cover
   determinism and configuration-mismatch rejection.
-- [~] Сохранять ключевые causal-chain intermediates.
+- [x] Сохранять ключевые causal-chain intermediates.
   — Generic payload/writer supports them, and `architecture_cycle.py` exposes component
   and shaft residuals; `architecture_raw.py` stores complete 0D states/residuals in
-  real saved datasets. Full stage/geometry/strength integration remains open.
+  real saved datasets. Acceptance: the selected uncooled meanline variant now also
+  persists every explicit sizing trial, complete actual stage dictionaries, geometry,
+  triangles, Mach, available stress, closure controls/residuals and GG/FPT linkage.
+  Five bounded datasets preserve 250 trials; all reproduced in their recorded runs.
+  Missing cooling/maps/material models are explicit limitations, not fabricated fields.
 - [x] Реализовать constraint profiles поверх RAW.
   — `turbine_engine/constraints.py`: explicit `ConstraintProfile`/rules; `rho <= 0.65`
   is `rho_065_profile()` opt-in only, never a search bound or filter.
@@ -585,7 +596,10 @@ evidence. The N boundary and active-path A/B/C/D classification are closed.
 - [ ] Реализовать quick preset.
 - [ ] Реализовать normal preset.
 - [ ] Реализовать deep preset только если оправдан runtime/storage.
-- [ ] Оценивать N_candidates/storage перед крупным run.
+- [x] Оценивать N_candidates/storage перед крупным run.
+  — Acceptance: bound actual nested sizing trials before launch, not just outer cases.
+  The 33-case actual pi3..13 run was capped at 1056 records / 16.9 MB estimated;
+  it produced 597 records / 8666417 bytes. No Cartesian explosion or GPU speed claim.
 - [x] Проверить все архитектуры на small sweep.
   — Saved 13-point smoke and 55-point coarse reference-0D runs; not stage feasibility.
 - [x] Проверить πк=3...13 на coarse sweep.
@@ -594,20 +608,48 @@ evidence. The N boundary and active-path A/B/C/D classification are closed.
 - [x] Проверить compressor split.
   — Dual-CC weights 0.4/0.5/0.6 at every integer pi=3..13; actual state propagation and
   preserved products. Compressor map/blading validation is not supplied.
-- [ ] Проверить turbine split.
-- [ ] Проверить основные geometry/search variables.
+- [x] Проверить turbine split.
+  — Acceptance for the selected meanline variant: explicit C GG/FPT counts 1–3 and
+  source-backed GG pressure-weight alternatives are attempted with actual work/state
+  transfer and retained failures. Independent shaft n/hub inputs are exercised;
+  no operating map or optimal turbine split is inferred.
+- [~] Проверить основные geometry/search variables.
+  — Explicit per-role speed/hub overrides now reach actual closures; bounded independent
+  n/hub sensitivities are saved with re-sized flow and all stages. Remaining stage work
+  distribution, broader pressure/split coverage and engineering checks are still open.
 - [x] Не запускать бессмысленный Cartesian explosion.
   — No production sweep was launched; bounded real experiments have 13 and 55 points.
 
 ## M6 — Production design-space calculation
 
-- [ ] Запустить достаточный coarse RAW sweep всех архитектур.
-- [ ] Проверить dataset integrity.
-- [ ] Проверить numerical failure statistics.
-- [ ] Проверить energy/mass residual distributions.
-- [ ] Найти boundaries/high gradients/extrema.
-- [ ] Выполнить adaptive refinement только там, где он добавляет информацию.
-- [ ] Выполнить local perturbations вокруг важных candidates.
+- [~] Запустить достаточный coarse RAW sweep всех архитектур.
+  — Actual sized pi3..13 coverage now saved: 33 cases, three explicit control families,
+  597 RAW trials, 30 roots + 3 outer bracket failures. Geometry/stage inventory and
+  source-limited production coverage remain insufficient for a global design claim.
+- [x] Проверить dataset integrity.
+  — Acceptance: verified manifests/hashes, exact RAW candidate-ID accounting, successful
+  and failed record reproduction. V3 audits and analysis cover 1064 trials in eight
+  completed sizing runs; additional strict-domain checks are saved separately.
+- [x] Проверить numerical failure statistics.
+  — Acceptance: distinguish outer sizing status from inner calculation status. Coarse:
+  3 NUMERICAL_FAILURE at pi3 but all 597 inner SUCCESS. No root in a bracket is not
+  physical impossibility. Source-domain rejection is separately MODEL_ERROR.
+- [~] Проверить energy/mass residual distributions.
+  — Actual root shaft/pressure/mass/GG-continuity residual distributions saved. Maximum
+  recorded mass residual in final analysis is 2.22e-16 kg/s. Cooling/mixing and full
+  calorimetric/material physics remain unverified; sizing-trace power residuals are
+  not misrepresented as errors of accepted final engines.
+- [~] Найти boundaries/high gradients/extrema.
+  — pi3 outer bracket boundary, low-pi stress/table-domain issues, A/B upper-pi profile
+  boundary and n/hub angle trade-offs are visible. No global extrema claim.
+- [x] Выполнить adaptive refinement только там, где он добавляет информацию.
+  — Acceptance: retain informative bounded alternatives, do not expand blindly. A/B
+  n=79k→78k at hub 0.070 m resolves a measured angle boundary; C's independent
+  GG/FPT/work-weight refinement resolves specific recorded violations. All trials kept.
+- [~] Выполнить local perturbations вокруг важных candidates.
+  — Six scoped roots recalculated under strict final-source-domain policy with explicit
+  ±2% flow endpoints and central roots (18/18 reproduce). This is local verification,
+  not a robustness proof or a complete independent-variable perturbation campaign.
 - [ ] При необходимости расширить sampling.
 - [ ] Не считать дополнительные миллионы точек без ожидаемого информационного выигрыша.
 
@@ -616,17 +658,31 @@ evidence. The N boundary and active-path A/B/C/D classification are closed.
 - [~] Создать annotated dataset.
   — Post-processing annotation contracts and profiles exist; no production dataset has
   been annotated yet.
+  — Final post-hoc `*-stage-audit-v2.json` reports now annotate 13 real sized roots:
+  RHO065, prompt pi, source alpha2, assumed stress and reaction-table domain; RAW is
+  unchanged. Overall feasibility stays NOT_CHECKED; production coverage remains open.
 - [ ] Построить feasibility map.
 - [~] Построить near-feasibility analysis.
   — `analysis.py` returns full raw/normalized violation vectors and conservative ranking;
   tested only on synthetic rows.
-- [ ] Определить active constraints.
+- [x] Определить active constraints.
+  — Bounded actual-stage audits expose stress vs angle/table-domain trade-offs. Original
+  A/B fail project stress; C also fails angles/pi/table domain. This is not a global
+  active-constraint map or a material-life assessment. Acceptance: identify active
+  known checks and signed margins for the available sample; the final cross-run
+  analysis does this for 46 unique roots without treating missing checks as zero.
 - [~] Выполнить controlled sensitivity analysis.
   — Saved coarse summary has adjacent-pi flow/fuel slopes and fixed-pi split spreads;
   stage/geometry/strength perturbations remain open. Generic paired utility is tested.
 - [~] Исследовать влияние πк на G/πт/geometry/blade heights.
   — Flow/pressure states saved for pi=3..13; geometry/blade-height branch remains open.
-- [ ] Исследовать влияние n и D на blade heights/stress/angles.
+- [x] Исследовать влияние n и D на blade heights/stress/angles.
+  — Saved controlled n/hub experiments with full re-sizing and all attempts. A/B
+  78000 rpm / 0.070 m pass the four audited profiles within source l/D domain;
+  lower speed alone or excessive hub moves the active limitation to exit angles
+  or table domain. Acceptance: controlled n/hub alternatives with actual re-sized
+  stages, role-correct margins and retained invalid cases. This is demonstrated by
+  saved RAW plus scatter plots; wider coverage/radial/material validation remain open.
 - [~] Исследовать compressor split.
   — Controlled reduced-0D split spreads saved; map/stage/geometry implications unverified.
 - [ ] Исследовать turbine split.
@@ -637,14 +693,22 @@ evidence. The N boundary and active-path A/B/C/D classification are closed.
 - [~] Построить Pareto.
   — Pareto utility with explicit objective directions is implemented and synthetically
   tested; no real front exists yet.
-- [ ] Выбрать feasible/near-feasible/boundary finalists.
-- [ ] Пересчитать finalists reference backend.
-- [ ] Объяснить результаты физически, не только статистически.
+- [~] Выбрать feasible/near-feasible/boundary finalists.
+  — Six four-profile screening candidates at pi11/12 selected for A/B/C, not fully
+  feasible finalists. Maps/cooling/material/radial checks still NOT_CHECKED.
+- [x] Пересчитать finalists reference backend.
+  — Acceptance for scoped screening finalists: six retained roots recomputed by actual
+  reference meanline under strict final table-domain policy; 18 local sizing records
+  reproduce, same controls/source properties, no fitted powers or relaxed limits.
+- [x] Объяснить результаты физически, не только статистически.
+  — Acceptance: explain flow/work sizing, stress–angle–geometry trade-offs, independent
+  GG/FPT controls, source-domain boundaries and non-isolated architecture comparisons.
+  `SIZED_STAGE_FINDINGS.md` records these explanations and missing physical evidence.
 
 ## M8 — Final audit / delivery
 
 - [~] Reference tests PASS либо расхождения документированы.
-  — Current software suites pass (466 engine + 94 scripts), but this is not an independent
+  — Current software suites pass (536 engine, 1 skip; 245 scripts), but this is not an independent
   physical validation; external cases remain unapproved.
 - [~] Energy balances проверены.
   — Component arithmetic and shaft residuals are tested for the explicit 0D variant; no
@@ -669,11 +733,15 @@ evidence. The N boundary and active-path A/B/C/D classification are closed.
 - [ ] Нет критических TODO/BLOCKED, делающих выводы недостоверными.
   — Compressor/turbine stage inventories, cooling/maps, material life and production
   sweep remain open; conclusions are bounded accordingly.
-- [ ] Сформирован final engineering report.
+- [~] Сформирован final engineering report.
+  — `SIZED_STAGE_FINDINGS.md` is a bounded verified findings report, not final delivery;
+  physical validation, full engineering gates and remaining coverage are still open.
 - [ ] Даны ответы на основные инженерные вопросы ТЗ.
 - [ ] Выполнен финальный GPT-6 Luna review.
-  — Independent review is pending; one reviewer attempt was blocked by the external
-  subscription limit, so this gate is not claimed passed.
+  — User now selects GPT-6.1 Sol for orchestration. Independent intermediate reviews
+  PASS for actual-boundary/flow-sizing/operating-point and final v2 audit changes;
+  final whole-project delivery review is not yet complete. Earlier subscription-limit
+  observations are historical, not the current review verdict.
 
 ## Gate before starting M2
 

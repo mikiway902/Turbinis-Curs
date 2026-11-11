@@ -1,6 +1,6 @@
 # Autonomous execution gates
 
-Updated: 2026-11-11. This is an execution-gate map, not a claim of completion.
+Updated: 2026-11-12. This is an execution-gate map, not a claim of completion.
 Progress source of truth remains `PROJECT_CHECKLIST.md`.
 
 ## Revised mandatory route — user scope correction, 2026-11-11
@@ -113,6 +113,34 @@ A/B count1 failures mean only that the explicit static-pressure bracket did not
 contain a root. All successful points retain nonzero 110 kW deficits, so this does
 not authorize a production sweep or a feasible-engine claim. Actual full stages,
 GG/FPT linkage, signed power residuals and post-hoc pi profiles remain in RAW.
+
+Subsequent source-backed correction to the fixed-flow interpretation: original cycle
+book printed p.22 §3.2 explicitly relates prescribed power and air flow through specific
+work. The 0D flow is preliminary, not a constraint when actual meanline work changes.
+An opt-in explicit air-flow design unknown now re-solves every stage/geometry and GG/FPT
+boundary at each trial, using actual compressor Lc*Gair and unchanged fuel/air ratio.
+This is distinct from silently multiplying saved powers or fitting efficiencies.
+Three control cases numerically close 110 kW with all 57 trials in RAW. Optional
+independent per-role n/hub controls support bounded physical sensitivities, not maps.
+Across five bounded experiments 250 sizing trials / 13 roots are retained. Refined
+A/B controls at 78000 rpm / 0.070 m pass the four audited acceptance profiles, but
+overall feasibility remains NOT_CHECKED. C still has documented engineering violations.
+The root audit separately checks actual mass, work, pressure and GG→FPT continuity;
+source-table l/D clipping is a model-domain limitation, not an accepted extrapolation.
+See PROJECT_STATE and `*-stage-audit-v2.json` for the latest evidence. This does not
+close stage selection, production coverage, cooling/maps/material or physical validation.
+
+Further bounded execution is now recorded in PROJECT_STATE / SIZED_STAGE_FINDINGS:
+actual flow-sized pi=3..13 coarse coverage has 33 cases / 597 inner RAW trials and
+597/597 reproduction. Stage pressure-weight alternatives and independent GG/FPT
+operating points are explicit, not implicit copies of the reference. Six A/B/C
+pi=11/12 candidates pass the four audited profiles, and have been recalculated with
+strict final reaction-table-domain checking (18 local verification trials).
+An outside-domain final state is MODEL_ERROR with full partials, not a successful
+extrapolation or a physically impossible engine. Legacy datasets are preserved.
+V3 audit keeps outer root failures distinct from inner solver status. Analysis plots
+are sparse scatter evidence, not a filled feasibility map or optimum. Numerical closure
+and four-profile screening do not close the missing material/map/cooling/radial gates.
 
 Missing maps, material life or detailed cooling physics are marked NOT_CHECKED /
 MISSING_* at their affected checks. They do not justify inventing those models or

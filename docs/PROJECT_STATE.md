@@ -1,9 +1,141 @@
 # Project State
 
-Last updated: 2026-11-11
-Git checkpoint: `0952832` (branch `main`); RAW integration below is subsequent working-tree work.
+Last updated: 2026-11-12
+Git checkpoint: `48be4ee` (branch `main`); the continuation below is uncommitted working-tree work.
 
 ## Current route — two-textbook scope correction
+
+### Latest verified checkpoint — 2026-11-12
+
+Status: NOT DONE. Numerical actual-engine sizing now works for A/B/C; this is not
+production or physical validation. Full delivery gates and missing engineering
+evidence remain open. Lead model is GPT-6.1 Sol per the user's explicit selection.
+Counted checklist: 88 DONE / 31 IN PROGRESS / 13 TODO / 2 SKIPPED = 134 tasks;
+44 remain unclosed. This is not an effort estimate or a physical-readiness percentage.
+
+Additional implementation: explicit stage design arrays, independent n/hub controls,
+source-cycle compressor-ratio variants, failure-aware v3 audit and read-only cross-run
+analysis/plots. Changing pressure ratios recomputes compressor/fuel/alpha/GG reference
+states; other source parameters remain locked. Final-source-domain checking is opt-in:
+`stage_controls.reaction_table_policy="require_final_source_domain"`. It rejects an
+unsupported final reaction-table state as MODEL_ERROR with full calculated partials,
+not as physical impossibility. Legacy snapshots remain numerically reproducible.
+Intermediate table clipping is numerical continuation only, not validated physics.
+
+Completed bounded actual sized coarse run:
+`reference/architecture_stage_smoke/2026-11-11-pi3-13-sized-coarse/`:
+33 explicit cases (A/B MAIN3 and C GG2/FPT1 at each integer pi=3..13), 597 inner RAW
+trials, 597/597 reproduce. Outer results: 30 roots + 3 NUMERICAL_FAILURE, all at pi=3
+with no root in the declared air-flow bracket. All 597 inner trials are SUCCESS;
+outer bracket failure must not be counted as an inner nonphysical state. Estimated
+upper bound before launch was 1056 records / 16.9 MB; actual journal is 8666417 bytes,
+SHA-256 `761e89d138c07f5e4bacfcad2ee26801ea21b464d504ec8afd26687f32139c92`.
+Recorded calculation time excluding reproduction/setup: 565.24 s on this host.
+
+C's independent refinement (`2026-11-11-c-independent-refinement/`) retains 58 trials,
+58/58 reproduce. GG2 uses 76000 rpm / 0.073 m, equal explicit pressure weights;
+FPT1 uses 61000 rpm / 0.080 m. At pi=11 and 12 it passes the four audited profiles
+within the source reaction-table domain; pi=10 angle failures are preserved.
+
+Final cross-run report/plots: `2026-11-11-sized-analysis-final/` under the same
+reference directory. Eight datasets, 1064 inner trials, 60 outer cases, 54 root
+memberships deduplicated to 46 unique root candidates; 6 outer failures retained.
+Six unique candidates pass ONLY the four audited profiles at pi=11/12 (A/B/C).
+No global best, fully feasible design, Pareto front or production readiness is claimed.
+See `docs/SIZED_STAGE_FINDINGS.md` for physical interpretation, exact scope and paths.
+
+Reference recalculation with strict final-source-domain policy:
+`2026-11-12-strict-finalist-sizing/` has 18 trials: each of the six screened roots
+was recomputed with explicit ±2% air-flow endpoints and the central root. All six
+power roots and 18/18 records reproduce. These local endpoints are verification of
+known roots, not independent optimization. `2026-11-12-final-source-domain-check/`
+separately preserves six valid roots and one known out-of-domain A/pi4 MODEL_ERROR;
+all seven reproduce, including the failed record's full computed stages.
+
+Parent independently observed final suites: 536 engine tests OK (1 GPU skip),
+245 scripts tests OK; static verifier 6 PASS / 7 WARN / 0 FAIL; diff check clean.
+Independent reviewers PASS after fixes for every substantial addition, including
+source-domain handling, source-ratio variants, failure accounting and role-correct
+plots/deduplication. No commit or push after checkpoint `48be4ee`.
+
+Next concrete P0/P1 action: use strict-source-domain policy in subsequent accepted
+flow-sizing runs; inspect the remaining available source/engineering checks (root
+reaction, meridional geometry/clearance/speed assumptions) before treating four-profile
+screening as broader feasibility. Keep compressor inventory/maps, cooling/mixing,
+material/metal-temperature/creep and radial validation explicitly missing. Finish
+the remaining checklist gates without inferring those data or restarting thermodynamics.
+Context-handoff checkpoint: all commands launched in this continuation have finished;
+there are no background calculations to recover. Start from the latest section and
+the 44 open checklist tasks, not the older fixed-flow deficit. No user confirmation
+is needed for ordinary continuation. Production physical-validation claims are blocked
+by the missing engineering evidence; the overall project is still IN PROGRESS, not
+declared complete. Preserve the uncommitted working tree and all historical journals.
+Historical snapshots below are superseded only where this latest section says so.
+
+### Current continuation — explicit design-flow sizing and independent operating points
+
+Goal: close the actual meanline engine numerically at 110 kW, then assess stage
+constraints without treating numerical closure as engineering feasibility.
+
+Source decision: lead visually checked the original cycle textbook printed p.22,
+§3.2 (`N_specific=N/G_air`, shaft power from turbine gas work minus compressor air
+work). At the user-defined pre-reducer plane the downstream gearbox efficiency is
+not applied. Therefore the preliminary 0D-sized flow must not be frozen when actual
+meanline work differs. `air_mass_flow_kg_s` is now an explicit optional design unknown;
+each trial rebuilds all stages/geometry and actual GG→FPT linkage. No saved stage
+power is simply multiplied to produce 110 kW. Fuel/air ratio, gas basis and source
+cycle pressure/temperature assumptions stay fixed; actual compressor work is Lc*Gair.
+
+`architecture_flow_sizing_smoke.py` sizes three fixed control cases by explicit
+bracketed bisection (0.9–1.4 times preliminary air flow), saving every trial in RAW.
+`stage_controls.operating_points` optionally supplies independent per-role speed/hub;
+the source 84000 rpm / 0.065 m remains unchanged when this option is absent. Independent
+GG/FPT speed compatibility with an actual compressor/map is NOT_CHECKED.
+
+Saved experiments (all successful numerical roots, not validated designs):
+
+| Directory under reference/architecture_stage_smoke | Roots / RAW trials | Result |
+|---|---:|---|
+| 2026-11-11-flow-sized | 3 / 57 | A/B MAIN3 and C GG3/FPT1 close 110 kW; original stage controls violate known engineering checks |
+| 2026-11-11-operating-points | 4 / 77 | Lower-speed A/B and independent C GG2/FPT1 controls; stress/angles trade-offs retained |
+| 2026-11-11-hub-sensitivity | 2 / 40 | A/B 72000 rpm, hub 0.080 m; angle and reaction-table-domain violations retained |
+| 2026-11-11-speed-hub-boundary | 2 / 39 | A/B 79000 rpm, hub 0.070 m; first-stage exit-angle violations retained |
+| 2026-11-11-speed-hub-refinement | 2 / 37 | A/B 78000 rpm, hub 0.070 m; the four audited profiles pass and source l/D stays in domain |
+
+Total: 250 retained sizing trials / 13 roots, not a global sweep. Each run reproduced
+all its records. The operating-point run resumed with zero appends and reproduced
+77/77. Original independent 12/12 RAW, 12/12 clipped, fixed-flow coupled 15/15 and
+default sized 57/57 journals were also rechecked read-only with the current evaluator.
+Computational source changes intentionally prevent resuming older source-locked runs;
+never rewrite their manifests. Use a new destination for a changed implementation.
+
+Default sized roots: A air 0.7067594631 kg/s → 110000.068091 W; B air
+0.7019687615 → 110000.048204 W; C air 0.7111105240 → 109999.997604 W.
+Refined A/B at 78000 rpm / 0.070 m: air 0.7091406169 / 0.7043527123 kg/s,
+power 110000.000520 / 109999.950304 W. This is screening evidence for four checks
+only: RHO065, prompt stage pi=1.8–2.4, textbook p.38 alpha2, assumed sigma<=290 MPa.
+It is not full feasibility, an optimum, a material-life assessment or an architecture ranking.
+
+`audit_sized_stage_roots.py` independently recomputes source compressor arithmetic,
+actual stage powers, sized compressor targets, mass balance, pressure residuals and
+actual GG→FPT T/p/flow continuity. It never reruns meanline or mutates RAW. Final
+reports are `*-stage-audit-v2.json`; earlier `*-stage-audit.json` reports are retained
+as preliminary v1 artifacts. Overall feasibility remains null/NOT_CHECKED. Original
+default A/B stresses exceed 290 MPa; C also violates angles/pi and its FPT l/D table
+domain. Existing table clipping is explicitly reported, not silently validated.
+
+Independent reviews PASS for flow sizing, per-role operating points/case provenance,
+and the final v2 audit after corrections. Parent's last completed suites before the
+latest operating-point/audit additions: 536 engine tests OK (1 GPU skip), 161 scripts
+tests OK. Final full suites are running; do not infer their result from agent reports.
+No commit/push performed for this continuation.
+
+Next P0/P1: extend source-backed stage work distribution and bounded pi/split coverage
+on the actual sized model; keep C's remaining violations explicit. Engineering maps,
+cooling, material/thermal/resource and radial validation are still missing and must not
+be invented. No production/global optimizer or validated-engine claim is authorized.
+
+### Historical fixed-flow continuation (superseded only where stated above)
 
 ### Latest bounded actual-boundary RAW continuation
 

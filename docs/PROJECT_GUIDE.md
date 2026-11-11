@@ -69,6 +69,69 @@ NOT_CHECKED, not feasible. Component closure does not supply a stage inventory.
 
 ### Stage inventory and bounded assembly checks
 
+#### Explicit design-flow sizing and operating-point controls
+
+The fixed-flow assembly runs below are historical diagnostics. Original cycle-book
+p.22 §3.2 makes flow a design output for prescribed power. The new opt-in sizing
+path therefore re-solves actual stages/geometry at each explicit trial flow; it does
+not rescale stored stage powers or alter efficiencies to manufacture 110 kW.
+
+```powershell
+.\.venv\Scripts\python.exe scripts/architecture_flow_sizing_smoke.py --destination reference/architecture_stage_smoke/new-flow-run
+.\.venv\Scripts\python.exe scripts/architecture_flow_sizing_smoke.py --destination reference/architecture_stage_smoke/new-flow-run --resume
+.\.venv\Scripts\python.exe scripts/audit_sized_stage_roots.py --dataset reference/architecture_stage_smoke/new-flow-run --output reference/new-flow-run-audit.json
+```
+
+The default plan has A MAIN3, B MAIN3 and C GG3/FPT1, with explicit air-flow brackets
+0.9–1.4 times their preliminary 0D flow. Every actual inner calculation is journalled;
+failed trials stop their case without suppressing other cases. Resume replays the
+deterministic outer bisection using saved candidate records. Current-source changes
+reject resume of historical source-locked snapshots; do not modify their manifests.
+
+The Python API `run_plan(destination, cases=explicit_cases)` accepts bounded explicit
+case plans tied to actual base payloads. Per-role `stage_controls.operating_points`,
+`design_overrides`, reaction-table policy and explicit static brackets may differ.
+`with_compressor_pressure_ratios(base_payload, ratios)` creates an explicit source
+pressure variant and recomputes the 0D compressor/fuel/alpha/GG reference states;
+all other source-cycle parameters remain locked. Each operating point
+contains positive `speed_rpm` and `hub_diameter_m`: AB uses `main`; C uses separate
+`gas_generator` and `free_power` roles. The source default is preserved when absent.
+Compressor speed/map compatibility is always NOT_CHECKED; independent inputs do not
+invent a compressor or shaft matching model. Plans, source payloads/controls, brackets,
+constants and computational digests are locked for reproducibility.
+
+Saved default 57 trials and bounded operating-point experiments are listed at the
+top of PROJECT_STATE. Final v2 audits verify actual sized compressor work, mass,
+power/pressure closure and actual GG/FPT state continuity before reporting separate
+engineering margins. `sigma<=290 MPa` is a project assumption, not material validation;
+RHO065 and stage pi bounds are user profiles. Table l/D domain is reported separately.
+Passing the four audited profiles does not imply full-engine feasibility or an optimum.
+Earlier v1/v2 audit files are retained; use `*-stage-audit-v3.json` for current findings.
+V3 verifies exact RAW-ID coverage and separates outer root failures from inner
+calculation status; an outer bracket failure is not physical infeasibility.
+
+`design_overrides` supplies complete `alpha1_deg`, `kappa`, `pi_weights` arrays for
+each active role, with exact stage count and final pressure-weight normalizer 1.
+These are explicit design inputs, not fitted efficiencies. Mathematical validation
+does not replace the separate engineering angle/pi/stress profiles.
+
+For accepted final reaction states, explicitly select
+`stage_controls.reaction_table_policy="require_final_source_domain"`. This checks
+actual final l/D against the actual namespace table bounds. Outside-domain results
+become MODEL_ERROR with full computed partials; no graph extrapolation is accepted.
+Absent/`legacy_clipped` preserves historical results. Intermediate clipped numerical
+guesses are not validated outputs. The policy is included in input/config hashes.
+
+```powershell
+.\.venv\Scripts\python.exe scripts/analyze_sized_stage_sweeps.py --dataset reference/architecture_stage_smoke/2026-11-11-pi3-13-sized-coarse --dataset reference/architecture_stage_smoke/2026-11-11-c-independent-refinement --destination reference/new-sized-analysis
+```
+
+The analysis verifies completed inputs through the v3 auditor, keeps failed outer
+cases, deduplicates root IDs with source memberships and emits scatter-only plots.
+Missing metrics stay null/NOT_CHECKED. Alpha margins in speed/hub plots are per-role,
+not falsely attributed from another shaft. Scope is FOUR_PROFILE_SCREENING, never
+overall feasibility. `docs/SIZED_STAGE_FINDINGS.md` records current measured results.
+
 Actual-boundary methods on `ConstHubOrchestration` are
 `solve_total_outlet_pressure` and `solve_prescribed_mechanical_power`. They require
 `raw_unbounded` and an explicit physical `static_pressure_bracket`; they do not

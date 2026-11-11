@@ -1,5 +1,33 @@
 # Energy and gas-property method audit — 2026-11-11
 
+## 2026-11-12 — actual design-flow closure, source domains and sampled coverage
+
+`docs/SIZED_STAGE_FINDINGS.md` and the latest PROJECT_STATE supersede the earlier
+fixed-flow power-deficit interpretation below. The lead visually checked original
+cycle p.22 §3.2: prescribed power / specific work determines design air flow. The
+explicit optional air-flow sizing path recomputes every actual stage/geometry and
+GG/FPT boundary, retaining the source fuel/air ratio and actual compressor Lc*Gair.
+No stored stage power or efficiency is fitted to 110 kW.
+
+Actual pi3..13 coverage: 33 cases / 597 inner RAW trials, 597/597 reproduced;
+30 numerical roots and 3 outer bracket failures at pi3. All inner trials are SUCCESS;
+outer missing roots are not physical impossibility. V3 audits verify every RAW-ID
+reference and keep outer/inner statuses separate, including partial failed calculations.
+
+Six A/B/C pi11/12 candidates pass only the four declared screening profiles plus
+source-table domain checks. Source-domain policy `require_final_source_domain`
+recalculates them without accepting clipped final interpolation: 18 local sizing
+verification records reproduce, and a separate known outside-domain control is
+MODEL_ERROR with complete computed stages. Historical default-clipped snapshots are
+preserved and remain labelled; intermediate clipped guesses are not validated outputs.
+
+Final cross-run JSON/plots (`2026-11-11-sized-analysis-final/`) cover eight completed
+sizing journals / 1064 trials, deduplicate root memberships to 46 unique candidates,
+and retain six outer failed-case memberships. Constraints, unknown criteria and source
+domain violations are separate. No full feasibility map, global winner or validated
+material/thermal/resource balance is inferred. Final independent reviews PASS;
+parent suites 536 engine OK (1 GPU skip), 245 scripts OK; static verifier 6/7/0.
+
 ## Bounded actual-boundary RAW alternatives
 
 New coupled-stage smoke reuses the existing meanline closures without changing

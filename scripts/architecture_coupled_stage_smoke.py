@@ -15,11 +15,21 @@ A bracket without the root is NUMERICAL_FAILURE, not physical infeasibility.
 the RAW MODEL_ERROR boundary; a successful GG closure survives an FPT failure.
 Calculations are SUCCESS regardless of power deficit or pi profile (overall
 feasibility NOT_CHECKED).  No flow, speed, hub, stage count, or bracket is tuned.
+
+Optional ``stage_controls.reaction_table_policy`` (absent = legacy clipped):
+
+* ``legacy_clipped`` keeps the source ``np.interp`` clip and unchanged outputs.
+* ``require_final_source_domain`` rejects a final actual closure whose stage
+  ``l_l/D_l`` lies outside the actual source ``ρ_таблица`` input bounds.  The
+  inner fixed point may still use the existing clip for numerical
+  initialization; only the accepted final closure is checked.  The rejection is
+  a typed source-domain MODEL_ERROR, not engineering infeasibility.
 """
 from __future__ import annotations
 
 import argparse, hashlib, inspect, json, math, os, struct, sys, time
 from collections import Counter, namedtuple
+from dataclasses import replace
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -35,7 +45,8 @@ from turbine_engine.architecture import Architecture  # noqa: E402
 from turbine_engine.architecture_cycle import (  # noqa: E402
     ARCHITECTURE_GAS_PROPERTY_BASIS_TEXTBOOK as TEXTBOOK,
     calculate_architecture_cycle)
-from turbine_engine.architecture_raw import payload_to_input  # noqa: E402
+from turbine_engine.architecture_raw import (  # noqa: E402
+    input_to_payload, payload_to_input)
 from turbine_engine.dataset import (  # noqa: E402
     DatasetError, DatasetWriter, load_manifest, read_records)
 from turbine_engine.diagnostics import SolverDiagnosticsError  # noqa: E402
@@ -68,6 +79,13 @@ SPEED_BASIS = "fixed regression anchor copied from the stage fixture; no selecti
 AB_BRACKET, C_FPT_BRACKET = (120_000.0, 150_000.0), (120_000.0, 150_000.0)
 GG_BRACKET_FACTORS = (0.8, 1.2)
 POWER_CLOSURE_RELATIVE_TOL = 1e-6
+REACTION_TABLE_POLICY_LEGACY_CLIPPED = "legacy_clipped"
+REACTION_TABLE_POLICY_REQUIRE_FINAL_SOURCE_DOMAIN = "require_final_source_domain"
+REACTION_TABLE_POLICIES = (
+    REACTION_TABLE_POLICY_LEGACY_CLIPPED,
+    REACTION_TABLE_POLICY_REQUIRE_FINAL_SOURCE_DOMAIN,
+)
+REACTION_TABLE_DOMAIN_TOL = 1e-12
 NEW_SMOKE_FILE = "scripts/architecture_coupled_stage_smoke.py"
 MODEL_SOURCE_FILES = tuple(stage_smoke.MODEL_SOURCE_FILES) + (NEW_SMOKE_FILE,)
 
@@ -76,6 +94,42 @@ _MODEL: Any | None = None
 
 class ArchitectureCoupledSmokeError(RuntimeError):
     pass
+
+
+class SourceTableDomainError(Exception):
+    """Final actual closure outside the source reaction-table input domain.
+
+    This is a source-support error, not a physical-impossibility or engineering
+    acceptance result.  The attached closure is the complete actual final
+    closure; ``partial`` is populated by the evaluator with every stage already
+    calculated.
+    """
+
+    def __init__(self, role, stage, table_bounds, actuals, margins, closure,
+                 flow_metadata=None):
+        self.role = role
+        self.stage = stage
+        self.reason = "reaction_table_source_domain"
+        self.table_bounds = list(table_bounds)
+        self.actuals = list(actuals)
+        self.signed_margins = list(margins)
+        self.closure = closure
+        self.flow_metadata = flow_metadata
+        self.partial: dict[str, Any] = {}
+        super().__init__(
+            f"{role} final stage {stage} l_l/D_l outside source reaction table "
+            f"[{self.table_bounds[0]!r}, {self.table_bounds[1]!r}]")
+
+    def as_record(self):
+        record = {
+            "role": self.role, "stage": self.stage, "reason": self.reason,
+            "table_bounds": list(self.table_bounds),
+            "actual_l_over_D": list(self.actuals),
+            "signed_margins": list(self.signed_margins),
+            "actual_closure": self.closure}
+        if self.flow_metadata is not None:
+            record["flow_metadata"] = self.flow_metadata
+        return record
 
 
 class CoupledNoSolution(Exception):
@@ -117,9 +171,142 @@ def _source_index():
             in zip(stage_smoke.plan_points(), stage_smoke.plan_payloads())}
 
 
+DESIGN_CONTROL_KEYS = ("alpha1_deg", "kappa", "pi_weights")
+
+
+def _design_overrides(payload):
+    return payload["stage_controls"].get("design_overrides")
+
+
 def _controls(payload, role):
-    block = payload["stage_controls"][role]
-    return {key: list(block[key]) for key in ("alpha1_deg", "kappa", "pi_weights")}
+    """Return effective stage arrays: explicit design override, else anchors."""
+    overrides = _design_overrides(payload)
+    block = (overrides[role] if overrides is not None
+             else payload["stage_controls"][role])
+    return {key: list(block[key]) for key in DESIGN_CONTROL_KEYS}
+
+
+def _design_output(payload):
+    """Record source anchor arrays and effective arrays; absent by default."""
+    overrides = _design_overrides(payload)
+    if overrides is None:
+        return None
+    return {
+        "override_source": "EXPLICIT_STAGE_CONTROLS_DESIGN_OVERRIDES",
+        "roles": {role: {
+            "source": stage_smoke._stage_controls(
+                payload["stage_counts"][role]),
+            "effective": {key: list(values)
+                          for key, values in block.items()}}
+            for role, block in overrides.items()}}
+
+
+def _operating(payload, role):
+    """Return the explicit effective ``(speed_rpm, hub_diameter_m, overridden)``."""
+    points = payload["stage_controls"].get("operating_points")
+    if points is None:
+        return SPEED_RPM, HUB_DIAMETER_M, False
+    point = points[role]
+    return float(point["speed_rpm"]), float(point["hub_diameter_m"]), True
+
+
+def _operating_output(effective):
+    """Record explicit source-vs-effective controls; absent by default."""
+    if not any(item[2] for item in effective.values()):
+        return None
+    return {role: {
+        "source_speed_rpm": SPEED_RPM,
+        "source_hub_diameter_m": HUB_DIAMETER_M,
+        "effective_speed_rpm": n,
+        "effective_hub_diameter_m": hub,
+        "override_source": "EXPLICIT_STAGE_CONTROLS_OPERATING_POINTS",
+        "compressor_speed_compatibility": "NOT_CHECKED",
+        "implicit_powertrain_map": "NOT_APPLIED"}
+        for role, (n, hub, _) in effective.items()}
+
+
+def _reaction_table_policy(payload):
+    return payload["stage_controls"].get(
+        "reaction_table_policy", REACTION_TABLE_POLICY_LEGACY_CLIPPED)
+
+
+def _reaction_table_bounds(namespace):
+    """Return the actual source reaction-table l/D bounds, never hard-coded."""
+    try:
+        table = namespace["ρ_таблица"]
+        bounds = table[0]
+    except (KeyError, IndexError, TypeError) as exc:
+        raise ArchitectureCoupledSmokeError(
+            "actual namespace reaction table is missing") from exc
+    try:
+        values = [float(value) for value in bounds]
+    except (TypeError, ValueError) as exc:
+        raise ArchitectureCoupledSmokeError(
+            "actual namespace reaction table bounds are not numeric") from exc
+    _need(bool(values) and all(math.isfinite(value) for value in values)
+          and all(left < right for left, right in zip(values, values[1:])),
+          "actual namespace reaction table bounds must be finite and strictly "
+          "increasing")
+    return values[0], values[-1]
+
+
+def _reaction_table_actuals(closure):
+    """Return final stage l_l/D_l values through the typed StageResult."""
+    actuals = []
+    for index, item in enumerate(closure["actual_stages"], 1):
+        stage = StageResult.from_legacy_dict(item)
+        _need(math.isfinite(stage.D_l) and stage.D_l > 0.0,
+              f"actual stage {index} has non-positive rotor diameter")
+        actuals.append(float(stage.l_l) / float(stage.D_l))
+    _need(bool(actuals), "actual closure has no stage results")
+    return actuals
+
+
+def _reaction_table_domain_record(role, closure, namespace, *, policy,
+                                  flow_metadata=None):
+    """Check only the accepted final closure against the actual table bounds."""
+    lo, hi = _reaction_table_bounds(namespace)
+    actuals = _reaction_table_actuals(closure)
+    margins = [min(actual - lo, hi - actual) for actual in actuals]
+    outside = [index for index, margin in enumerate(margins, 1)
+               if margin < -REACTION_TABLE_DOMAIN_TOL]
+    record = {
+        "role": role, "policy": policy,
+        "status": "FINAL_SOURCE_DOMAIN_VERIFIED" if not outside
+        else "OUTSIDE_SOURCE_DOMAIN",
+        "final_domain_verified": not outside,
+        "table_bounds": [lo, hi],
+        "source_domain_tolerance": REACTION_TABLE_DOMAIN_TOL,
+        "actual_l_over_D": actuals, "signed_margins": margins,
+        "stages": [{
+            "stage": index, "actual_l_over_D": actual,
+            "lower_margin": actual - lo, "upper_margin": hi - actual,
+            "signed_margin": min(actual - lo, hi - actual),
+            "status": "WITHIN_SOURCE_DOMAIN" if index not in outside
+            else "OUTSIDE_SOURCE_DOMAIN"}
+            for index, actual in enumerate(actuals, 1)],
+        "intermediate_clipping":
+            "NUMERICAL_INITIALIZATION_ONLY_NOT_VALIDATED_STATES",
+        "note": "only the accepted final actual closure is checked; the inner "
+                "reaction fixed point retains the existing source clip for "
+                "numerical initialization and those intermediate states are "
+                "not validated outputs"}
+    if flow_metadata is not None:
+        record["flow_metadata"] = flow_metadata
+    return record, outside
+
+
+def _enforce_reaction_table_domain(role, closure, namespace, *, policy,
+                                   flow_metadata=None):
+    record, outside = _reaction_table_domain_record(
+        role, closure, namespace, policy=policy, flow_metadata=flow_metadata)
+    if outside:
+        raise SourceTableDomainError(
+            role=role, stage=outside[0], table_bounds=record["table_bounds"],
+            actuals=record["actual_l_over_D"],
+            margins=record["signed_margins"], closure=closure,
+            flow_metadata=flow_metadata)
+    return record
 
 
 def _preliminary_static(total_pressure, k):
@@ -192,6 +379,75 @@ def plan_payloads():
     return payloads
 
 
+def _pressure_ratios(ratios):
+    """Validate explicit source compressor ratios without an engineering filter."""
+    _need(isinstance(ratios, (list, tuple))
+          and not isinstance(ratios, (str, bytes)) and bool(ratios),
+          "compressor_pressure_ratios must be a non-empty ordered sequence")
+    values = []
+    for index, value in enumerate(ratios):
+        _need(not isinstance(value, bool) and isinstance(value, (int, float))
+              and math.isfinite(float(value)) and float(value) > 1.0,
+              f"compressor_pressure_ratios[{index}] must be a finite number > 1")
+        values.append(float(value))
+    return tuple(values)
+
+
+def with_compressor_pressure_ratios(base_payload, ratios):
+    """Copy a plan payload with only explicit source compressor ratios changed.
+
+    The source :class:`ArchitectureCycleInput` is read from
+    ``base_payload['architecture_cycle_source']``; only its
+    ``compressor_pressure_ratios`` are replaced, then the existing 0D cycle is
+    recalculated and serialized with ``input_to_payload``.  Stage counts, role,
+    control arrays and the case point are preserved.  Targets are the new exact
+    source compressor power and outlet pressure; the 110 kW target is unchanged.
+    The C GG static bracket is the same declared reference-Mach conversion at
+    the new source k and GG outlet state.  The AB explicit bracket is unchanged.
+    This is a pressure-variant payload, not flow/efficiency fitting and not a
+    second preliminary meanline.  Requesting the source ratios returns an
+    unchanged deep copy so old payload hashes stay bit-identical.
+    """
+    ratio_tuple = _pressure_ratios(ratios)
+    payload = copy_json_value(base_payload)
+    request = payload_to_input(payload["architecture_cycle_source"])
+    if ratio_tuple == tuple(request.compressor_pressure_ratios):
+        return payload
+    try:
+        variant = replace(request, compressor_pressure_ratios=ratio_tuple)
+    except (TypeError, ValueError) as exc:
+        raise ArchitectureCoupledSmokeError(str(exc) or type(exc).__name__) from exc
+    result = calculate_architecture_cycle(variant)
+    payload["architecture_cycle_source"] = input_to_payload(variant)
+    note = ("explicit source compressor pressure-ratio variant; targets and "
+            "brackets recomputed from the 0D cycle at the requested ratios; "
+            "no flow or efficiency fitting and no additional meanline")
+    payload["targets"]["provenance"] = note
+    if payload["coupling"] == "AB":
+        turbine = result.turbines[0]
+        payload["targets"]["main_total_outlet_pressure_Pa"] = float(
+            turbine.outlet.p_total)
+        payload["targets"]["main_compressor_power_W"] = float(
+            result.compressor.power)
+        payload["brackets"]["provenance"] = (
+            "explicit 120000/150000 Pa static bracket; " + note)
+    else:
+        gas_generator, free_power = result.turbines
+        payload["targets"]["gas_generator_compressor_power_W"] = float(
+            result.compressor.power)
+        payload["targets"]["free_power_outlet_total_pressure_Pa"] = float(
+            free_power.outlet.p_total)
+        static = _preliminary_static(gas_generator.outlet.p_total,
+                                     gas_generator.outlet.k)
+        payload["brackets"]["gas_generator"] = [
+            GG_BRACKET_FACTORS[0] * static, GG_BRACKET_FACTORS[1] * static]
+        payload["brackets"]["provenance"] = (
+            "gas_generator: 0.8/1.2 * preliminary 0D static conversion at the "
+            f"variant source k (M_t={REFERENCE_EXIT_MACH}); free_power: "
+            "explicit 120000/150000 Pa; " + note)
+    return payload
+
+
 def _digest(relatives):
     digest = hashlib.sha256()
     for relative in relatives:
@@ -249,12 +505,41 @@ def _stage_block(block, count):
         _need(list(block[key]) == list(values), f"stage control {key} was changed")
 
 
+def _design_block(block, count, role):
+    """Validate complete mathematical override arrays for one active role."""
+    _need(isinstance(block, Mapping) and set(block) == set(DESIGN_CONTROL_KEYS),
+          f"design_overrides.{role} keys changed")
+    arrays = {}
+    for key in DESIGN_CONTROL_KEYS:
+        values = block[key]
+        _need(isinstance(values, (list, tuple)) and len(values) == count,
+              f"design_overrides.{role}.{key} must have {count} entries")
+        _need(all(not isinstance(value, bool)
+                  and isinstance(value, (int, float))
+                  and math.isfinite(float(value)) for value in values),
+              f"design_overrides.{role}.{key} must be finite numbers")
+        values = [float(value) for value in values]
+        if key == "alpha1_deg":
+            _need(all(0.0 < value < 180.0 for value in values),
+                  f"design_overrides.{role}.alpha1_deg must be in (0, 180)")
+        else:
+            _need(all(value > 0.0 for value in values),
+                  f"design_overrides.{role}.{key} must be > 0")
+        arrays[key] = values
+    _need(arrays["pi_weights"][-1] == 1.0,
+          f"design_overrides.{role}.pi_weights[-1] must be 1.0")
+    return arrays
+
+
 def _validate_payload(payload) -> PlanPoint:
     top = {"schema_version", "point_index", "coupling", "assembly", "architecture",
            "turbine_role", "stage_counts", "architecture_cycle_source",
            "stage_controls", "targets", "brackets"}
-    _need(isinstance(payload, Mapping) and set(payload) == top,
+    allowed = top | {"air_mass_flow_kg_s"}
+    _need(isinstance(payload, Mapping) and top <= set(payload) <= allowed,
           "payload keys or schema changed")
+    if "air_mass_flow_kg_s" in payload:
+        _finite(payload["air_mass_flow_kg_s"], "air_mass_flow_kg_s")
     _need(payload["schema_version"] == INPUT_SCHEMA_VERSION, "schema version changed")
     coupling, assembly = payload["coupling"], payload["assembly"]
     if coupling == "AB":
@@ -270,15 +555,40 @@ def _validate_payload(payload) -> PlanPoint:
     controls = payload["stage_controls"]
     _need(isinstance(controls, Mapping) and set(controls) == {
         "speed_rpm", "hub_diameter_m", "reference_exit_mach",
-        "boundary_is_static", "pressure_ratio_policy", "speed_basis"} | set(counts),
+        "boundary_is_static", "pressure_ratio_policy", "speed_basis"} | set(counts)
+        | ({"operating_points"} if "operating_points" in controls else set())
+        | ({"design_overrides"} if "design_overrides" in controls else set())
+        | ({"reaction_table_policy"} if "reaction_table_policy" in controls
+           else set()),
         "stage_controls keys changed")
     for key, value in (("speed_rpm", SPEED_RPM), ("hub_diameter_m", HUB_DIAMETER_M),
                        ("reference_exit_mach", REFERENCE_EXIT_MACH),
                        ("boundary_is_static", True), ("speed_basis", SPEED_BASIS),
                        ("pressure_ratio_policy", PRESSURE_RATIO_RAW_UNBOUNDED)):
         _need(controls[key] == value, f"stage_controls.{key} was changed")
+    if "reaction_table_policy" in controls:
+        _need(controls["reaction_table_policy"] in REACTION_TABLE_POLICIES,
+              "stage_controls.reaction_table_policy must be one of "
+              f"{REACTION_TABLE_POLICIES!r}")
     for key, count in counts.items():
         _stage_block(controls[key], count)
+    if "design_overrides" in controls:
+        overrides = controls["design_overrides"]
+        _need(isinstance(overrides, Mapping) and set(overrides) == set(counts),
+              "design_overrides must cover exactly the active turbine roles")
+        for role, count in counts.items():
+            _design_block(overrides[role], count, role)
+    if "operating_points" in controls:
+        points = controls["operating_points"]
+        _need(isinstance(points, Mapping) and set(points) == set(counts),
+              "operating_points must cover exactly the active turbine roles")
+        for role, point in points.items():
+            _need(isinstance(point, Mapping)
+                  and set(point) == {"speed_rpm", "hub_diameter_m"},
+                  f"operating_points.{role} keys changed")
+            _finite(point["speed_rpm"], f"operating_points.{role}.speed_rpm")
+            _finite(point["hub_diameter_m"],
+                    f"operating_points.{role}.hub_diameter_m")
     brackets = payload["brackets"]
     _need(isinstance(brackets, Mapping), "brackets must be an object")
     for key in counts:
@@ -313,10 +623,15 @@ def _bound_orchestration(namespace):
     raise ArchitectureCoupledSmokeError("fresh namespace has no bound orchestration")
 
 
-def _fresh_namespace(model, result, turbine, count, controls, p_static):
+def _fresh_namespace(model, result, turbine, count, controls, p_static,
+                     gas_flow=None):
     namespace = stage_smoke._build_namespace(
         model, result, turbine, count, controls, p_static,
         PRESSURE_RATIO_RAW_UNBOUNDED)
+    if gas_flow is not None:
+        namespace.update({"G_в": float(gas_flow), "G_c1": float(gas_flow),
+                          "G_л_ост": float(gas_flow),
+                          "G_base": (float(gas_flow),) * 3})
     return namespace, _bound_orchestration(namespace)
 
 
@@ -356,22 +671,75 @@ def _base_output(payload, result, posthoc):
     }
 
 
+def _sizing(payload, result):
+    """Return explicit unknown-air-flow trial values, or None when absent."""
+    raw = payload.get("air_mass_flow_kg_s")
+    if raw is None:
+        return None
+    air = _finite(raw, "air_mass_flow_kg_s")
+    source_air = float(result.air_mass_flow)
+    source_gas = float(result.gas_mass_flow)
+    source_fuel = float(result.fuel_mass_flow)
+    ratio = air / source_air
+    gas, fuel = air * (source_gas / source_air), source_fuel * ratio
+    return {"air": air, "gas": gas, "fuel": fuel, "ratio": ratio,
+            "source_air": source_air, "source_gas": source_gas,
+            "source_fuel": source_fuel,
+            "compressor_power": float(result.compressor.specific_work) * air,
+            "mass_residual": gas - (air + fuel)}
+
+
+def _flow_output(sizing, result):
+    """Explicit design-flow provenance; never claims the 0D flow was sized."""
+    return {
+        "kind": "EXPLICIT_UNKNOWN_AIR_FLOW_DESIGN_TRIAL",
+        "sizing_basis": "CYCLE_BOOK_PRINTED_P22_SPECIFIC_POWER_PRE_REDUCER",
+        "source_book": "cycle textbook printed p.22 section 3.2",
+        "source_equation": "N_specific=N/G_air; "
+                           "N=(L_t*G_gas*eta_m-L_c*G_air)*eta_reducer; "
+                           "eta_reducer omitted at the pre-reducer 110 kW plane",
+        "pre_reducer": True,
+        "source_flow_role": "PRELIMINARY_0D_NOT_A_SIZED_DESIGN_FLOW",
+        "source_air_mass_flow_kg_s": sizing["source_air"],
+        "source_gas_mass_flow_kg_s": sizing["source_gas"],
+        "source_fuel_mass_flow_kg_s": sizing["source_fuel"],
+        "trial_air_mass_flow_kg_s": sizing["air"],
+        "trial_gas_mass_flow_kg_s": sizing["gas"],
+        "trial_fuel_mass_flow_kg_s": sizing["fuel"],
+        "air_flow_ratio_to_source_0d": sizing["ratio"],
+        "combustor_alpha": float(result.combustor.alpha),
+        "alpha_unchanged": True, "mass_residual_kg_s": sizing["mass_residual"],
+        "gas_property_basis": result.gas_property_basis,
+        "actual_compressor_power_target_W": sizing["compressor_power"],
+        "compressor_power_basis":
+            "actual compressor specific work times explicit trial air flow",
+        "note": "every trial re-evaluates the actual meanline and GG/FPT "
+                "closures at the trial air flow; stored stage powers are not "
+                "rescaled from the 0D result",
+    }
+
+
 def _evaluate_ab(payload, model):
     result = calculate_architecture_cycle(
         payload_to_input(payload["architecture_cycle_source"]))
     turbine = result.turbines[0]
     target = float(payload["targets"]["main_total_outlet_pressure_Pa"])
-    compressor_power = float(result.compressor.power)
+    sizing = _sizing(payload, result)
+    compressor_power = (sizing["compressor_power"] if sizing is not None
+                        else float(result.compressor.power))
     _need(target == float(turbine.outlet.p_total)
-          and float(payload["targets"]["main_compressor_power_W"]) == compressor_power,
-          "AB target was changed")
+          and float(payload["targets"]["main_compressor_power_W"])
+          == float(result.compressor.power), "AB target was changed")
     namespace, orchestration = _fresh_namespace(
         model, result, turbine, payload["stage_counts"]["main"],
         _controls(payload, "main"),
-        _preliminary_static(turbine.outlet.p_total, turbine.outlet.k))
+        _preliminary_static(turbine.outlet.p_total, turbine.outlet.k),
+        None if sizing is None else sizing["gas"])
+    main_operating = _operating(payload, "main")
+    n, hub = main_operating[:2]
     closure = _call_closure(
         namespace, "AB_MAIN.solve_total_outlet_pressure",
-        orchestration.solve_total_outlet_pressure, SPEED_RPM, HUB_DIAMETER_M,
+        orchestration.solve_total_outlet_pressure, n, hub,
         target, static_pressure_bracket=payload["brackets"]["main"])
     stages = closure["actual_stages"]
     efficiency = float(result.shaft.mechanical_efficiencies[0])
@@ -386,13 +754,42 @@ def _evaluate_ab(payload, model):
         "closure": stage_smoke._json_value(closure, "ab.closure")}
     outputs = _base_output(
         payload, result, {"main": stage_smoke._posthoc_pi_acceptance(stages)})
+    operating = _operating_output({"main": main_operating})
+    if operating is not None:
+        outputs["operating_points"] = operating
+    design = _design_output(payload)
+    if design is not None:
+        outputs["design_controls"] = design
     outputs["actual_boundary"] = boundary
+    power_extra = {
+        "mechanical_efficiency": efficiency, "stage_gas_power_W": stage_gas_power,
+        "stage_mechanical_power_W": mechanical, "compressor_power_W": compressor_power,
+        "compressor_power_basis": "exactly source result.compressor.power"}
+    if sizing is not None:
+        power_extra.update({
+            "reference_0d_compressor_power_W": float(result.compressor.power),
+            "actual_sized_compressor_power_W": compressor_power,
+            "sized_air_mass_flow_kg_s": sizing["air"],
+            "compressor_power_basis": "actual specific work times explicit "
+                                      "trial air flow"})
+        outputs["flow_sizing"] = _flow_output(sizing, result)
     outputs["power"] = _power(
         "AB_NET_STAGE_MECHANICAL_MINUS_SOURCE_COMPRESSOR_POWER",
-        mechanical - compressor_power, {
-            "mechanical_efficiency": efficiency, "stage_gas_power_W": stage_gas_power,
-            "stage_mechanical_power_W": mechanical, "compressor_power_W": compressor_power,
-            "compressor_power_basis": "exactly source result.compressor.power"})
+        mechanical - compressor_power, power_extra)
+    policy = _reaction_table_policy(payload)
+    if policy == REACTION_TABLE_POLICY_REQUIRE_FINAL_SOURCE_DOMAIN:
+        try:
+            outputs["reaction_table_source_domain"] = (
+                _enforce_reaction_table_domain(
+                    "main", closure, namespace, policy=policy,
+                    flow_metadata=(None if sizing is None
+                                   else _flow_output(sizing, result))))
+        except SourceTableDomainError as exc:
+            try:
+                exc.partial = stage_smoke._json_value(outputs, "ab.outputs")
+            except stage_smoke.StageNumericalFailure:
+                exc.partial = {"actual_boundary": boundary}
+            raise
     try:
         return stage_smoke._json_value(outputs, "ab.outputs")
     except stage_smoke.StageNumericalFailure as exc:
@@ -404,35 +801,61 @@ def _evaluate_c(payload, model):
     result = calculate_architecture_cycle(
         payload_to_input(payload["architecture_cycle_source"]))
     gas_generator, free_power = result.turbines
-    compressor_power = float(result.compressor.power)
+    sizing = _sizing(payload, result)
+    reference_compressor_power = float(result.compressor.power)
+    compressor_power = (sizing["compressor_power"] if sizing is not None
+                        else reference_compressor_power)
     gg_target = float(payload["targets"]["gas_generator_compressor_power_W"])
     fpt_target = float(payload["targets"]["free_power_outlet_total_pressure_Pa"])
-    _need(gg_target == compressor_power
+    policy = _reaction_table_policy(payload)
+    flow_metadata = None if sizing is None else _flow_output(sizing, result)
+    _need(gg_target == reference_compressor_power
           and fpt_target == float(free_power.outlet.p_total), "C target was changed")
     gg_eff, fpt_eff = (float(item) for item
                        in result.shaft.mechanical_efficiencies[:2])
+    gas_flow = None if sizing is None else sizing["gas"]
+    gg_operating = _operating(payload, "gas_generator")
+    fpt_operating = _operating(payload, "free_power")
     gg_namespace, gg_orchestration = _fresh_namespace(
         model, result, gas_generator, payload["stage_counts"]["gas_generator"],
         _controls(payload, "gas_generator"),
-        _preliminary_static(gas_generator.outlet.p_total, gas_generator.outlet.k))
+        _preliminary_static(gas_generator.outlet.p_total, gas_generator.outlet.k),
+        gas_flow)
     gg_closure = _call_closure(
         gg_namespace, "C_GAS_GENERATOR.solve_prescribed_mechanical_power",
-        gg_orchestration.solve_prescribed_mechanical_power, SPEED_RPM,
-        HUB_DIAMETER_M, gg_target, gg_eff,
+        gg_orchestration.solve_prescribed_mechanical_power, gg_operating[0],
+        gg_operating[1], compressor_power, gg_eff,
         static_pressure_bracket=payload["brackets"]["gas_generator"])
     gg_typed = [StageResult.from_legacy_dict(item)
                 for item in gg_closure["actual_stages"]]
     gg_last, gg_gas = gg_typed[-1], sum(item.G_c * item.L_t for item in gg_typed)
     gg_mech = gg_eff * gg_gas
     gg_record = {
-        "target_compressor_power_W": gg_target,
+        "target_compressor_power_W": compressor_power,
         "actual_mechanical_power_W": float(gg_closure["actual_metric"]),
         "gas_generator_balance_residual_W": gg_mech - compressor_power,
         "closure": stage_smoke._json_value(gg_closure, "c.gas_generator")}
+    if sizing is not None:
+        gg_record["reference_0d_compressor_power_W"] = reference_compressor_power
+        gg_record["target_compressor_power_basis"] = (
+            "actual specific work times explicit trial air flow")
+    partial = {"gas_generator": gg_record}
+    gg_domain = None
+    if policy == REACTION_TABLE_POLICY_REQUIRE_FINAL_SOURCE_DOMAIN:
+        try:
+            gg_domain = _enforce_reaction_table_domain(
+                "gas_generator", gg_closure, gg_namespace, policy=policy,
+                flow_metadata=flow_metadata)
+        except SourceTableDomainError as exc:
+            exc.partial = dict(partial)
+            if flow_metadata is not None:
+                exc.partial["flow_sizing"] = flow_metadata
+            raise
     fpt_namespace, fpt_orchestration = _fresh_namespace(
         model, result, free_power, payload["stage_counts"]["free_power"],
         _controls(payload, "free_power"),
-        _preliminary_static(free_power.outlet.p_total, free_power.outlet.k))
+        _preliminary_static(free_power.outlet.p_total, free_power.outlet.k),
+        gas_flow)
     flow_keys = ("G_в", "G_c1", "G_л_ост")
     flow_before = {key: float(fpt_namespace[key]) for key in flow_keys}
     R_before, alpha_before = (float(fpt_namespace["R"]),
@@ -443,12 +866,11 @@ def _evaluate_c(payload, model):
                  and float(fpt_namespace["R"]) == R_before
                  and float(fpt_namespace["α_г"]) == alpha_before)
     _need(unchanged, "FPT flow/R/alpha changed during GG state transfer")
-    partial = {"gas_generator": gg_record}
     try:
         fpt_closure = _call_closure(
             fpt_namespace, "C_FREE_POWER.solve_total_outlet_pressure",
-            fpt_orchestration.solve_total_outlet_pressure, SPEED_RPM,
-            HUB_DIAMETER_M, fpt_target,
+            fpt_orchestration.solve_total_outlet_pressure, fpt_operating[0],
+            fpt_operating[1], fpt_target,
             static_pressure_bracket=payload["brackets"]["free_power"])
     except CoupledNoSolution as exc:
         exc.partial = partial
@@ -459,15 +881,24 @@ def _evaluate_c(payload, model):
     fpt_typed = [StageResult.from_legacy_dict(item)
                  for item in fpt_closure["actual_stages"]]
     fpt_first = fpt_typed[0]
+    source_flow = float(result.gas_mass_flow)
+    sized_flow = source_flow if gas_flow is None else float(gas_flow)
     continuity = {
         "gas_generator_last_stage_T_total_K": float(gg_last.T_total), "gas_generator_last_stage_p_total_Pa": float(gg_last.p_total),
         "free_power_first_stage_T0_K": float(fpt_first.T0), "free_power_first_stage_p0_Pa": float(fpt_first.p0),
         "temperature_exact": fpt_first.T0 == gg_last.T_total, "pressure_exact": fpt_first.p0 == gg_last.p_total,
-        "flow_exact": fpt_first.G_c == gg_last.G_c, "source_flow_kg_s": float(result.gas_mass_flow),
-        "flow_matches_source": fpt_first.G_c == float(result.gas_mass_flow),
+        "flow_exact": fpt_first.G_c == gg_last.G_c, "source_flow_kg_s": source_flow,
+        "flow_matches_source": fpt_first.G_c == source_flow,
         "flow_R_alpha_unchanged": unchanged}
+    if sizing is not None:
+        continuity.update({
+            "sized_gas_flow_kg_s": sized_flow,
+            "flow_matches_sized": fpt_first.G_c == sized_flow,
+            "flow_check_target": "ACTUAL_SIZED_FLOW"})
     _need(continuity["temperature_exact"] and continuity["pressure_exact"]
-          and continuity["flow_exact"], "GG to FPT total state continuity is not exact")
+          and continuity["flow_exact"]
+          and fpt_first.G_c == sized_flow,
+          "GG to FPT total state continuity is not exact")
     fpt_gas = sum(item.G_c * item.L_t for item in fpt_typed)
     fpt_mech = fpt_eff * fpt_gas
     fpt_record = {
@@ -475,21 +906,59 @@ def _evaluate_c(payload, model):
         "actual_outlet_total_pressure_Pa": float(fpt_closure["actual_metric"]),
         "mechanical_efficiency": fpt_eff, "stage_gas_power_W": fpt_gas,
         "closure": stage_smoke._json_value(fpt_closure, "c.free_power")}
+    fpt_domain = None
+    if policy == REACTION_TABLE_POLICY_REQUIRE_FINAL_SOURCE_DOMAIN:
+        try:
+            fpt_domain = _enforce_reaction_table_domain(
+                "free_power", fpt_closure, fpt_namespace, policy=policy,
+                flow_metadata=flow_metadata)
+        except SourceTableDomainError as exc:
+            exc.partial = {**partial, "free_power": fpt_record}
+            if flow_metadata is not None:
+                exc.partial["flow_sizing"] = flow_metadata
+            raise
     outputs = _base_output(payload, result, {
         "gas_generator": stage_smoke._posthoc_pi_acceptance(
             gg_closure["actual_stages"]),
         "free_power": stage_smoke._posthoc_pi_acceptance(
             fpt_closure["actual_stages"])})
+    operating = _operating_output({
+        "gas_generator": gg_operating, "free_power": fpt_operating})
+    if operating is not None:
+        outputs["operating_points"] = operating
+    design = _design_output(payload)
+    if design is not None:
+        outputs["design_controls"] = design
     outputs["actual_boundary"] = {
         "gas_generator": gg_record, "free_power": fpt_record,
         "gas_generator_to_free_power_continuity": continuity}
+    if policy == REACTION_TABLE_POLICY_REQUIRE_FINAL_SOURCE_DOMAIN:
+        outputs["reaction_table_source_domain"] = {
+            "policy": policy, "status": "FINAL_SOURCE_DOMAIN_VERIFIED",
+            "final_domain_verified": True,
+            "table_bounds": gg_domain["table_bounds"],
+            "source_domain_tolerance": REACTION_TABLE_DOMAIN_TOL,
+            "roles": {"gas_generator": gg_domain, "free_power": fpt_domain},
+            "intermediate_clipping":
+                "NUMERICAL_INITIALIZATION_ONLY_NOT_VALIDATED_STATES",
+            "note": "only the accepted final actual GG and FPT closures are "
+                    "checked; intermediate reaction clipping is numerical "
+                    "initialization and is not a validated state"}
+    if flow_metadata is not None:
+        outputs["flow_sizing"] = flow_metadata
+    gg_power = {
+        "mechanical_efficiency": gg_eff, "stage_gas_power_W": gg_gas,
+        "mechanical_power_W": gg_mech, "compressor_power_W": compressor_power,
+        "balance_residual_W": gg_mech - compressor_power}
+    fpt_power = {
+        "mechanical_efficiency": fpt_eff, "stage_gas_power_W": fpt_gas,
+        "mechanical_power_W": fpt_mech}
+    if sizing is not None:
+        gg_power["reference_0d_compressor_power_W"] = reference_compressor_power
+        fpt_power["sized_air_mass_flow_kg_s"] = sizing["air"]
     outputs["power"] = _power(
         "C_FPT_MECHANICAL_POWER_GG_BALANCED_AGAINST_COMPRESSOR", fpt_mech, {
-            "gas_generator": {"mechanical_efficiency": gg_eff, "stage_gas_power_W": gg_gas,
-                              "mechanical_power_W": gg_mech, "compressor_power_W": compressor_power,
-                              "balance_residual_W": gg_mech - compressor_power},
-            "free_power": {"mechanical_efficiency": fpt_eff, "stage_gas_power_W": fpt_gas,
-                           "mechanical_power_W": fpt_mech}})
+            "gas_generator": gg_power, "free_power": fpt_power})
     try:
         return stage_smoke._json_value(outputs, "c.outputs")
     except stage_smoke.StageNumericalFailure as exc:
@@ -528,6 +997,14 @@ def evaluate_coupled_payload(payload, *, model=None):
                         "stage_geometry_domain", exc.reason, input_payload,
                         {**diag, "location": exc.location}, exc.partial or None,
                         {"input": input_payload, "location": exc.location})
+    except SourceTableDomainError as exc:
+        return _failure(CalculationStatus.MODEL_ERROR,
+                        "reaction_table_source_domain", exc.reason,
+                        input_payload, {**diag, "source_domain": exc.as_record()},
+                        exc.partial or None,
+                        {"input": input_payload, "role": exc.role,
+                         "stage": exc.stage,
+                         "table_bounds": list(exc.table_bounds)})
     except stage_smoke.StageNumericalFailure as exc:
         return _failure(CalculationStatus.NUMERICAL_FAILURE, "stage_numerical",
                         "non_finite_coupled_output", input_payload,
