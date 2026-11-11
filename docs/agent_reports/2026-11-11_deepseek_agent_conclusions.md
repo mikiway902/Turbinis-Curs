@@ -1,7 +1,7 @@
 # DeepSeek agent conclusions — 2026-11-11 checkpoint
 
-This file preserves the implementation-agent reports exactly as recorded at the
-checkpoint. They are work reports, not independent physical validation and not
+This file preserves structured summaries of the implementation-agent reports at the
+checkpoint, not a verbatim transcript. They are work reports, not independent physical validation and not
 final project approval. Cross-checked verification is summarized in
 `docs/STAGE_REPORT_2026-11-11.md` and `docs/PROJECT_STATE.md`.
 
@@ -233,8 +233,8 @@ workstream were superseded by the final combined run (43 scripts tests OK).
 
 ### Unknowns and integration
 
-- `turbine_engine/__init__.py` was not edited by this workstream; the parent added
-  exports.
+- `turbine_engine/__init__.py` was not edited by this workstream; RAW package-level
+  exports were not subsequently added. Use direct module imports.
 - `pyproject.toml` was not edited by this workstream; the parent added optional
   `parquet`/`jax` groups.
 - No engineering profile numbers were invented; profiles are explicit inputs.

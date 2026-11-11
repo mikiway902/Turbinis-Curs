@@ -37,13 +37,54 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from typing import Any, Mapping
+from typing import Any, Mapping, NoReturn
+
+from turbine_engine.diagnostics import (
+    NON_PHYSICAL_STATE,
+    NumericalConvergenceError,
+    SolverDiagnosticsError,
+)
 
 # Solver controls copied from the notebook defaults (absolute tolerances in K
 # for the compressor/turbine temperature iteration and in pressure-ratio units
 # for the turbine expansion iteration).
 SOLVER_TOL = 1e-6
 SOLVER_MAX_ITER = 100
+
+# Opt-in property/method selectors.  The default is the unchanged notebook
+# path; the textbook path is an explicitly labelled variant of this same
+# single-point calculation, not a new cycle model.
+CYCLE_GAS_PROPERTY_BASIS_LEGACY = "legacy_mean_cp"
+CYCLE_GAS_PROPERTY_BASIS_TEXTBOOK = "textbook_true_cp"
+CYCLE_GAS_PROPERTY_BASES = (
+    CYCLE_GAS_PROPERTY_BASIS_LEGACY,
+    CYCLE_GAS_PROPERTY_BASIS_TEXTBOOK,
+)
+
+ALPHA_BASIS_LEGACY = "empirical_process_calc_alpha_fuel_exit_alpha"
+ALPHA_BASIS_TEXTBOOK = "fuel_ratio_all_process_and_exit"
+
+TEXTBOOK_LIMITATIONS = (
+    "NOT_PHYSICALLY_VALIDATED",
+    "cooling_bookkeeping_only_no_temperature_mixing",
+    "common_R",
+)
+
+
+def _resolve_cycle_gas_property_basis(value: Any) -> str:
+    """Validate the property-basis selector before any cycle arithmetic."""
+
+    if not isinstance(value, str):
+        raise ValueError(
+            f"gas_property_basis must be a string, got {value!r}; "
+            f"expected one of {CYCLE_GAS_PROPERTY_BASES!r}"
+        )
+    if value not in CYCLE_GAS_PROPERTY_BASES:
+        raise ValueError(
+            f"unknown gas_property_basis {value!r}; "
+            f"expected one of {CYCLE_GAS_PROPERTY_BASES!r}"
+        )
+    return value
 
 
 class CycleSolverError(RuntimeError):
@@ -234,6 +275,14 @@ class CycleResult:
     g_cooling: float
     g_return: float
     cooled: bool
+    # Additive method metadata.  The defaults keep the legacy notebook path
+    # legible without changing any legacy arithmetic or serialization shape;
+    # the opt-in textbook path records its basis and plain JSON diagnostics.
+    # The frozen dataclass prevents attribute rebinding only; the nested
+    # method_diagnostics mapping is not deeply immutable.
+    gas_property_basis: str = CYCLE_GAS_PROPERTY_BASIS_LEGACY
+    alpha_basis: str = ALPHA_BASIS_LEGACY
+    method_diagnostics: Mapping[str, Any] | None = None
 
 
 def _as_float(name: str, value: Any) -> float:
@@ -353,6 +402,61 @@ def _compressor_exit_temperature(
     )
 
 
+def _textbook_cp_k(T: float, alpha: float, config: CycleConfig) -> tuple[float, float]:
+    """Local opt-in bridge to the published direct true-cp correlation.
+
+    Imported lazily so the default cycle path keeps its original import graph
+    and does not load ``turbine_engine.gas`` (which imports this module).
+    """
+
+    from turbine_engine.gas import calc_textbook_gas_cp_k
+
+    return calc_textbook_gas_cp_k(T, alpha, config.R)
+
+
+def _textbook_compressor_state(
+    T_in: float,
+    pi: float,
+    config: CycleConfig,
+    tol: float,
+    nmax: int,
+) -> dict[str, Any]:
+    """Evaluate the textbook-cp compressor fixed point from ``T_in``."""
+
+    def evaluate(T_out: float) -> dict[str, Any]:
+        T_mean = 0.5 * (T_in + T_out)
+        cp, k = _textbook_cp_k(T_mean, math.inf, config)
+        T_out_new = T_in * pi ** (
+            (k - 1.0) / (k * config.eta_compressor_poly)
+        )
+        return {
+            "T_in": T_in,
+            "T_out": T_out,
+            "T_out_new": T_out_new,
+            "T_mean": T_mean,
+            "cp": cp,
+            "k": k,
+        }
+
+    T_out = T_in * pi ** (
+        (config.k_air - 1.0) / (config.k_air * config.eta_compressor_poly)
+    )
+    return _textbook_fixed_point(
+        evaluate,
+        T_out,
+        tol,
+        nmax,
+        stage="cycle.compressor.textbook_true_cp",
+        reason="compressor_iteration_exhausted",
+        context={
+            "gas_property_basis": CYCLE_GAS_PROPERTY_BASIS_TEXTBOOK,
+            "T_in": T_in,
+            "pi": pi,
+        },
+        next_key="T_out_new",
+    )
+
+
 def calc_compressor(
     pi: float,
     config: CycleConfig = DEFAULT_CONFIG,
@@ -360,6 +464,7 @@ def calc_compressor(
     tol: float = SOLVER_TOL,
     nmax: int = SOLVER_MAX_ITER,
     T_in: float | None = None,
+    gas_property_basis: str = CYCLE_GAS_PROPERTY_BASIS_LEGACY,
 ) -> tuple[float, float]:
     """Compressor exit total temperature and mean k (variable-k iteration).
 
@@ -367,8 +472,16 @@ def calc_compressor(
     keeps the notebook/cycle anchor path bit-for-bit unchanged by using
     ``config.T_a_full``; supplying it applies the same equation from another
     inlet total temperature.
+
+    ``gas_property_basis="legacy_mean_cp"`` (default) preserves the existing
+    notebook path exactly.  Opting into ``"textbook_true_cp"`` evaluates the
+    published direct true-cp correlation at the mean of the actual inlet and
+    evaluated outlet temperature, while retaining the same polytropic relation,
+    tolerance and iteration limit.  The returned ``T_out`` is the last
+    evaluated state; its fixed-point residual is below ``tol``.
     """
 
+    basis = _resolve_cycle_gas_property_basis(gas_property_basis)
     pi = _as_positive_float("pi", pi)
     nmax = _positive_int("nmax", nmax)
     tol = _as_float("tol", tol)
@@ -377,6 +490,11 @@ def calc_compressor(
     inlet_temperature = (
         config.T_a_full if T_in is None else _as_positive_float("T_in", T_in)
     )
+    if basis == CYCLE_GAS_PROPERTY_BASIS_TEXTBOOK:
+        state = _textbook_compressor_state(
+            inlet_temperature, pi, config, tol, nmax
+        )
+        return state["T_out"], state["k"]
     return _compressor_exit_temperature(
         inlet_temperature, pi, config, tol, nmax
     )
@@ -434,12 +552,526 @@ def _positive_int(name: str, value: Any) -> int:
 
 
 # ---------------------------------------------------------------------------
-# Single point
+# Opt-in textbook true-cp variant (same single-point calculation)
 # ---------------------------------------------------------------------------
-def calculate_cycle_point(
-    state: CycleState, config: CycleConfig = DEFAULT_CONFIG
+def _nonphysical(stage: str, reason: str, message: str, state: Mapping[str, Any]) -> NoReturn:
+    raise SolverDiagnosticsError(
+        message,
+        stage=stage,
+        reason=reason,
+        status=NON_PHYSICAL_STATE,
+        last_valid_state=state,
+    )
+
+
+def _textbook_fixed_point(
+    evaluate,
+    initial: float,
+    tol: float,
+    nmax: int,
+    *,
+    stage: str,
+    reason: str,
+    context: Mapping[str, Any],
+    next_key: str = "T_out",
+) -> dict[str, Any]:
+    # Run a bounded temperature fixed point and return the last evaluated state.
+    last: dict[str, Any] | None = None
+    evaluated = initial
+    proposed = initial
+    residual = 0.0
+    for iteration in range(nmax):
+        evaluated = initial
+        last = evaluate(evaluated)
+        proposed = last[next_key]
+        residual = proposed - evaluated
+        last["evaluated_temperature_K"] = evaluated
+        last["proposed_temperature_K"] = proposed
+        last["residual"] = residual
+        last["iterations"] = iteration + 1
+        if abs(residual) < tol:
+            return last
+        initial = proposed
+    raise NumericalConvergenceError(
+        f"{stage} fixed-point iteration exhausted its limit",
+        stage=stage,
+        reason=reason,
+        last_valid_state={
+            "iterations": nmax,
+            "iteration_limit": nmax,
+            "tolerance_K": tol,
+            **context,
+            **(last or {}),
+            "evaluated_temperature_K": evaluated,
+            "proposed_temperature_K": proposed,
+            "residual_K": residual,
+            "converged": False,
+        },
+    )
+
+
+def _textbook_turbine_state(
+    T_eval: float,
+    T_g: float,
+    alpha: float,
+    config: CycleConfig,
+    p_g: float,
+    pt_static: float,
+) -> dict[str, Any]:
+    # One coherent turbine evaluation at the proposed outlet total temperature.
+    if not (math.isfinite(T_eval) and T_eval > 0.0):
+        _nonphysical(
+            "cycle.turbine.textbook_true_cp",
+            "turbine_outlet_temperature_invalid",
+            "textbook turbine outlet temperature is invalid",
+            {"T_eval": T_eval, "T_g": T_g},
+        )
+    T_mean = 0.5 * (T_g + T_eval)
+    cp, k = _textbook_cp_k(T_mean, alpha, config)
+    _, k_exit = _textbook_cp_k(T_eval, alpha, config)
+    mach_factor = 1.0 + 0.5 * (k_exit - 1.0) * config.M_t**2
+    pt_total = pt_static * mach_factor ** (k_exit / (k_exit - 1.0))
+    pi_t = p_g / pt_total
+    if not (math.isfinite(pi_t) and pi_t > 1.0):
+        _nonphysical(
+            "cycle.turbine.textbook_true_cp",
+            "turbine_pressure_ratio_not_above_one",
+            "textbook turbine total pressure ratio is not above one",
+            {
+                "T_eval": T_eval,
+                "T_g": T_g,
+                "p_g": p_g,
+                "p_t_static": pt_static,
+                "p_t_total": pt_total,
+                "pi_t": pi_t,
+                "k_exit": k_exit,
+            },
+        )
+    eta_t = calc_eta_expansion(pi_t, k, config.eta_turbine_poly)
+    work = cp * T_g * (1.0 - pi_t ** ((1.0 - k) / k)) * eta_t
+    T_out = T_g - work / cp
+    if not (math.isfinite(T_out) and T_out > 0.0):
+        _nonphysical(
+            "cycle.turbine.textbook_true_cp",
+            "turbine_outlet_temperature_invalid",
+            "textbook turbine energy equation produced an invalid outlet",
+            {"T_eval": T_eval, "T_g": T_g, "work": work, "T_out": T_out},
+        )
+    T_static = T_eval / mach_factor
+    return {
+        "T_eval": T_eval,
+        "T_out": T_out,
+        "T_mean": T_mean,
+        "cp": cp,
+        "k": k,
+        "k_exit": k_exit,
+        "pt_total": pt_total,
+        "pi_t": pi_t,
+        "eta_t": eta_t,
+        "work": work,
+        "T_static": T_static,
+        "c_t": config.M_t * math.sqrt(k_exit * config.R * T_static),
+    }
+
+
+def _solve_textbook_turbine(
+    T_g: float,
+    alpha: float,
+    config: CycleConfig,
+    p_g: float,
+    pt_static: float,
+    pi: float,
+) -> dict[str, Any]:
+    # Bounded fixed point for the coupled actual outlet temperature and pressure.
+    # Numerical seed only.  The actual p_g below follows the source
+    # sigma_in*sigma_combustion*p_a_full*pi and does not normalize pi_v.
+    seed = (
+        config.sigma_in
+        * config.sigma_combustion
+        * pi
+        * config.pi_v
+        / config.pi_nozzle
+    )
+    return _textbook_fixed_point(
+        lambda T: _textbook_turbine_state(
+            T, T_g, alpha, config, p_g, pt_static
+        ),
+        T_g * seed ** ((1.0 - config.k_air) / config.k_air),
+        SOLVER_TOL,
+        SOLVER_MAX_ITER,
+        stage="cycle.turbine.textbook_true_cp",
+        reason="turbine_iteration_exhausted",
+        context={"T_g": T_g, "alpha": alpha, "p_g": p_g, "p_t_static": pt_static},
+    )
+
+
+def _textbook_nozzle_state(
+    T_eval: float,
+    T_t: float,
+    pi_c_full: float,
+    alpha: float,
+    config: CycleConfig,
+) -> dict[str, Any]:
+    # One coherent nozzle evaluation at the proposed static outlet temperature.
+    if not (math.isfinite(T_eval) and T_eval > 0.0):
+        _nonphysical(
+            "cycle.nozzle.textbook_true_cp",
+            "nozzle_outlet_temperature_invalid",
+            "textbook nozzle outlet temperature is invalid",
+            {"T_eval": T_eval, "T_t": T_t},
+        )
+    if not (math.isfinite(pi_c_full) and pi_c_full > 1.0):
+        _nonphysical(
+            "cycle.nozzle.textbook_true_cp",
+            "nozzle_pressure_ratio_not_above_one",
+            "textbook nozzle total-to-static pressure ratio is not above one",
+            {"T_t": T_t, "pi_c_full": pi_c_full, "p_a": config.p_a},
+        )
+    T_mean = 0.5 * (T_t + T_eval)
+    cp, k = _textbook_cp_k(T_mean, alpha, config)
+    H_c = cp * T_t * (1.0 - pi_c_full ** ((1.0 - k) / k))
+    c_c = config.phi_nozzle * math.sqrt(2.0 * H_c)
+    T_out = T_t - c_c**2 / (2.0 * cp)
+    if not (math.isfinite(T_out) and T_out > 0.0):
+        _nonphysical(
+            "cycle.nozzle.textbook_true_cp",
+            "nozzle_outlet_temperature_invalid",
+            "textbook nozzle temperature equation produced an invalid outlet",
+            {"T_eval": T_eval, "T_t": T_t, "H_c": H_c, "T_out": T_out},
+        )
+    return {
+        "T_eval": T_eval,
+        "T_out": T_out,
+        "T_mean": T_mean,
+        "cp": cp,
+        "k": k,
+        "H_c": H_c,
+        "c_c": c_c,
+        "pi_c_full": pi_c_full,
+    }
+
+
+def _solve_textbook_nozzle(
+    T_t: float,
+    pi_c_full: float,
+    alpha: float,
+    config: CycleConfig,
+) -> dict[str, Any]:
+    # Bounded fixed point for the nozzle outlet static temperature.
+    return _textbook_fixed_point(
+        lambda T: _textbook_nozzle_state(T, T_t, pi_c_full, alpha, config),
+        T_t * pi_c_full ** ((1.0 - config.k_air) / config.k_air),
+        SOLVER_TOL,
+        SOLVER_MAX_ITER,
+        stage="cycle.nozzle.textbook_true_cp",
+        reason="nozzle_iteration_exhausted",
+        context={"T_t": T_t, "pi_c_full": pi_c_full, "alpha": alpha},
+    )
+
+
+def _textbook_method_diagnostics(
+    compressor: Mapping[str, Any],
+    fuel: Mapping[str, Any],
+    turbine: Mapping[str, Any],
+    nozzle: Mapping[str, Any],
+    powers: Mapping[str, Any],
+    config: CycleConfig,
+) -> dict[str, Any]:
+    # Plain JSON-friendly method record; no model object or enum is stored.
+    return {
+        "gas_property_basis": CYCLE_GAS_PROPERTY_BASIS_TEXTBOOK,
+        "alpha_basis": ALPHA_BASIS_TEXTBOOK,
+        "property_correlation": "Appendix 6 direct true-cp fit, 750 K branch",
+        "limitations": list(TEXTBOOK_LIMITATIONS),
+        "assumptions": {
+            "turbine_outlet_pressure": (
+                "prescribed static p_t = pi_nozzle*p_a; total pressure from "
+                "local exit k and M_t"
+            ),
+            "nozzle": (
+                "process cp at mean total/static temperature and coefficient "
+                "phi; not a variable-cp integral"
+            ),
+            "cooling": "cooling_bookkeeping_only_no_temperature_mixing",
+            "gas_constant": "common_R",
+        },
+        "compressor": {
+            "inlet_total_temperature_K": compressor["T_in"],
+            "outlet_total_temperature_K": compressor["T_out"],
+            "proposed_outlet_total_temperature_K": compressor["proposed_temperature_K"],
+            "process_temperature_mean_K": compressor["T_mean"],
+            "cp_process_J_per_kgK": compressor["cp"],
+            "k_process": compressor["k"],
+            "alpha_domain": "dry air (alpha=inf)",
+            "temperature_residual_K": compressor["residual"],
+            "energy_residual_J_per_kg": compressor["cp"] * compressor["residual"],
+            "iterations": compressor["iterations"],
+        },
+        "fuel": {
+            "T_compressor_exit_K": fuel["T_k"],
+            "T_turbine_inlet_K": fuel["T_g"],
+            "T_fuel_reference_K": fuel["T_ref"],
+            "g_m": fuel["g_m"],
+            "alpha": fuel["alpha"],
+            "relation": "source calc_g_m mean-cp balance at T_ref",
+        },
+        "turbine": {
+            "inlet_total_temperature_K": fuel["T_g"],
+            "outlet_total_temperature_K": turbine["T_eval"],
+            "proposed_outlet_total_temperature_K": turbine["proposed_temperature_K"],
+            "outlet_static_temperature_K": turbine["T_static"],
+            "process_temperature_mean_K": turbine["T_mean"],
+            "cp_process_J_per_kgK": turbine["cp"],
+            "k_process": turbine["k"],
+            "k_exit": turbine["k_exit"],
+            "outlet_static_pressure_Pa": config.pi_nozzle * config.p_a,
+            "outlet_total_pressure_Pa": turbine["pt_total"],
+            "pressure_ratio": turbine["pi_t"],
+            "expansion_efficiency": turbine["eta_t"],
+            "specific_work_J_per_kg": turbine["work"],
+            "outlet_velocity_m_per_s": turbine["c_t"],
+            "mach": config.M_t,
+            "temperature_residual_K": turbine["residual"],
+            "energy_residual_J_per_kg": turbine["cp"] * turbine["residual"],
+            "iterations": turbine["iterations"],
+        },
+        "nozzle": {
+            "inlet_total_temperature_K": turbine["T_eval"],
+            "outlet_static_temperature_K": nozzle["T_eval"],
+            "proposed_outlet_static_temperature_K": nozzle["proposed_temperature_K"],
+            "process_temperature_mean_K": nozzle["T_mean"],
+            "cp_process_J_per_kgK": nozzle["cp"],
+            "k_process": nozzle["k"],
+            "total_static_pressure_ratio": nozzle["pi_c_full"],
+            "inlet_total_pressure_Pa": turbine["pt_total"],
+            "outlet_static_pressure_Pa": config.p_a,
+            "isentropic_drop_J_per_kg": nozzle["H_c"],
+            "exit_velocity_m_per_s": nozzle["c_c"],
+            "temperature_residual_K": nozzle["residual"],
+            "energy_residual_J_per_kg": nozzle["cp"] * nozzle["residual"],
+            "iterations": nozzle["iterations"],
+        },
+        "powers": dict(powers),
+    }
+
+
+def _calculate_textbook_cycle_point(
+    state: CycleState, config: CycleConfig
 ) -> CycleResult:
-    """Evaluate one cycle point without notebook state or optimizer search."""
+    # Evaluate the explicitly opted-in textbook true-cp variant.
+    pi, T_g, N = state.pi, state.T_g, state.N
+    cooled = T_g > config.T_cool_threshold
+    g_cooling = config.g_cooling if cooled else config.g_cooling_off
+    g_return = config.g_return_fraction * g_cooling
+
+    compressor = _textbook_compressor_state(
+        config.T_a_full, pi, config, SOLVER_TOL, SOLVER_MAX_ITER
+    )
+    T_k = compressor["T_out"]
+    L_k = compressor["cp"] * (T_k - config.T_a_full)
+    if not (math.isfinite(L_k) and L_k >= 0.0):
+        _nonphysical(
+            "cycle.compressor.textbook_true_cp",
+            "compressor_work_invalid",
+            "textbook compressor specific work is invalid",
+            {**compressor, "T_in": config.T_a_full, "pi": pi},
+        )
+    if not T_g > T_k:
+        _nonphysical(
+            "cycle.combustor.textbook_true_cp",
+            "turbine_inlet_not_above_compressor_exit",
+            "textbook turbine inlet temperature must exceed compressor exit",
+            {"T_k": T_k, "T_g": T_g, "pi": pi},
+        )
+    g_m = calc_g_m(T_k, T_g, config)
+    if not (math.isfinite(g_m) and g_m > 0.0):
+        _nonphysical(
+            "cycle.combustor.textbook_true_cp",
+            "fuel_ratio_not_positive",
+            "textbook source fuel balance is not finite and positive",
+            {"T_k": T_k, "T_g": T_g, "g_m": g_m},
+        )
+    alpha = 1.0 / (g_m * config.l0)
+    if not (math.isfinite(alpha) and alpha >= 1.0):
+        _nonphysical(
+            "cycle.combustor.textbook_true_cp",
+            "outside_textbook_lean_alpha_domain",
+            "fuel-based alpha is outside the published lean true-cp domain",
+            {
+                "T_k": T_k,
+                "T_g": T_g,
+                "g_m": g_m,
+                "l0": config.l0,
+                "alpha": alpha,
+                "published_domain": "alpha >= 1 or inf",
+            },
+        )
+
+    g_t = (1.0 + g_m) * (1.0 - config.g_leak - g_cooling)
+    if not (
+        config.g_leak + g_cooling < 1.0
+        and math.isfinite(g_t)
+        and g_t > 0.0
+    ):
+        _nonphysical(
+            "cycle.bookkeeping.textbook_true_cp",
+            "non_positive_combustor_air_fraction",
+            "textbook remaining combustor air fraction must be positive",
+            {
+                "g_m": g_m,
+                "g_leak": config.g_leak,
+                "g_cooling": g_cooling,
+                "g_cooling_off": config.g_cooling_off,
+                "g_return_fraction": config.g_return_fraction,
+                "g_return": g_return,
+                "g_t": g_t,
+                "cooled": cooled,
+            },
+        )
+    if not (0.0 <= g_return <= g_cooling):
+        _nonphysical(
+            "cycle.bookkeeping.textbook_true_cp",
+            "return_fraction_exceeds_cooling_fraction",
+            "textbook cooling return must be between zero and the selected "
+            "cooling fraction",
+            {
+                "g_m": g_m,
+                "g_leak": config.g_leak,
+                "g_cooling": g_cooling,
+                "g_cooling_off": config.g_cooling_off,
+                "g_return_fraction": config.g_return_fraction,
+                "g_return": g_return,
+                "g_t": g_t,
+                "cooled": cooled,
+            },
+        )
+    g_sum = g_t + g_return
+    p_g = config.sigma_combustion * config.sigma_in * config.p_a_full * pi
+    p_t = config.pi_nozzle * config.p_a
+    turbine = _solve_textbook_turbine(T_g, alpha, config, p_g, p_t, pi)
+    pi_c_full = turbine["pt_total"] / config.p_a
+    nozzle = _solve_textbook_nozzle(
+        turbine["T_eval"], pi_c_full, alpha, config
+    )
+
+    N_ud = turbine["work"] * g_sum * config.eta_mech_turbine - L_k
+    if not (math.isfinite(N_ud) and N_ud > 0.0):
+        _nonphysical(
+            "cycle.power.textbook_true_cp",
+            "non_positive_specific_net_power",
+            "textbook specific net shaft power is not finite and positive",
+            {
+                "L_k": L_k,
+                "L_t": turbine["work"],
+                "g_sum": g_sum,
+                "eta_mech_turbine": config.eta_mech_turbine,
+                "N_ud": N_ud,
+            },
+        )
+    G = N / N_ud
+    N_reducer_out_ud = N_ud * config.eta_reducer
+    R_ud = g_sum * (nozzle["c_c"] - config.v)
+    N_e_ud = N_reducer_out_ud + (
+        R_ud / config.beta_prop
+        if config.v == 0.0
+        else R_ud * config.v / config.eta_propeller
+    )
+    C_e = g_m * (1.0 - config.g_leak - g_cooling) * 3600.0 / (N_ud / 1e3)
+    eta_e = 3600.0 / (C_e * config.q_lhv_kj)
+    if not all(
+        math.isfinite(value)
+        for value in (G, N_reducer_out_ud, R_ud, N_e_ud, C_e, eta_e)
+    ):
+        _nonphysical(
+            "cycle.power.textbook_true_cp",
+            "non_finite_power_or_economics",
+            "textbook power or economics output is not finite",
+            {
+                "G": G,
+                "N_ud": N_ud,
+                "N_reducer_out_ud": N_reducer_out_ud,
+                "R_ud": R_ud,
+                "N_e_ud": N_e_ud,
+                "C_e": C_e,
+                "eta_e": eta_e,
+            },
+        )
+
+    powers = {
+        "compressor_specific_work_J_per_kg": L_k,
+        "turbine_specific_work_J_per_kg": turbine["work"],
+        "gas_mass_flow_factor": g_t,
+        "mass_flow_sum_factor": g_sum,
+        "net_specific_shaft_power_J_per_kg": N_ud,
+        "reducer_out_specific_power_J_per_kg": N_reducer_out_ud,
+        "mass_flow_kg_per_s": G,
+        "momentum_factor": R_ud,
+        "equivalent_specific_power_J_per_kg": N_e_ud,
+        "fuel_per_shaft_kWh_kg_per_kWh": C_e,
+        "effective_efficiency": eta_e,
+        "requested_shaft_power_W": N,
+        "pre_reducer_power_check_W": G * N_ud,
+        "post_reducer_power_check_W": G * N_reducer_out_ud,
+    }
+    fuel = {"T_k": T_k, "T_g": T_g, "T_ref": config.T_ref, "g_m": g_m, "alpha": alpha}
+    diagnostics = _textbook_method_diagnostics(
+        compressor, fuel, turbine, nozzle, powers, config
+    )
+
+    return CycleResult(
+        pi=pi,
+        T_g=T_g,
+        N=N,
+        G=G,
+        p_g=p_g,
+        p_t=p_t,
+        c_t=turbine["c_t"],
+        g_m=g_m,
+        g_t=g_t,
+        alpha=alpha,
+        L_k=L_k,
+        L_t=turbine["work"],
+        pi_t=turbine["pi_t"],
+        pi_c_full=pi_c_full,
+        eta_t=turbine["eta_t"],
+        T_t=turbine["T_eval"],
+        H_c_full=nozzle["H_c"],
+        c_c=nozzle["c_c"],
+        N_ud=N_ud,
+        N_reducer_out_ud=N_reducer_out_ud,
+        R_ud=R_ud,
+        N_e_ud=N_e_ud,
+        C_e=C_e,
+        eta_e=eta_e,
+        g_cooling=g_cooling,
+        g_return=g_return,
+        cooled=cooled,
+        gas_property_basis=CYCLE_GAS_PROPERTY_BASIS_TEXTBOOK,
+        alpha_basis=ALPHA_BASIS_TEXTBOOK,
+        method_diagnostics=diagnostics,
+    )
+
+
+def calculate_cycle_point(
+    state: CycleState,
+    config: CycleConfig = DEFAULT_CONFIG,
+    *,
+    gas_property_basis: str = CYCLE_GAS_PROPERTY_BASIS_LEGACY,
+) -> CycleResult:
+    """Evaluate one cycle point without notebook state or optimizer search.
+
+    ``gas_property_basis="legacy_mean_cp"`` (default) executes the original
+    notebook arithmetic unchanged.  ``"textbook_true_cp"`` dispatches to the
+    explicitly labelled textbook variant in this module: the same single-point
+    calculation, but with the published direct true-cp correlation used for the
+    compressor/turbine/nozzle process states and fuel-based alpha used for all
+    combustion-product properties.  Unknown selectors are rejected before any
+    arithmetic.
+    """
+
+    basis = _resolve_cycle_gas_property_basis(gas_property_basis)
+    if basis == CYCLE_GAS_PROPERTY_BASIS_TEXTBOOK:
+        return _calculate_textbook_cycle_point(state, config)
 
     pi = state.pi
     T_g = state.T_g
@@ -558,10 +1190,18 @@ def calculate_cycle_point(
         g_cooling=g_cooling,
         g_return=g_return,
         cooled=cooled,
+        gas_property_basis=CYCLE_GAS_PROPERTY_BASIS_LEGACY,
+        alpha_basis=ALPHA_BASIS_LEGACY,
+        method_diagnostics=None,
     )
 
 
 __all__ = [
+    "ALPHA_BASIS_LEGACY",
+    "ALPHA_BASIS_TEXTBOOK",
+    "CYCLE_GAS_PROPERTY_BASES",
+    "CYCLE_GAS_PROPERTY_BASIS_LEGACY",
+    "CYCLE_GAS_PROPERTY_BASIS_TEXTBOOK",
     "CycleConfig",
     "CycleResult",
     "CycleSolverError",
@@ -569,6 +1209,7 @@ __all__ = [
     "DEFAULT_CONFIG",
     "SOLVER_MAX_ITER",
     "SOLVER_TOL",
+    "TEXTBOOK_LIMITATIONS",
     "calc_alpha",
     "calc_compressor",
     "calc_cp_kerosene",

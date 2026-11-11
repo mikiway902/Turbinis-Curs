@@ -1,8 +1,113 @@
 # How Turbinis-Calc Works
 
 Last updated: 2026-11-11
-Describes: the actual checkout at `85e6102` plus the pre-existing dirty working tree.
+Describes: checkpoint `0952832` plus the subsequent architecture RAW integration.
 Does not describe: the target architecture in `Super-Promt-Autonomous.md` as if it existed.
+
+## Architecture RAW continuation
+
+`turbine_engine/architecture_raw.py` provides strict JSON input/output conversion
+and typed failure mapping for the opt-in 0D cycles. `scripts/architecture_smoke.py`
+runs only a bounded fixture experiment (manual/grid, 13 attempts), persists all
+attempts, supports compatible resume, and reproduces every record. Saved grid and
+commands: `docs/ARCHITECTURE_RAW_SMOKE.md`. Missing stage reaction stays NOT_CHECKED;
+the experiment is not physical validation, production coverage or optimization.
+`docs/ENERGY_METHOD_AUDIT.md` records the checked original source pages and independent
+numerical audit. `scripts/profile_engine_paths.py` measures the fixed anchor on this
+host. The saved bounded 55-point pi_k/split experiment is described in
+`docs/COARSE_0D_EXPERIMENT.md`. Integral `caloric*` work is now preserved outside the
+active package in `experiments/caloric/`; it is not required by the chosen textbook
+route and is not wired into a cycle or RAW experiment. Its optional test suite has
+one disclosed interrupted-combustor assertion failure.
+
+The necessary property-method comparison reuses the existing calculation:
+
+```python
+ns, cycle = optimize_extended.build_ns(
+    model,
+    gas_property_basis="textbook_true_cp",
+    cycle_gas_property_basis="textbook_true_cp",
+)
+result = optimize_extended.eval_candidate(x, ns, "B87_relaxed", 0.995)
+```
+
+Default `legacy_derivative` preserves the notebook reference. The explicit option
+uses the published p.57 true-cp fit in the stage/pressure iteration. The separate
+cycle option selects process-mean true cp/k, fuel-based alpha and consistent exit
+Mach/pressure relations, while retaining the p.20 mean-cp fuel balance. Omitting
+the cycle option keeps the previous stage-only diagnostic. Results report stage and
+cycle bases separately. Rebuild the namespace
+to change method; relabelling its marker is rejected before calculation. See the
+revised mandatory route in `AUTONOMOUS_EXECUTION.md` and the comparison table in
+`ENERGY_METHOD_AUDIT.md`.
+
+### A/B/C aggregate method and RAW version
+
+`ArchitectureCycleInput(..., gas_property_basis="textbook_true_cp")` now uses the
+same published true-cp correlation for each compressor/turbine process. Endpoint
+states contain local properties; `process_properties` contains the separate means,
+source-equation residuals and tolerances. This branch requires `LegacyCombustorClosure`
+and `AlphaBasis.FUEL_BASED`; it does not infer composition from an external cp/k state.
+The total-pressure architecture boundary remains distinct from the single-point
+cycle's static-pressure/nozzle boundary. Neither is silently substituted for the other.
+
+`architecture_raw.input_to_payload` emits v2 for the source basis and retains v1
+for legacy. V2 requires the method field; it records process metadata (`"dry_air"`
+represents infinite compressor alpha without JSON Infinity). Use
+`model_variant_for_payload` to obtain the matching RAW dataset label. V1 remains
+backward-compatible; the old datasets are not relabelled as source results.
+
+Saved bounded experiment (no production sweep):
+
+```powershell
+.\.venv\Scripts\python.exe scripts/architecture_smoke.py --destination reference/architecture_smoke/2026-11-11-textbook-v2 --preset grid --gas-property-basis textbook_true_cp --resume
+```
+
+It retains 9 successes, 3 explicitly unsupported external-state inputs as model
+errors, and 1 physical inability; all 13 reproduce. Missing stage rho remains
+NOT_CHECKED, not feasible. Component closure does not supply a stage inventory.
+
+### Stage inventory and bounded assembly checks
+
+Actual-boundary methods on `ConstHubOrchestration` are
+`solve_total_outlet_pressure` and `solve_prescribed_mechanical_power`. They require
+`raw_unbounded` and an explicit physical `static_pressure_bracket`; they do not
+resize flow or alter speed/geometry. Both restore the namespace static pressure.
+The actual GG/3 → FPT/1 linkage regression now closes GG compressor work and FPT
+outlet pressure, but yields only 106095.69 W versus 110 kW. Its separate diagnostic
+JSON preserves stages and inputs; the older assembly datasets are not retroactively
+coupled or rewritten. Full-engine power closure remains outstanding.
+
+`baseline.estimate_stage_count(c0, u_mean, y0, recovered_exit_velocity)` is the
+unrounded p.87 item-54 expression already used by the baseline. It does not choose
+an integer or infer missing speed/geometry. Original PDF p.88 corresponds to printed
+p.87; Markdown pagination is shifted and is not the page authority.
+
+The new bounded runner uses the existing const-hub meanline directly, not the
+three-stage-specific optimizer vector or flow rescaling:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/architecture_stage_smoke.py --destination reference/architecture_stage_smoke/2026-11-11-raw --resume
+```
+
+Fixed fixtures evaluate A MAIN, B MAIN, C GG and C FPT at 1/2/3 stages. Speed 84000 rpm,
+hub 0.065 m and explicit angle/kappa/pressure-weight arrays come from the existing
+control point; they are not optimized or validated for those assemblies. The boundary
+uses the aggregate total outlet and explicit reference exit Mach 0.3379 to obtain a
+static target. Final actual meanline total pressure and power are reported, not forced
+to match the aggregate. GG/FPT meanlines are independent here, not an end-to-end engine.
+
+`pressure_ratio_policy="raw_unbounded"` avoids the reference engineering clip;
+`"legacy_clipped"` remains the library default and an explicit CLI comparison option.
+Saved runs: 12/12 successes raw versus 7 successes + 5 stalls clipped. All attempts in
+both journals reproduce. Resume binds the plan, policy, borrowed constants and 28-file
+model digest; changing a computational dependency rejects resume.
+
+The 1.8–2.4 pi profile is the prompt's engineering recommendation, not a fundamental
+book limit. Its PASS/FAIL and signed margins are calculated after physics; overall
+feasibility remains NOT_CHECKED. Here pi_stage is the meanline p0_total/p2_static,
+not the aggregate total/total ratio. Do not multiply these stage ratios without the
+interstage kinetic-recovery relation. The full pressure states are retained in RAW.
 
 ## 1. Purpose
 

@@ -1,0 +1,214 @@
+{
+  "coupling_label": "ACTUAL_BOUNDARY_STAGE_COUPLED",
+  "experiment": {
+    "model_digest": "b289b003780cc0cf5b272ed53fbd400cdb207e09203b12ddbf750a12b0b396ec",
+    "payload_plan_count": 15,
+    "payload_plan_sha256": "a7c796f7ddcd1f7091a4816e1f7f5982f1d9459c130f2107fb544099efc56d5c",
+    "plan_name": "ab-actual-pressure-c-gg-x-fpt"
+  },
+  "physically_validated": false,
+  "points": [
+    {
+      "calculation_status": "NUMERICAL_FAILURE",
+      "candidate_id": "cand_45744275ba350db89e6c113dc906df0be0af2da06acb7c9e2a30f1066e903552",
+      "engine_power_closed": null,
+      "engine_power_label": null,
+      "failure_reason": "boundary_not_bracketed",
+      "failure_stage": "orchestration.solve_total_outlet_pressure",
+      "net_mechanical_power_W": null,
+      "overall_engineering_feasibility_status": null,
+      "relative_power_residual": null,
+      "signed_power_residual_W": null
+    },
+    {
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_11fbf7e4e1eeb7237c6c33c4eaee072ac9ff2a865d3002d21a32c799e64dfa0d",
+      "engine_power_closed": false,
+      "engine_power_label": "ACTUAL_BOUNDARY_LINK_NOT_POWER_CLOSED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "net_mechanical_power_W": 102198.84761754601,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "relative_power_residual": 0.0709195671132181,
+      "signed_power_residual_W": -7801.152382453991
+    },
+    {
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_6c21017fe1229f5c063f4c574ec4e498ce19f9e018475e83ddb09b9864efc401",
+      "engine_power_closed": false,
+      "engine_power_label": "ACTUAL_BOUNDARY_LINK_NOT_POWER_CLOSED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "net_mechanical_power_W": 104894.02618884415,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "relative_power_residual": 0.04641794373778049,
+      "signed_power_residual_W": -5105.9738111558545
+    },
+    {
+      "calculation_status": "NUMERICAL_FAILURE",
+      "candidate_id": "cand_fbffb1748bc03de27ab1b58ed430ed68dcbd87a0a4ad16251d413f246fe0f15a",
+      "engine_power_closed": null,
+      "engine_power_label": null,
+      "failure_reason": "boundary_not_bracketed",
+      "failure_stage": "orchestration.solve_total_outlet_pressure",
+      "net_mechanical_power_W": null,
+      "overall_engineering_feasibility_status": null,
+      "relative_power_residual": null,
+      "signed_power_residual_W": null
+    },
+    {
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_38ce0f39ba2b926fdafe9366fa69b7403b1536b1e375f8fb8c0a04549ba1bd8c",
+      "engine_power_closed": false,
+      "engine_power_label": "ACTUAL_BOUNDARY_LINK_NOT_POWER_CLOSED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "net_mechanical_power_W": 102204.1211805176,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "relative_power_residual": 0.07087162563165819,
+      "signed_power_residual_W": -7795.878819482401
+    },
+    {
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_98625dd8a738a418810f0efa85ad87aa65dc28aafe36c2847fe8d6dc68d95913",
+      "engine_power_closed": false,
+      "engine_power_label": "ACTUAL_BOUNDARY_LINK_NOT_POWER_CLOSED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "net_mechanical_power_W": 104880.83481605112,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "relative_power_residual": 0.04653786530862615,
+      "signed_power_residual_W": -5119.165183948877
+    },
+    {
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_cc773a0707ce97aed6f37e2d35c2ad9f034d16ac1721e5a0888654f7c5babdd0",
+      "engine_power_closed": false,
+      "engine_power_label": "ACTUAL_BOUNDARY_LINK_NOT_POWER_CLOSED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "net_mechanical_power_W": 105403.50362188586,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "relative_power_residual": 0.04178633071012856,
+      "signed_power_residual_W": -4596.496378114141
+    },
+    {
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_542fa683d3d4970007bce3c5ad4a7d2362a1eedb64a27b343866d9b8933f6f62",
+      "engine_power_closed": false,
+      "engine_power_label": "ACTUAL_BOUNDARY_LINK_NOT_POWER_CLOSED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "net_mechanical_power_W": 100294.96679486349,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "relative_power_residual": 0.0882275745921501,
+      "signed_power_residual_W": -9705.033205136511
+    },
+    {
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_29ccee25e1fb536df6d97437dd7b3c91f285626da2e385ab144decae5d05ec9c",
+      "engine_power_closed": false,
+      "engine_power_label": "ACTUAL_BOUNDARY_LINK_NOT_POWER_CLOSED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "net_mechanical_power_W": 94493.59958846042,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "relative_power_residual": 0.14096727646854162,
+      "signed_power_residual_W": -15506.40041153958
+    },
+    {
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_a460884c9c9ef48917a156ed469cad3107ec178beafa18ec39e415476c303ac9",
+      "engine_power_closed": false,
+      "engine_power_label": "ACTUAL_BOUNDARY_LINK_NOT_POWER_CLOSED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "net_mechanical_power_W": 108141.9831776252,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "relative_power_residual": 0.016891062021589128,
+      "signed_power_residual_W": -1858.0168223748042
+    },
+    {
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_f8acc977bc4dab6f327ce770dc7dd43463f7b9ac216c0c7f30c9a963b6f2fd7e",
+      "engine_power_closed": false,
+      "engine_power_label": "ACTUAL_BOUNDARY_LINK_NOT_POWER_CLOSED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "net_mechanical_power_W": 103243.48609317277,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "relative_power_residual": 0.06142285369842932,
+      "signed_power_residual_W": -6756.513906827226
+    },
+    {
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_eed83553fa86b5314c72ffc343b7c4e06167001bf70fcfd7b048da462cec5cf8",
+      "engine_power_closed": false,
+      "engine_power_label": "ACTUAL_BOUNDARY_LINK_NOT_POWER_CLOSED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "net_mechanical_power_W": 97542.81696834737,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "relative_power_residual": 0.11324711846956938,
+      "signed_power_residual_W": -12457.183031652632
+    },
+    {
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_07bdf9d42538b3e2a7f70c4b0ed868af02e65e609e31df192b4dc43c33bde2c2",
+      "engine_power_closed": false,
+      "engine_power_label": "ACTUAL_BOUNDARY_LINK_NOT_POWER_CLOSED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "net_mechanical_power_W": 106095.68575825705,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "relative_power_residual": 0.0354937658340268,
+      "signed_power_residual_W": -3904.314241742948
+    },
+    {
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_697e20e157e37bf03e60a0a22371f26fbba6f0853f432b330a0f720ab3fa49bc",
+      "engine_power_closed": false,
+      "engine_power_label": "ACTUAL_BOUNDARY_LINK_NOT_POWER_CLOSED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "net_mechanical_power_W": 101037.90204194668,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "relative_power_residual": 0.08147361780048469,
+      "signed_power_residual_W": -8962.097958053317
+    },
+    {
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_6ec29f9745e9fbbb69431c346e3a957884bd5ed0940b9114116ac33494381822",
+      "engine_power_closed": false,
+      "engine_power_label": "ACTUAL_BOUNDARY_LINK_NOT_POWER_CLOSED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "net_mechanical_power_W": 95261.35881763232,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "relative_power_residual": 0.1339876471124334,
+      "signed_power_residual_W": -14738.641182367675
+    }
+  ],
+  "report_version": "architecture-coupled-stage-summary-v2",
+  "reproduce": {
+    "atol": 1e-09,
+    "checked": 15,
+    "differences": [],
+    "matches": true,
+    "rtol": 1e-12
+  },
+  "run": {
+    "complete": true,
+    "elapsed_seconds": 0.015514,
+    "journal_sha256": "2277f4e544954c68a259f46f94be30bddddc11ac81d1fe4b0793acb3ca1e8fa2",
+    "points_attempted": 15,
+    "record_count": 15,
+    "records_appended_this_invocation": 0,
+    "run_id": "run_e6af647c8fd9d62c8036ddfcb1ec708d32b7a859f743f725949fc05506eef85d"
+  },
+  "status_counts": {
+    "NUMERICAL_FAILURE": 2,
+    "SUCCESS": 13
+  },
+  "validation_status": "NOT_PHYSICALLY_VALIDATED"
+}

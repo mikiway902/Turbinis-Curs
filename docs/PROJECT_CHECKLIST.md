@@ -13,6 +13,23 @@ Status legend:
 - `[B]` BLOCKED by external information/access
 - `[S]` SKIPPED — reason required
 
+## Counted progress snapshot — after caloric correction
+
+Count of top-level task bullets within M0–M8 (not milestone-table rows): 134.
+DONE: 78; IN PROGRESS: 25; TODO: 29; BLOCKED: 0; SKIPPED: 2.
+Thus 54 task bullets remain unclosed. This is an unweighted checklist count,
+not an estimate of remaining effort or a claim of 60% physical readiness.
+Open counts by milestone: M0=0, M1=1, M2=4, M3=4, M4=7, M5=6,
+M6=9, M7=15, M8=8. Completed reduced-model tasks retain their explicit scope;
+  they do not close production or stage-validation gates.
+
+Mandatory execution order is revised in `AUTONOMOUS_EXECUTION.md` under the user's
+two-textbook/no-extra-work instruction. Integral caloric models are frozen experiments,
+not prerequisites. Current P0 continuation now includes the published true-cp option
+in the existing cycle and stage paths, retaining the cycle fuel relation. Per-aggregate
+A/B/C process-property reconciliation is implemented at aggregate level; stage
+inventory and meanline coupling remain open. Saved RAW v2 evidence is recorded below.
+
 ## Accepted acceptance profile — `rho <= 0.65`
 
 The user approved a global acceptance ceiling of `rho <= 0.65` on 2026-11-10. It is an
@@ -41,11 +58,11 @@ Recommended profile id in future annotations: `RHO065` (acceptance ceiling only)
 | M0 | §37.1 | `[x]` | Bootstrap state and environment recorded |
 | M1 | §37.1 | `[~]` | Source audit recorded; source notebooks located; several method items remain `[~]` |
 | M2 | §37.1 | `[~]` | In progress — contracts, components, shaft balance and opt-in 0D architecture reference cycles landed; stage inventory, cooling/map semantics and physical validation remain open |
-| M3 | §37.1 | `[ ]` | Calculation semantics and RAW data |
+| M3 | §37.1 | `[~]` | Immutable RAW and typed failures integrated with opt-in architecture cycles; bounded saved smoke/reproduce/resume verified; full stage integration remains open |
 | M4 | §37.1 | `[ ]` | Performance path |
-| M5 | §37.1 | `[ ]` | Sweep engine |
+| M5 | §37.1 | `[~]` | Generic durable writer and bounded 13-point architecture smoke verified; no production engine sweep |
 | M6 | §37.1 | `[ ]` | Production design-space calculation |
-| M7 | §37.1 | `[ ]` | Engineering analysis |
+| M7 | §37.1 | `[~]` | Conservative analysis infrastructure exists; no validated production architecture comparison |
 | M8 | §37.1 | `[ ]` | Final audit and delivery |
 
 Working rule (§35): `IF THE NEXT STEP FOLLOWS FROM THIS SPEC AND DOES NOT REQUIRE NEW USER INFORMATION → DO IT NOW`.
@@ -243,11 +260,16 @@ evidence. The N boundary and active-path A/B/C/D classification are closed.
   "test_*.py" -v` → 43 tests OK, including the candidate anchor and cycle-point anchors.
   These are software-drift tests, not physical validation. The old post-reducer cycle
   values remain only in a labelled legacy differential.
-- [~] Выполнить короткий baseline profile.
+- [x] Выполнить короткий baseline profile.
   — Evidence: `Optimizer/results/PERF_AUDIT.md` is a prior cProfile on a Ryzen 7 PRO 5850U
   (3 candidates); it is **not comparable** to the current Ryzen 5 9600X. Current-host
   single samples: `_evaluate(oc.warm_start(CONFIG), full=False)` 0.6385 s and
-  `eval_candidate` 0.1298 s. No current-host multi-candidate profile yet.
+  `eval_candidate` 0.1298 s. Those initial single samples are historical.
+  Update: bounded current-host repeated-anchor profile now saved in
+  `docs/current_host_profile_2026-11-11.json`; script/test coverage in
+  `scripts/profile_engine_paths.py` and `scripts/test_profile_engine_paths.py`,
+  reviewer PASS. It compares both paths on one fixed candidate, not multiple
+  candidate geometries; no production throughput claim.
 - [x] Отметить hot functions и JAX compatibility.
   — Evidence: prior audit identifies `cp_k_ступени`, `газ`, and the `ступень_const_hub`
   fixed-point loop as hot (`PERF_AUDIT.md` §1). A bounded gas-property kernel now has
@@ -263,7 +285,33 @@ evidence. The N boundary and active-path A/B/C/D classification are closed.
 
 ## M2 — Unified physical core + architectures
 
-- [ ] Выделить единый source of truth физических формул.
+- [x] P0 independent numerical energy-method audit of saved 0D RAW fixtures:
+  `docs/ENERGY_METHOD_AUDIT.md`, `scripts/audit_architecture_energy.py` and saved
+  JSON; reviewer PASS. Source pp.20/54/56/57 visually checked. Not physical validation.
+- [x] P0 preserve typed solver failures across the real combustor-property boundary;
+  architecture cycle/RAW tests, reviewer PASS; reference fixture still reproduces.
+- [S] Integral true-cp component/cycle branch — not needed for the selected textbook
+  approximation. Preserved in `experiments/caloric/`, excluded from the mandatory
+  model and active test discovery. Earlier component review PASS remains historical;
+  interrupted combustor has a disclosed optional-test failure. No further integration.
+- [x] Independent bounded 0D coarse experiment: pi_k=3..13 for all architectures,
+  dual split weights 0.4/0.5/0.6; 55 RAW records, 55/55 reproduce, resume no duplicates.
+  `reference/architecture_coarse/2026-11-11-pi3-13/`, reviewer PASS. This checks reduced
+  model sampling/persistence only, not stage feasibility or production coverage.
+- [x] Remaining extracted gas fixed-point exhaustion made explicit: `gas.py`,
+  `ExplicitNonconvergenceTests`, `NUMERICAL_FAILURES.md`, reviewer PASS; identical
+  successful reference values. Latest parent suites 463 engine + 94 scripts OK.
+
+- [~] Выделить единый source of truth физических формул.
+  — Published p.57 true-cp correlation now available in existing `gas.py`, separate
+  from mean cp and legacy derivative. Existing cycle and const-hub paths have explicit,
+  provenance-checked `textbook_true_cp` options; defaults remain legacy.
+  `test_gas_core.TextbookGasPropertyTests`, `scripts/test_textbook_stage_basis.py`,
+  both changes independently reviewed PASS. This does not yet close full-cycle unification.
+  — A/B/C now reuses the same source helper through existing component APIs; strict
+  RAW v2 stores actual basis plus process properties. Independent reviews PASS.
+  `test_book_components.py`, `test_book_architecture_cycle.py`, extended
+  `test_architecture_raw.py`; latest parent suites 510+116 OK (one GPU skip).
 - [x] Создать/нормализовать StationState.
   — Evidence: `turbine_engine/architecture.py` adds a frozen, validated `StationState`
   storing only `T_total`, `p_total`, `mass_flow`, `cp`, `k` and an optional identifier.
@@ -382,8 +430,17 @@ evidence. The N boundary and active-path A/B/C/D classification are closed.
 - [~] Проверить energy balance.
   — Component arithmetic is consistent (`w=cp*ΔT`, turbine drop/temperature, shaft
   powers). Fuel/air comes from the retained `calc_g_m` source relation; no independent
-  absolute-enthalpy/exergy audit or calorimetric validation was performed, and the
-  compressor/turbine `cp` models are explicitly not claimed equivalent.
+  calorimetric validation exists, and the compressor/turbine `cp` models are explicitly
+  not claimed equivalent. Independent saved-fixture algebraic/enthalpy-convention audit
+  is now complete (`ENERGY_METHOD_AUDIT.md`), not a validation of the whole cycle.
+  Opt-in single-point textbook variant now checks actual process means, consistent
+  alpha, temperature/power residuals and local Mach/static-total relations; independent
+  review PASS, `test_textbook_cycle.py`. A/B/C process-property reconciliation was
+  subsequently implemented at aggregate level: component means are separate from
+  local endpoint properties, GG/FPT shaft residuals use achieved powers, and actual
+  GG outlet is the FPT inlet. RAW v2 smoke saved 9 successes, 3 explicit unsupported
+  model inputs and 1 physical failure, 13/13 reproduce. Cooled mixing energy and
+  stage-resolved physics remain open. Latest active suites: 510+116 OK.
 - [x] Реализовать полный пересчёт cycle при изменении πк.
   — Every call rebuilds compressor states, fuel flow, turbine states, and `G`; tests
   change a ratio/outlet pressure and assert changed states and `G`, with the target still
@@ -395,9 +452,21 @@ evidence. The N boundary and active-path A/B/C/D classification are closed.
   — A/B use the explicit total-pressure ratio from combustor exit to the prescribed total
   outlet; C solves the GG ratio from prescribed work and uses the resulting state for the
   independent FPT ratio. No stage-count split is assumed.
-- [ ] Подтвердить/исправить stage-count assumptions.
-  — Deliberately not inferred. The reference cycles are conceptual assembly closures,
-  not stage inventories; this remains a P0 M2/M3 input.
+- [~] Подтвердить/исправить stage-count assumptions.
+  — Original part-1 p.87 item 54 visually checked; its unrounded estimate is reused
+  through `baseline.estimate_stage_count`. Explicit 1/2/3-stage alternatives for
+  A MAIN, B MAIN, C GG and C FPT are saved with full existing meanline results.
+  No integer count is automatically chosen; actual meanline outlet/work coupling
+  remains open. See `ENERGY_METHOD_AUDIT.md` for static/total and power mismatches.
+  — Follow-up: actual pressure/work closures and one GG/3 → FPT/1 linkage regression
+  now close compressor work/outlet pressure within 1e-6 relative, preserving flow.
+  FPT power remains 3904.31 W short of 110 kW; stage selection and full engine closure
+  are still IN PROGRESS, not accepted by component convergence alone.
+  — Bounded actual-boundary RAW follow-up: 15 alternatives (A/B counts 1–3; C nine
+  GG/FPT count pairs), 13 SUCCESS + 2 boundary_not_bracketed numerical failures;
+  all 15 reproduce, resume appends zero. No successful point closes 110 kW at its
+  fixed flow/controls. Stage-count selection remains open, not resolved by these
+  illustrative fixtures. See PROJECT_STATE for the saved journal and next P0.
 - [x] Reproduce reference points после рефакторинга.
   — The legacy cycle/candidate anchors are unchanged and still tested; the new
   architecture cycles are not reference-validated and do not rebaseline the legacy path.
@@ -405,6 +474,11 @@ evidence. The N boundary and active-path A/B/C/D classification are closed.
 ## M3 — Full calculation semantics + RAW data
 
 - [~] Убрать engineering early rejection из calculation path.
+  — New explicit `raw_unbounded` policy in `orchestration.py` removes the engineering
+  pi secant clip without changing its reference default. Saved assembly plan:
+  12 SUCCESS raw versus 7 SUCCESS + 5 numerical stalls clipped; both reproduce 12/12.
+  Post-hoc pi profile has independent PASS/FAIL/margins; overall feasibility is unknown.
+  Other legacy repairs remain labelled and prevent claiming this item fully closed.
   — The 2 % last-stage pressure margin `p0 <= 1.02*p_t` has been removed: the checked
   textbook equation (printed p. 92, items 138–140) supports only `p0 > p_t`, and the
   guard now rejects only `p0 <= p_t`. This item stays open because the §8 audit cannot
@@ -429,7 +503,8 @@ evidence. The N boundary and active-path A/B/C/D classification are closed.
   determinism and configuration-mismatch rejection.
 - [~] Сохранять ключевые causal-chain intermediates.
   — Generic payload/writer supports them, and `architecture_cycle.py` exposes component
-  and shaft residuals; a production evaluator adapter has not yet been written.
+  and shaft residuals; `architecture_raw.py` stores complete 0D states/residuals in
+  real saved datasets. Full stage/geometry/strength integration remains open.
 - [x] Реализовать constraint profiles поверх RAW.
   — `turbine_engine/constraints.py`: explicit `ConstraintProfile`/rules; `rho <= 0.65`
   is `rho_065_profile()` opt-in only, never a search bound or filter.
@@ -450,10 +525,10 @@ evidence. The N boundary and active-path A/B/C/D classification are closed.
 
 ## M4 — Performance path
 
-- [~] Измерить hot path.
-  — Prior `Optimizer/results/PERF_AUDIT.md` is on another host and predates the power-plane
-  change; no current-host full-cycle profile exists. The bounded backend benchmark is not a
-  substitute.
+- [x] Измерить hot path.
+  — `docs/current_host_profile_2026-11-11.json`: current-host fixed full-stage anchor,
+  extracted/reference paths, separated setup/warmup/timing/cProfile, exact scalar parity.
+  One repeated geometry, not a production throughput benchmark; reviewer PASS.
 - [ ] Удалить очевидные Python bottlenecks без изменения физики.
 - [~] Векторизовать только горячие kernels.
   — `turbine_engine/backends.py` vectorizes only the gas-property kernel; the scalar stage
@@ -511,14 +586,18 @@ evidence. The N boundary and active-path A/B/C/D classification are closed.
 - [ ] Реализовать normal preset.
 - [ ] Реализовать deep preset только если оправдан runtime/storage.
 - [ ] Оценивать N_candidates/storage перед крупным run.
-- [ ] Проверить все архитектуры на small sweep.
-- [ ] Проверить πк=3...13 на coarse sweep.
-- [ ] Проверить compressor split.
+- [x] Проверить все архитектуры на small sweep.
+  — Saved 13-point smoke and 55-point coarse reference-0D runs; not stage feasibility.
+- [x] Проверить πк=3...13 на coarse sweep.
+  — `reference/architecture_coarse/2026-11-11-pi3-13/`, 55/55 reproduce, reviewer PASS;
+  explicitly illustrative reduced model, not production M6.
+- [x] Проверить compressor split.
+  — Dual-CC weights 0.4/0.5/0.6 at every integer pi=3..13; actual state propagation and
+  preserved products. Compressor map/blading validation is not supplied.
 - [ ] Проверить turbine split.
 - [ ] Проверить основные geometry/search variables.
 - [x] Не запускать бессмысленный Cartesian explosion.
-  — No production sweep was launched; only synthetic infrastructure tests and a
-  three-point labelled smoke check were run.
+  — No production sweep was launched; bounded real experiments have 13 and 55 points.
 
 ## M6 — Production design-space calculation
 
@@ -543,13 +622,18 @@ evidence. The N boundary and active-path A/B/C/D classification are closed.
   tested only on synthetic rows.
 - [ ] Определить active constraints.
 - [~] Выполнить controlled sensitivity analysis.
-  — `paired_sensitivity` supports exact paired perturbations; no real paired dataset yet.
-- [ ] Исследовать влияние πк на G/πт/geometry/blade heights.
+  — Saved coarse summary has adjacent-pi flow/fuel slopes and fixed-pi split spreads;
+  stage/geometry/strength perturbations remain open. Generic paired utility is tested.
+- [~] Исследовать влияние πк на G/πт/geometry/blade heights.
+  — Flow/pressure states saved for pi=3..13; geometry/blade-height branch remains open.
 - [ ] Исследовать влияние n и D на blade heights/stress/angles.
-- [ ] Исследовать compressor split.
+- [~] Исследовать compressor split.
+  — Controlled reduced-0D split spreads saved; map/stage/geometry implications unverified.
 - [ ] Исследовать turbine split.
-- [ ] Сравнить архитектуры на одинаковой базе.
-- [ ] Построить только информативные plots/heatmaps.
+- [~] Сравнить архитектуры на одинаковой базе.
+  — Uniform fixtures and reduced-model equality of B/C documented; not an engineering ranking.
+- [~] Построить только информативные plots/heatmaps.
+  — Saved gas/fuel flow slices; required stage/geometry/strength plots remain open.
 - [~] Построить Pareto.
   — Pareto utility with explicit objective directions is implemented and synthetically
   tested; no real front exists yet.
@@ -560,11 +644,12 @@ evidence. The N boundary and active-path A/B/C/D classification are closed.
 ## M8 — Final audit / delivery
 
 - [~] Reference tests PASS либо расхождения документированы.
-  — Current software suites pass (399 engine + 43 scripts), but this is not an independent
+  — Current software suites pass (466 engine + 94 scripts), but this is not an independent
   physical validation; external cases remain unapproved.
 - [~] Energy balances проверены.
   — Component arithmetic and shaft residuals are tested for the explicit 0D variant; no
-  independent absolute-enthalpy/exergy audit is complete.
+  full-cycle calorimetric/exergy validation is complete. Independent numerical fixture
+  audit and true-cp component quadrature checks are saved separately.
 - [x] Mass balances проверены.
   — `gas = air + fuel` is enforced and tested for the no-bleed reference variant.
 - [x] CPU fallback работает.
@@ -575,8 +660,10 @@ evidence. The N boundary and active-path A/B/C/D classification are closed.
   — Synthetic interruption/resume tests pass with matching manifest and records.
 - [x] Reproduce candidate проверен.
   — Synthetic successful and failed candidate reproduction tests pass.
-- [ ] RAW dataset сохранён.
-- [ ] Analysis outputs сохранены.
+- [~] RAW dataset сохранён.
+  — Real reduced-model 13/55-point datasets saved; validated production dataset absent.
+- [~] Analysis outputs сохранены.
+  — Audit JSON, coarse slices and plot saved; production feasibility/Pareto/finalists absent.
 - [x] PROJECT_GUIDE соответствует фактическому проекту.
 - [x] PROJECT_STATE соответствует фактическому состоянию.
 - [ ] Нет критических TODO/BLOCKED, делающих выводы недостоверными.

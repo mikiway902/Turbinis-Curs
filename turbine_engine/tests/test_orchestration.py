@@ -20,6 +20,7 @@ validated physical baseline or an acceptable design.
 
 from __future__ import annotations
 
+import copy
 import inspect
 import json
 import math
@@ -39,6 +40,8 @@ from turbine_engine.diagnostics import (  # noqa: E402
     NumericalConvergenceError,
 )
 from turbine_engine.orchestration import (  # noqa: E402
+    PRESSURE_RATIO_LEGACY_CLIPPED,
+    PRESSURE_RATIO_RAW_UNBOUNDED,
     ConstHubOrchestration,
     build_const_hub_orchestration,
     clip_scalar,
@@ -66,6 +69,24 @@ class HelperTests(unittest.TestCase):
             build_const_hub_orchestration({})
         orchestration = build_const_hub_orchestration({}, validate=False)
         self.assertIn("ступень", orchestration.missing_namespace_keys())
+
+    def test_pressure_ratio_policy_validation_and_default(self) -> None:
+        default = build_const_hub_orchestration({}, validate=False)
+        self.assertEqual(
+            default.pressure_ratio_policy, PRESSURE_RATIO_LEGACY_CLIPPED
+        )
+        raw = build_const_hub_orchestration(
+            {}, validate=False, pressure_ratio_policy=PRESSURE_RATIO_RAW_UNBOUNDED
+        )
+        self.assertEqual(raw.pressure_ratio_policy, PRESSURE_RATIO_RAW_UNBOUNDED)
+        self.assertNotIn("π_ст_макс", raw.missing_namespace_keys())
+        self.assertIn("π_ст_макс", default.missing_namespace_keys())
+        with self.assertRaises(ValueError):
+            build_const_hub_orchestration(
+                {}, validate=False, pressure_ratio_policy="engineering_guess"
+            )
+        with self.assertRaises(ValueError):
+            ConstHubOrchestration({}, pressure_ratio_policy="engineering_guess")
 
     def test_standalone_import_does_not_load_notebook_or_numpy(self) -> None:
         code = (
@@ -728,6 +749,52 @@ class ExplicitDiagnosticsTests(unittest.TestCase):
         self.assertEqual(error.last_valid_state["iteration_limit"], 30)
         self.assertGreater(error.last_valid_state["residual"], 1e-5)
 
+    def test_nonfinite_initial_residual_raises_before_second_evaluation(
+        self,
+    ) -> None:
+        for policy in (
+            PRESSURE_RATIO_LEGACY_CLIPPED,
+            PRESSURE_RATIO_RAW_UNBOUNDED,
+        ):
+            for bad in (math.nan, math.inf, -math.inf):
+                with self.subTest(policy=policy, value=bad):
+                    calls: list[float] = []
+
+                    def first_bad(_n, _D_hub, y):
+                        calls.append(y)
+                        if len(calls) == 1:
+                            return [{"π_ст": bad + y}]
+                        return [{"π_ст": y}]
+
+                    orchestration = ConstHubOrchestration(
+                        _failure_namespace(), pressure_ratio_policy=policy
+                    )
+                    orchestration.турбина_const_hub = first_bad  # type: ignore[method-assign]
+                    with self.assertRaises(NumericalConvergenceError) as raised:
+                        orchestration.распределить_π_const_hub(
+                            84000.0, 0.065, 4.0
+                        )
+
+                    error = raised.exception
+                    self.assertEqual(
+                        error.reason, "non_finite_initial_residual"
+                    )
+                    self.assertEqual(
+                        error.stage,
+                        "orchestration.распределить_π_const_hub",
+                    )
+                    self.assertEqual(len(calls), 1)
+                    self.assertEqual(error.last_valid_state["input_y"], 4.0)
+                    self.assertIsNone(
+                        error.last_valid_state["initial_residual"]
+                    )
+                    self.assertNotIn("y", error.last_valid_state)
+                    if policy == PRESSURE_RATIO_RAW_UNBOUNDED:
+                        self.assertEqual(
+                            error.last_valid_state["pressure_ratio_policy"],
+                            policy,
+                        )
+
     def test_stage_reaction_fixed_point_exhaustion_raises(self) -> None:
         calls: list[int] = []
 
@@ -822,6 +889,928 @@ class ExplicitDiagnosticsTests(unittest.TestCase):
             )
         )
         json.dumps(error.as_record(), allow_nan=False)
+
+
+class PressureRatioPolicyTests(unittest.TestCase):
+    """Raw policy removes only the engineering clip, not numerical checks."""
+
+    N = 84000.0
+    D_HUB = 0.065
+
+    @staticmethod
+    def _constant_root(root):
+        def turbine(_n, _D_hub, _y):
+            return [{"π_ст": root}]
+
+        return turbine
+
+    def test_legacy_clip_stalls_where_raw_reaches_root_five(self) -> None:
+        legacy = ConstHubOrchestration(_failure_namespace(π_ст_макс=2.0))
+        legacy.турбина_const_hub = self._constant_root(5.0)  # type: ignore[method-assign]
+        with self.assertRaises(NumericalConvergenceError) as raised:
+            legacy.распределить_π_const_hub(self.N, self.D_HUB, 4.0)
+        error = raised.exception
+        self.assertEqual(error.reason, "secant_denominator_stalled")
+        self.assertNotIn("pressure_ratio_policy", error.last_valid_state)
+
+        raw = ConstHubOrchestration(
+            _failure_namespace(π_ст_макс=2.0),
+            pressure_ratio_policy=PRESSURE_RATIO_RAW_UNBOUNDED,
+        )
+        raw.турбина_const_hub = self._constant_root(5.0)  # type: ignore[method-assign]
+        y, stages = raw.распределить_π_const_hub(self.N, self.D_HUB, 4.0)
+        self.assertEqual(y, 5.0)
+        self.assertEqual(len(stages), 1)
+
+    def test_raw_never_calls_clip_or_reads_pi_max(self) -> None:
+        class Guarded(dict):
+            def __getitem__(self, key):
+                if key == "π_ст_макс":
+                    raise AssertionError("raw policy read π_ст_макс")
+                return super().__getitem__(key)
+
+        def forbidden(*_args, **_kwargs):
+            raise AssertionError("raw policy called the clip function")
+
+        orchestration = ConstHubOrchestration(
+            Guarded(_failure_namespace()),
+            clip=forbidden,
+            pressure_ratio_policy=PRESSURE_RATIO_RAW_UNBOUNDED,
+        )
+        orchestration.турбина_const_hub = self._constant_root(5.0)  # type: ignore[method-assign]
+        y, stages = orchestration.распределить_π_const_hub(
+            self.N, self.D_HUB, 4.0
+        )
+        self.assertEqual(y, 5.0)
+        self.assertEqual(len(stages), 1)
+
+    def test_raw_safeguards_proposals_at_or_below_domain(self) -> None:
+        orchestration = ConstHubOrchestration(
+            _failure_namespace(),
+            pressure_ratio_policy=PRESSURE_RATIO_RAW_UNBOUNDED,
+        )
+        seen: list[float] = []
+
+        def low_root(_n, _D_hub, y):
+            seen.append(y)
+            return [{"π_ст": 0.5}]
+
+        orchestration.турбина_const_hub = low_root  # type: ignore[method-assign]
+        with self.assertRaises(NumericalConvergenceError) as raised:
+            orchestration.распределить_π_const_hub(self.N, self.D_HUB, 4.0)
+
+        self.assertTrue(all(value > 1.0 for value in seen))
+        self.assertAlmostEqual(seen[2], 0.5 * (4.08 + 1.0), places=12)
+        error = raised.exception
+        self.assertEqual(error.reason, "pi_secant_iteration_exhausted")
+        self.assertEqual(
+            error.last_valid_state["pressure_ratio_policy"],
+            PRESSURE_RATIO_RAW_UNBOUNDED,
+        )
+        self.assertGreater(error.last_valid_state["y"], 1.0)
+
+    def test_raw_nonfinite_proposal_and_lost_domain_are_typed(self) -> None:
+        orchestration = ConstHubOrchestration(
+            _failure_namespace(),
+            pressure_ratio_policy=PRESSURE_RATIO_RAW_UNBOUNDED,
+        )
+        with self.assertRaises(NumericalConvergenceError) as raised:
+            orchestration._raw_pi_candidate(
+                float("nan"), {"y": 2.0, "residual": 0.5}
+            )
+        error = raised.exception
+        self.assertEqual(error.reason, "non_finite_proposed_pressure_ratio")
+        self.assertEqual(
+            error.last_valid_state["pressure_ratio_policy"],
+            PRESSURE_RATIO_RAW_UNBOUNDED,
+        )
+
+        with self.assertRaises(NumericalConvergenceError) as raised:
+            orchestration._raw_pi_candidate(
+                0.5, {"y": 0.5, "residual": 1.0}
+            )
+        self.assertEqual(raised.exception.reason, "pi_expansion_domain_lost")
+
+        with self.assertRaises(NumericalConvergenceError) as raised:
+            orchestration.распределить_π_const_hub(self.N, self.D_HUB, 0.9)
+        self.assertEqual(raised.exception.reason, "pi_expansion_domain_lost")
+        self.assertEqual(
+            raised.exception.last_valid_state["pressure_ratio_policy"],
+            PRESSURE_RATIO_RAW_UNBOUNDED,
+        )
+
+
+def _closure_stage_payloads(
+    gas_power: float, total_pressure: float, z: int
+) -> list[dict[str, float]]:
+    """Minimal actual-stage payload with the metric and reporting keys."""
+
+    per_stage_work = gas_power / (10.0 * z)
+    stages = []
+    for _ in range(z):
+        stages.append({
+            "G_c": 10.0,
+            "L_т": per_stage_work,
+            "p_ст_п": total_pressure,
+            "T_ст_п": 900.0,
+            "p2": total_pressure / 1.02,
+            "T_ст": 950.0,
+            "π_ст": 1.5,
+            "ρ": 0.3,
+            "H0": 100_000.0,
+            "u1": 300.0,
+            "u2": 300.0,
+            "c2": 150.0,
+            "cp": 1100.0,
+            "k": 1.33,
+            "α1": 11.0,
+            "β1": 20.0,
+            "α2": 30.0,
+            "β2": 40.0,
+            "M_c1": 0.5,
+            "M_w2": 0.6,
+            "D_c": 0.1,
+            "D_л": 0.1,
+            "l_c": 0.02,
+            "l_л": 0.02,
+            "σ_р": 100.0,
+        })
+    return stages
+
+
+class SyntheticStaticPressureClosureTests(unittest.TestCase):
+    """Bracketed closures evaluated against a synthetic actual-stage solver."""
+
+    INLET_TOTAL = 1_000_000.0
+    ORIGINAL_P_T = 500_000.0
+
+    def _namespace(self, *, z: int = 2) -> dict[str, object]:
+        return {
+            "НетРешения": _НетРешения,
+            "p_г_полн": self.INLET_TOTAL,
+            "z": z,
+            "p_т": self.ORIGINAL_P_T,
+        }
+
+    def _make(self, *, total=None, gas=None, z: int = 2):
+        namespace = self._namespace(z=z)
+        orchestration = ConstHubOrchestration(
+            namespace,
+            pressure_ratio_policy=PRESSURE_RATIO_RAW_UNBOUNDED,
+        )
+        calls: list[float] = []
+
+        def resolver(_n, _D_hub, _seed):
+            p_static = namespace["p_т"]
+            calls.append(p_static)
+            total_p = total(p_static) if total is not None else 0.0
+            work = gas(p_static) if gas is not None else 0.0
+            return 1.0, _closure_stage_payloads(work, total_p, z)
+
+        orchestration.распределить_π_const_hub = resolver  # type: ignore[method-assign]
+        return orchestration, namespace, calls
+
+    def test_increasing_total_pressure_fixture_closes(self) -> None:
+        orchestration, namespace, _ = self._make(
+            total=lambda p: 1.1 * p + 10_000.0
+        )
+        record = orchestration.solve_total_outlet_pressure(
+            84_000.0,
+            0.065,
+            160_000.0,
+            static_pressure_bracket=(120_000.0, 150_000.0),
+        )
+        self.assertEqual(record["target_kind"], "total_outlet_pressure")
+        self.assertEqual(record["target_value"], 160_000.0)
+        self.assertLessEqual(record["relative_residual"], 1e-6)
+        self.assertEqual(
+            record["actual_metric"],
+            record["actual_outlet_total_pressure_Pa"],
+        )
+        self.assertEqual(
+            record["actual_metric"],
+            record["actual_stages"][-1]["p_ст_п"],
+        )
+        self.assertAlmostEqual(
+            record["solved_static_pressure_Pa"],
+            (160_000.0 - 10_000.0) / 1.1,
+            delta=1.0,
+        )
+        self.assertGreater(record["iterations"], 0)
+        self.assertEqual(
+            record["pressure_ratio_policy"], PRESSURE_RATIO_RAW_UNBOUNDED
+        )
+        self.assertEqual(namespace["p_т"], self.ORIGINAL_P_T)
+
+    def test_decreasing_mechanical_power_fixture_closes(self) -> None:
+        orchestration, namespace, _ = self._make(
+            gas=lambda p: 3_000_000.0 - p
+        )
+        efficiency = 0.99
+        target = efficiency * (3_000_000.0 - 125_000.0)
+        record = orchestration.solve_prescribed_mechanical_power(
+            84_000.0,
+            0.065,
+            target,
+            efficiency,
+            static_pressure_bracket=(120_000.0, 150_000.0),
+        )
+        stages = record["actual_stages"]
+        recomputed = efficiency * sum(
+            stage["G_c"] * stage["L_т"] for stage in stages
+        )
+        self.assertEqual(record["target_kind"], "mechanical_power")
+        self.assertEqual(record["mechanical_power_W"], record["actual_metric"])
+        self.assertAlmostEqual(record["actual_metric"], recomputed, places=9)
+        self.assertLessEqual(record["relative_residual"], 1e-6)
+        # The stop test is the relative metric residual, not the pressure
+        # width, so the pressure tolerance follows the fixture slope.
+        pressure_tolerance = (
+            1e-6 * abs(target) / efficiency + 1e-9
+        )
+        self.assertAlmostEqual(
+            record["solved_static_pressure_Pa"],
+            125_000.0,
+            delta=pressure_tolerance,
+        )
+        self.assertEqual(namespace["p_т"], self.ORIGINAL_P_T)
+
+    def test_endpoint_root_is_accepted_in_both_directions(self) -> None:
+        orchestration, _, _ = self._make(
+            total=lambda p: 1.1 * p + 10_000.0
+        )
+        for boundary, target in (
+            (120_000.0, 142_000.0),
+            (150_000.0, 175_000.0),
+        ):
+            with self.subTest(boundary=boundary):
+                record = orchestration.solve_total_outlet_pressure(
+                    84_000.0,
+                    0.065,
+                    target,
+                    static_pressure_bracket=(120_000.0, 150_000.0),
+                )
+                self.assertEqual(
+                    record["solved_static_pressure_Pa"], boundary
+                )
+                self.assertEqual(record["iterations"], 0)
+                self.assertEqual(record["actual_metric"], target)
+
+    def test_not_bracketed_raises_typed_boundary_error(self) -> None:
+        orchestration, namespace, _ = self._make(
+            total=lambda p: 1.1 * p + 10_000.0
+        )
+        with self.assertRaises(NumericalConvergenceError) as raised:
+            orchestration.solve_total_outlet_pressure(
+                84_000.0,
+                0.065,
+                500_000.0,
+                static_pressure_bracket=(120_000.0, 150_000.0),
+            )
+        error = raised.exception
+        self.assertEqual(error.status, NUMERICAL_FAILURE)
+        self.assertEqual(error.reason, "boundary_not_bracketed")
+        state = error.last_valid_state
+        self.assertEqual(state["target"], 500_000.0)
+        self.assertEqual(
+            state["evaluated_static_pressure_Pa"], [120_000.0, 150_000.0]
+        )
+        self.assertEqual(
+            state["evaluated_metrics"], [142_000.0, 175_000.0]
+        )
+        self.assertEqual(
+            state["signed_residuals"], [-358_000.0, -325_000.0]
+        )
+        self.assertEqual(namespace["p_т"], self.ORIGINAL_P_T)
+
+    def test_nonfinite_initial_and_trial_metrics_are_typed(self) -> None:
+        orchestration, namespace, _ = self._make(
+            total=lambda p: 1.1 * p + 10_000.0
+        )
+
+        def initial_nonfinite(_n, _D_hub, _seed):
+            return 1.0, _closure_stage_payloads(1e6, math.nan, 2)
+
+        orchestration.распределить_π_const_hub = initial_nonfinite  # type: ignore[method-assign]
+        with self.assertRaises(NumericalConvergenceError) as raised:
+            orchestration.solve_total_outlet_pressure(
+                84_000.0,
+                0.065,
+                160_000.0,
+                static_pressure_bracket=(120_000.0, 150_000.0),
+            )
+        self.assertEqual(
+            raised.exception.reason, "non_finite_initial_metric"
+        )
+        self.assertEqual(namespace["p_т"], self.ORIGINAL_P_T)
+
+        def trial_nonfinite(_n, _D_hub, _seed):
+            p_static = namespace["p_т"]
+            total = (
+                math.nan
+                if p_static == 135_000.0
+                else 1.1 * p_static + 10_000.0
+            )
+            return 1.0, _closure_stage_payloads(1e6, total, 2)
+
+        orchestration.распределить_π_const_hub = trial_nonfinite  # type: ignore[method-assign]
+        with self.assertRaises(NumericalConvergenceError) as raised:
+            orchestration.solve_total_outlet_pressure(
+                84_000.0,
+                0.065,
+                160_000.0,
+                static_pressure_bracket=(120_000.0, 150_000.0),
+            )
+        error = raised.exception
+        self.assertEqual(error.reason, "non_finite_metric")
+        self.assertEqual(
+            error.last_valid_state["static_pressure_Pa"], 135_000.0
+        )
+        self.assertIsNone(error.last_valid_state["metric"])
+        self.assertEqual(namespace["p_т"], self.ORIGINAL_P_T)
+
+    def test_stalled_adjacent_floats_and_iteration_limit_are_typed(self) -> None:
+        namespace = {
+            "НетРешения": _НетРешения,
+            "p_г_полн": 10.0,
+            "z": 1,
+            "p_т": 1.0,
+        }
+        orchestration = ConstHubOrchestration(
+            namespace,
+            pressure_ratio_policy=PRESSURE_RATIO_RAW_UNBOUNDED,
+        )
+        lo, hi = 1.0, math.nextafter(1.0, 2.0)
+
+        def discontinuous(_n, _D_hub, _seed):
+            total = 1_000_000.0 if namespace["p_т"] == lo else 0.0
+            return 1.0, _closure_stage_payloads(0.0, total, 1)
+
+        orchestration.распределить_π_const_hub = discontinuous  # type: ignore[method-assign]
+        with self.assertRaises(NumericalConvergenceError) as raised:
+            orchestration.solve_total_outlet_pressure(
+                84_000.0,
+                0.065,
+                500_000.0,
+                static_pressure_bracket=(lo, hi),
+            )
+        error = raised.exception
+        self.assertEqual(error.reason, "stalled_adjacent_floats")
+        self.assertEqual(error.last_valid_state["iterations"], 1)
+        self.assertEqual(
+            error.last_valid_state["last_evaluated"][
+                "static_pressure_Pa"
+            ],
+            hi,
+        )
+        self.assertEqual(namespace["p_т"], 1.0)
+
+        orchestration, namespace, _ = self._make(
+            total=lambda p: 1.1 * p + 10_000.0
+        )
+        with self.assertRaises(NumericalConvergenceError) as raised:
+            orchestration.solve_total_outlet_pressure(
+                84_000.0,
+                0.065,
+                160_000.0,
+                static_pressure_bracket=(120_000.0, 150_000.0),
+                max_iter=1,
+            )
+        error = raised.exception
+        self.assertEqual(error.reason, "iteration_limit")
+        self.assertEqual(error.last_valid_state["iterations"], 1)
+        last_evaluated = error.last_valid_state["last_evaluated"]
+        self.assertEqual(
+            last_evaluated["static_pressure_Pa"], 135_000.0
+        )
+        self.assertEqual(last_evaluated["metric"], 158_500.0)
+        self.assertEqual(last_evaluated["residual"], -1_500.0)
+        self.assertEqual(namespace["p_т"], self.ORIGINAL_P_T)
+
+    def test_configuration_validation_is_strict(self) -> None:
+        namespace = self._namespace()
+        legacy = ConstHubOrchestration(namespace)
+        with self.assertRaises(ValueError):
+            legacy.solve_total_outlet_pressure(
+                84_000.0,
+                0.065,
+                160_000.0,
+                static_pressure_bracket=(120_000.0, 150_000.0),
+            )
+        with self.assertRaises(ValueError):
+            legacy.solve_prescribed_mechanical_power(
+                84_000.0,
+                0.065,
+                2_800_000.0,
+                0.99,
+                static_pressure_bracket=(120_000.0, 150_000.0),
+            )
+        self.assertEqual(namespace["p_т"], self.ORIGINAL_P_T)
+
+        orchestration, namespace, _ = self._make(
+            total=lambda p: 1.1 * p + 10_000.0
+        )
+
+        def call_total(**overrides):
+            kwargs = {
+                "n": 84_000.0,
+                "D_hub": 0.065,
+                "target_total_pressure": 160_000.0,
+                "static_pressure_bracket": (120_000.0, 150_000.0),
+            }
+            kwargs.update(overrides)
+            return orchestration.solve_total_outlet_pressure(**kwargs)
+
+        def call_power(**overrides):
+            kwargs = {
+                "n": 84_000.0,
+                "D_hub": 0.065,
+                "target_power": 2_800_000.0,
+                "mechanical_efficiency": 0.99,
+                "static_pressure_bracket": (120_000.0, 150_000.0),
+            }
+            kwargs.update(overrides)
+            return orchestration.solve_prescribed_mechanical_power(**kwargs)
+
+        bad_scalars = (0.0, -1.0, math.inf, math.nan, True, "1.0")
+        for name in ("n", "D_hub", "target_total_pressure"):
+            for value in bad_scalars:
+                with self.subTest(field=name, value=value):
+                    with self.assertRaises(ValueError):
+                        call_total(**{name: value})
+        for name, bad_values in (
+            ("target_power", bad_scalars),
+            ("mechanical_efficiency", (0.0, -0.1, 1.0001, math.inf,
+                                       math.nan, True, "0.99")),
+        ):
+            for value in bad_values:
+                with self.subTest(field=name, value=value):
+                    with self.assertRaises(ValueError):
+                        call_power(**{name: value})
+        for name, bad_values in (
+            ("relative_tol", (0.0, -1e-6, math.inf, math.nan, True, "1e-6")),
+            ("max_iter", (0, -1, 1.5, True, "40")),
+        ):
+            for value in bad_values:
+                with self.subTest(field=name, value=value):
+                    with self.assertRaises(ValueError):
+                        call_total(**{name: value})
+                    with self.assertRaises(ValueError):
+                        call_power(**{name: value})
+        bad_brackets = (
+            None,
+            (120_000.0,),
+            (120_000.0, 150_000.0, 200_000.0),
+            (150_000.0, 120_000.0),
+            (-1.0, 150_000.0),
+            (119_999.0, 1_000_000.0),
+            (120_000.0, math.nan),
+            (math.inf, 150_000.0),
+            "bracket",
+        )
+        for bracket in bad_brackets:
+            with self.subTest(bracket=bracket):
+                with self.assertRaises(ValueError):
+                    call_total(static_pressure_bracket=bracket)
+        for z in (0, -1, 1.5, True, "3"):
+            namespace["z"] = z
+            with self.subTest(z=z):
+                with self.assertRaises(ValueError):
+                    call_total()
+            namespace["z"] = 2
+        for inlet in (0.0, -1.0, math.inf, math.nan, True, "1e6"):
+            namespace["p_г_полн"] = inlet
+            with self.subTest(inlet=inlet):
+                with self.assertRaises(ValueError):
+                    call_total()
+            namespace["p_г_полн"] = self.INLET_TOTAL
+        self.assertEqual(namespace["p_т"], self.ORIGINAL_P_T)
+
+    def test_namespace_pressure_restored_on_success_failure_and_interrupt(
+        self,
+    ) -> None:
+        orchestration, namespace, _ = self._make(
+            total=lambda p: 1.1 * p + 10_000.0
+        )
+        orchestration.solve_total_outlet_pressure(
+            84_000.0,
+            0.065,
+            160_000.0,
+            static_pressure_bracket=(120_000.0, 150_000.0),
+        )
+        self.assertEqual(namespace["p_т"], self.ORIGINAL_P_T)
+
+        with self.assertRaises(NumericalConvergenceError):
+            orchestration.solve_total_outlet_pressure(
+                84_000.0,
+                0.065,
+                500_000.0,
+                static_pressure_bracket=(120_000.0, 150_000.0),
+            )
+        self.assertEqual(namespace["p_т"], self.ORIGINAL_P_T)
+
+        def interrupting(_n, _D_hub, _seed):
+            p_static = namespace["p_т"]
+            if p_static == 135_000.0:
+                raise KeyboardInterrupt("simulated interrupt")
+            return 1.0, _closure_stage_payloads(
+                1e6, 1.1 * p_static + 10_000.0, 2
+            )
+
+        orchestration.распределить_π_const_hub = interrupting  # type: ignore[method-assign]
+        with self.assertRaises(KeyboardInterrupt):
+            orchestration.solve_total_outlet_pressure(
+                84_000.0,
+                0.065,
+                160_000.0,
+                static_pressure_bracket=(120_000.0, 150_000.0),
+            )
+        self.assertEqual(namespace["p_т"], self.ORIGINAL_P_T)
+
+    def test_namespace_domain_and_inner_typed_errors_propagate(self) -> None:
+        orchestration, namespace, _ = self._make(
+            total=lambda p: 1.1 * p + 10_000.0
+        )
+        calls = {"count": 0}
+
+        def no_solution(_n, _D_hub, _seed):
+            calls["count"] += 1
+            raise _НетРешения("no stage geometry solution")
+
+        orchestration.распределить_π_const_hub = no_solution  # type: ignore[method-assign]
+        with self.assertRaises(_НетРешения):
+            orchestration.solve_total_outlet_pressure(
+                84_000.0,
+                0.065,
+                160_000.0,
+                static_pressure_bracket=(120_000.0, 150_000.0),
+            )
+        self.assertGreater(calls["count"], 0)
+        self.assertEqual(namespace["p_т"], self.ORIGINAL_P_T)
+
+        def inner_typed(_n, _D_hub, _seed):
+            raise NumericalConvergenceError(
+                "inner secant failed",
+                stage="inner.stage",
+                reason="inner_reason",
+            )
+
+        orchestration.распределить_π_const_hub = inner_typed  # type: ignore[method-assign]
+        with self.assertRaises(NumericalConvergenceError) as raised:
+            orchestration.solve_total_outlet_pressure(
+                84_000.0,
+                0.065,
+                160_000.0,
+                static_pressure_bracket=(120_000.0, 150_000.0),
+            )
+        self.assertEqual(raised.exception.stage, "inner.stage")
+        self.assertEqual(raised.exception.reason, "inner_reason")
+        self.assertEqual(namespace["p_т"], self.ORIGINAL_P_T)
+
+    def test_closure_does_not_mutate_flows_speed_or_geometry(self) -> None:
+        orchestration, namespace, calls = self._make(
+            total=lambda p: 1.1 * p + 10_000.0
+        )
+        before = {
+            key: copy.deepcopy(value)
+            for key, value in namespace.items()
+            if key != "p_т"
+        }
+        record = orchestration.solve_total_outlet_pressure(
+            84_000.0,
+            0.065,
+            160_000.0,
+            static_pressure_bracket=(120_000.0, 150_000.0),
+        )
+        after = {
+            key: copy.deepcopy(value)
+            for key, value in namespace.items()
+            if key != "p_т"
+        }
+        self.assertEqual(after, before)
+        self.assertEqual(namespace["p_т"], self.ORIGINAL_P_T)
+        self.assertTrue(all(value != self.ORIGINAL_P_T for value in calls))
+        self.assertEqual(record["source_point"]["stage_count"], 2)
+        self.assertEqual(record["controls"]["n_rpm"], 84_000.0)
+        self.assertEqual(record["controls"]["D_hub_m"], 0.065)
+
+
+def _build_source_stage_fixture(model, architecture, *, p_t=432_100.0):
+    """Build a fresh textbook namespace for one source architecture fixture."""
+
+    from dataclasses import replace
+
+    import optimize_extended as oe
+    from architecture_smoke import request_for
+    from turbine_engine.architecture_cycle import (
+        ARCHITECTURE_GAS_PROPERTY_BASIS_TEXTBOOK as TEXTBOOK,
+        calculate_architecture_cycle,
+    )
+    from turbine_engine.architecture_raw import (
+        input_to_payload,
+        payload_to_input,
+    )
+
+    request = replace(request_for(architecture), gas_property_basis=TEXTBOOK)
+    result = calculate_architecture_cycle(
+        payload_to_input(input_to_payload(request))
+    )
+    turbine = result.turbines[0]
+    namespace, _ = oe.build_ns(
+        model,
+        gas_property_basis=TEXTBOOK,
+        cycle_gas_property_basis=TEXTBOOK,
+    )
+    flow = float(result.gas_mass_flow)
+    namespace.update({
+        "T_г_полн": float(turbine.inlet.T_total),
+        "p_г_полн": float(turbine.inlet.p_total),
+        "G_в": flow,
+        "G_c1": flow,
+        "G_л_ост": flow,
+        "G_base": (flow, flow, flow),
+        "p_т": p_t,
+        "z": 3,
+        "α1_ст": [11.0, 11.0, 19.0],
+        "κ_ст": [1.38, 1.12, 1.15],
+        "π_веса": [0.75, 0.8, 1.0],
+        "R": float(result.gas_model.R),
+        "α_г": float(result.combustor.alpha),
+        "N_зад": float(result.target_gearbox_input_power),
+        "L_к": float(result.compressor.specific_work),
+    })
+    orchestration = build_const_hub_orchestration(
+        namespace,
+        interp=namespace.get("_линейно"),
+        pressure_ratio_policy=PRESSURE_RATIO_RAW_UNBOUNDED,
+    )
+    orchestration.install()
+    return result, turbine, namespace, orchestration
+
+
+class ActualSourceStaticPressureClosureTests(unittest.TestCase):
+    """Three-stage source fixtures for both closures; no selection."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        try:
+            import optimizer_core as oc
+            import optimize_extended  # noqa: F401
+        except ModuleNotFoundError as exc:
+            dependency = (exc.name or "").split(".")[0]
+            if dependency in {"numpy", "scipy", "pandas"}:
+                raise unittest.SkipTest(
+                    "source closure fixture needs runtime dependency "
+                    f"'{dependency}', which is not installed"
+                ) from exc
+            raise
+
+        from turbine_engine.architecture import Architecture
+
+        if str(ROOT / "scripts") not in sys.path:
+            sys.path.insert(0, str(ROOT / "scripts"))
+        model = oc.load_model()
+        cls.original_p_t = 432_100.0
+        (
+            cls.main_result,
+            cls.main_turbine,
+            cls.namespace,
+            cls.orchestration,
+        ) = _build_source_stage_fixture(
+            model,
+            Architecture.SINGLE_SHAFT_DUAL_CC,
+            p_t=cls.original_p_t,
+        )
+        (
+            cls.gg_result,
+            cls.gg_turbine,
+            cls.gg_namespace,
+            cls.gg_orchestration,
+        ) = _build_source_stage_fixture(
+            model,
+            Architecture.FREE_POWER_TURBINE,
+            p_t=cls.original_p_t,
+        )
+
+    def test_source_total_pressure_closure_uses_actual_last_stage(self) -> None:
+        namespace = self.namespace
+        namespace["p_т"] = self.original_p_t
+        before = {
+            key: copy.deepcopy(namespace[key])
+            for key in (
+                "T_г_полн",
+                "p_г_полн",
+                "G_c1",
+                "G_л_ост",
+                "z",
+                "α1_ст",
+                "κ_ст",
+                "π_веса",
+            )
+        }
+        record = self.orchestration.solve_total_outlet_pressure(
+            84_000.0,
+            0.065,
+            150_000.0,
+            static_pressure_bracket=(120_000.0, 150_000.0),
+        )
+        stages = record["actual_stages"]
+        self.assertEqual(len(stages), 3)
+        self.assertLessEqual(record["relative_residual"], 1e-6)
+        self.assertGreater(record["solved_static_pressure_Pa"], 120_000.0)
+        self.assertLess(record["solved_static_pressure_Pa"], 150_000.0)
+        self.assertGreater(record["iterations"], 0)
+        self.assertEqual(
+            record["actual_metric"], stages[-1]["p_ст_п"]
+        )
+        self.assertEqual(
+            record["actual_outlet_total_pressure_Pa"],
+            stages[-1]["p_ст_п"],
+        )
+        self.assertTrue(math.isfinite(record["actual_metric"]))
+        self.assertTrue(math.isfinite(record["solved_static_pressure_Pa"]))
+        self.assertIn("T_ст_п", stages[-1])
+        self.assertIn("p_ст_п", stages[-1])
+        self.assertEqual(
+            namespace["p_т"], self.original_p_t, "original p_т was not restored"
+        )
+        for key, value in before.items():
+            with self.subTest(key=key):
+                self.assertEqual(namespace[key], value)
+        self.assertEqual(
+            record["pressure_ratio_policy"], PRESSURE_RATIO_RAW_UNBOUNDED
+        )
+        self.assertEqual(record["physical_validation"], "NOT_PERFORMED")
+        self.assertEqual(record["stage_count_selection"], "NONE")
+
+    def test_source_gg_mechanical_power_closure(self) -> None:
+        namespace = self.gg_namespace
+        namespace["p_т"] = self.original_p_t
+        mach = 0.3379
+        k_out = float(self.gg_turbine.outlet.k)
+        p_guess = float(self.gg_turbine.outlet.p_total) / (
+            1.0 + 0.5 * (k_out - 1.0) * mach**2
+        ) ** (k_out / (k_out - 1.0))
+        bracket = (0.8 * p_guess, 1.2 * p_guess)
+        self.assertGreater(bracket[0], 0.0)
+        self.assertLess(
+            bracket[1], float(self.gg_turbine.inlet.p_total)
+        )
+        target = float(self.gg_result.compressor.power)
+        record = self.gg_orchestration.solve_prescribed_mechanical_power(
+            84_000.0,
+            0.065,
+            target,
+            0.99,
+            static_pressure_bracket=bracket,
+        )
+        stages = record["actual_stages"]
+        recomputed = 0.99 * sum(
+            stage["G_c"] * stage["L_т"] for stage in stages
+        )
+        self.assertLessEqual(record["relative_residual"], 1e-6)
+        self.assertGreater(record["solved_static_pressure_Pa"], bracket[0])
+        self.assertLess(record["solved_static_pressure_Pa"], bracket[1])
+        self.assertEqual(record["mechanical_power_W"], record["actual_metric"])
+        self.assertAlmostEqual(record["actual_metric"], recomputed, places=6)
+        self.assertAlmostEqual(
+            record["actual_metric"], target, delta=1e-6 * abs(target) + 1e-9
+        )
+        self.assertEqual(
+            record["actual_outlet_total_pressure_Pa"],
+            stages[-1]["p_ст_п"],
+        )
+        self.assertEqual(namespace["p_т"], self.original_p_t)
+        self.assertEqual(
+            record["pressure_ratio_policy"], PRESSURE_RATIO_RAW_UNBOUNDED
+        )
+
+    def test_source_gg_endpoint_links_to_fpt_static_pressure_closure(self) -> None:
+        """Close actual GG work, then feed its endpoint into a fresh FPT stage.
+
+        This is a linkage regression only: the GG meanline power closure
+        supplies the FPT inlet total state, the FPT total-pressure closure uses
+        the unchanged flow and the same fixed speed/hub, and the resulting FPT
+        mechanical power is reported without being driven to its 110 kW target.
+        """
+
+        import architecture_stage_smoke as smoke
+        from turbine_engine.stage import StageResult
+
+        model = smoke._get_model()
+        payloads = {
+            (point.assembly, point.stage_count): payload
+            for point, payload in zip(
+                smoke.plan_points(), smoke.plan_payloads()
+            )
+        }
+        gg_raw = smoke._run_stage_meanline(payloads[("C_GG", 3)], model=model)
+        fpt_raw = smoke._run_stage_meanline(payloads[("C_FPT", 1)], model=model)
+
+        def bound_orchestration(namespace):
+            for value in namespace.values():
+                if inspect.ismethod(value) and isinstance(
+                    value.__self__, ConstHubOrchestration
+                ):
+                    return value.__self__
+            self.fail("namespace has no bound ConstHubOrchestration")
+
+        gg_orchestration = bound_orchestration(gg_raw["namespace"])
+        fpt_orchestration = bound_orchestration(fpt_raw["namespace"])
+        gg_namespace, fpt_namespace = gg_raw["namespace"], fpt_raw["namespace"]
+        gg_original_p_t = gg_namespace["p_т"]
+        fpt_original_p_t = fpt_namespace["p_т"]
+
+        gg_target = float(gg_raw["result"].compressor.power)
+        gg_bracket = (
+            0.8 * float(gg_raw["p_out_static"]),
+            1.2 * float(gg_raw["p_out_static"]),
+        )
+        gg_closure = gg_orchestration.solve_prescribed_mechanical_power(
+            84_000.0,
+            0.065,
+            gg_target,
+            0.99,
+            static_pressure_bracket=gg_bracket,
+        )
+        self.assertLessEqual(gg_closure["relative_residual"], 1e-6)
+        self.assertAlmostEqual(
+            gg_closure["actual_metric"], gg_target,
+            delta=1e-6 * abs(gg_target),
+        )
+        self.assertEqual(
+            gg_closure["mechanical_power_W"], gg_closure["actual_metric"]
+        )
+        self.assertEqual(gg_closure["controls"]["n_rpm"], 84_000.0)
+        self.assertEqual(gg_closure["controls"]["D_hub_m"], 0.065)
+        gg_last = StageResult.from_legacy_dict(
+            gg_closure["actual_stages"][-1]
+        )
+        gg_endpoint_T = float(gg_last.T_total)
+        gg_endpoint_p = float(gg_last.p_total)
+        self.assertTrue(math.isfinite(gg_endpoint_T))
+        self.assertTrue(math.isfinite(gg_endpoint_p))
+        self.assertEqual(gg_namespace["p_т"], gg_original_p_t)
+
+        # The fresh FPT stage receives the exact actual GG endpoint as its
+        # source total state; flow and the fixed speed/hub are untouched.
+        fpt_namespace["T_г_полн"] = gg_endpoint_T
+        fpt_namespace["p_г_полн"] = gg_endpoint_p
+        flow_keys = ("G_в", "G_c1", "G_л_ост")
+        flow_before = {key: fpt_namespace[key] for key in flow_keys}
+        self.assertEqual(
+            float(fpt_namespace["G_c1"]), float(gg_namespace["G_c1"])
+        )
+        self.assertGreater(gg_endpoint_p, 150_000.0)
+
+        fpt_closure = fpt_orchestration.solve_total_outlet_pressure(
+            84_000.0,
+            0.065,
+            150_000.0,
+            static_pressure_bracket=(120_000.0, 150_000.0),
+        )
+        self.assertLessEqual(fpt_closure["relative_residual"], 1e-6)
+        self.assertAlmostEqual(
+            fpt_closure["actual_metric"], 150_000.0, delta=1e-6 * 150_000.0
+        )
+        fpt_stages = fpt_closure["actual_stages"]
+        self.assertEqual(len(fpt_stages), 1)
+        self.assertEqual(
+            fpt_closure["actual_metric"], fpt_stages[-1]["p_ст_п"]
+        )
+        fpt_first = StageResult.from_legacy_dict(fpt_stages[0])
+        self.assertEqual(fpt_first.T0, gg_endpoint_T)
+        self.assertEqual(fpt_first.p0, gg_endpoint_p)
+        self.assertEqual(fpt_first.G_c, gg_last.G_c)
+        self.assertEqual(
+            fpt_closure["controls"]["n_rpm"], 84_000.0
+        )
+        self.assertEqual(
+            fpt_closure["controls"]["D_hub_m"], 0.065
+        )
+        self.assertEqual(
+            fpt_closure["pressure_ratio_policy"], PRESSURE_RATIO_RAW_UNBOUNDED
+        )
+        for key in flow_keys:
+            self.assertEqual(fpt_namespace[key], flow_before[key])
+
+        fpt_mechanical = 0.99 * sum(
+            float(stage["G_c"]) * float(stage["L_т"])
+            for stage in fpt_stages
+        )
+        self.assertTrue(math.isfinite(fpt_mechanical))
+        self.assertGreater(fpt_mechanical, 0.0)
+        self.assertAlmostEqual(
+            fpt_mechanical, 106_095.68575825705,
+            delta=1e-6 * 106_095.68575825705,
+        )
+        # The linkage is not tuned to the 110 kW shaft request.
+        self.assertGreater(abs(fpt_mechanical - 110_000.0), 1_000.0)
+        self.assertAlmostEqual(
+            fpt_mechanical - 110_000.0, -3_904.314241742948,
+            delta=1e-6 * 3_904.314241742948,
+        )
+        self.assertEqual(fpt_namespace["p_т"], fpt_original_p_t)
 
 
 if __name__ == "__main__":

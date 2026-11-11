@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import inspect
 import json
 import bisect
 import math
@@ -32,6 +33,17 @@ sys.path.insert(0, str(ROOT / "Optimizer"))
 sys.path.insert(0, str(ROOT / "Turbinis-Calc"))
 import optimizer_core as oc  # noqa: E402
 import constraints as cs  # noqa: E402
+from turbine_engine.gas import (  # noqa: E402
+    GAS_PROPERTY_BASES,
+    GAS_PROPERTY_BASIS_LEGACY,
+    GAS_PROPERTY_BASIS_TEXTBOOK,
+)
+from turbine_engine.cycle import (  # noqa: E402
+    ALPHA_BASIS_LEGACY,
+    CYCLE_GAS_PROPERTY_BASES,
+    CYCLE_GAS_PROPERTY_BASIS_LEGACY,
+    CYCLE_GAS_PROPERTY_BASIS_TEXTBOOK,
+)
 from turbine_engine.orchestration import build_const_hub_orchestration  # noqa: E402
 
 RESULTS = Path(__file__).resolve().parent / "results"
@@ -41,9 +53,178 @@ SIGMA_LIM = 300.0
 LC1_MIN = 0.014
 N_TARGET = 110e3
 U_MAX = 400.0
+# Явные метки метода. Базовый вариант сохраняет исходную notebook-аппроксимацию
+# среднего cp; textbook_true_cp — только явно выбранный диагностический вариант.
+CYCLE_GAS_PROPERTY_BASIS = CYCLE_GAS_PROPERTY_BASIS_LEGACY
+TEXTBOOK_DIAGNOSTIC_MODEL_VARIANT = (
+    "extended_const_hub+textbook_true_cp_diagnostic"
+)
+TEXTBOOK_CYCLE_DIAGNOSTIC_MODEL_VARIANT = (
+    "extended_const_hub+textbook_true_cp_cycle_diagnostic"
+)
+TEXTBOOK_BOTH_DIAGNOSTIC_MODEL_VARIANT = (
+    "extended_const_hub+textbook_true_cp_cycle_and_stage_diagnostic"
+)
 # Отсутствие необязательной диагностики рис. 18 не делает точку лучше:
 # в soft-ранжировании такие точки штрафуются консервативно.
 SOFT_MISSING_DIAGNOSTIC_PENALTY = 1e3
+
+
+def _installed_gas_property_basis(function) -> str | None:
+    """Basis recorded by the factory that created an installed helper.
+
+    ``inspect.unwrap`` sees through the optional ``lru_cache`` wrappers.  A
+    missing attribute means the entry is a notebook/legacy or synthetic
+    function rather than one of the extracted adapters.
+    """
+
+    if function is None:
+        return None
+    try:
+        function = inspect.unwrap(function)
+    except (TypeError, ValueError):
+        pass
+    return getattr(function, oc.GAS_PROPERTY_BASIS_ATTR, None)
+
+
+def _gas_property_basis_state(ns: dict) -> tuple[str, str | None]:
+    """Resolve the actual basis from installed wiring and check the marker.
+
+    The mutable ``ns["_gas_property_basis"]`` marker is not trusted on its own.
+    The return value's first item is the construction-bound basis recovered from
+    the installed ``газ`` adapter; a marker without verifiable wiring, or a
+    marker that disagrees with it, is rejected.  The second item is a
+    configuration error to reject before any physical evaluation, or ``None``.
+    """
+
+    marker = ns.get("_gas_property_basis")
+    wiring = _installed_gas_property_basis(ns.get("газ"))
+
+    if marker is not None and (
+        not isinstance(marker, str) or marker not in GAS_PROPERTY_BASES
+    ):
+        basis = (
+            wiring
+            if wiring in GAS_PROPERTY_BASES
+            else GAS_PROPERTY_BASIS_LEGACY
+        )
+        return basis, (
+            f"unknown gas_property_basis marker {marker!r}; "
+            f"expected one of {GAS_PROPERTY_BASES!r}"
+        )
+    if wiring is not None and wiring not in GAS_PROPERTY_BASES:
+        return wiring, (
+            f"unknown installed gas_property_basis {wiring!r}; "
+            f"expected one of {GAS_PROPERTY_BASES!r}"
+        )
+    if wiring is None:
+        if marker is not None:
+            return marker, (
+                "gas_property_basis marker is present but installed газ "
+                "wiring has no construction metadata; rebuild the namespace"
+            )
+        return GAS_PROPERTY_BASIS_LEGACY, None
+
+    for name in ("H0_по_p", "ступень"):
+        other = _installed_gas_property_basis(ns.get(name))
+        if other is not None and other != wiring:
+            return wiring, (
+                f"installed {name} basis {other!r} does not match "
+                f"installed газ basis {wiring!r}; rebuild the namespace"
+            )
+    if marker is not None and marker != wiring:
+        return wiring, (
+            f"gas_property_basis marker {marker!r} does not match installed "
+            f"wiring {wiring!r}; rebuild the namespace instead of mutating "
+            "the marker"
+        )
+    return wiring, None
+
+
+def _installed_cycle_metadata(function) -> dict | None:
+    """Cycle method metadata recorded by the factory that built ``газ``.
+
+    It is deliberately a separate set of attributes from the stage gas basis:
+    the namespace may select the stage and cycle bases independently.
+    """
+
+    if function is None:
+        return None
+    try:
+        function = inspect.unwrap(function)
+    except (TypeError, ValueError):
+        pass
+    basis = getattr(function, oc.CYCLE_GAS_PROPERTY_BASIS_ATTR, None)
+    if basis is None:
+        return None
+    return {
+        "gas_property_basis": basis,
+        "alpha_basis": getattr(
+            function, oc.CYCLE_ALPHA_BASIS_ATTR, ALPHA_BASIS_LEGACY
+        ),
+        "method_diagnostics": getattr(
+            function, oc.CYCLE_METHOD_DIAGNOSTICS_ATTR, None
+        ),
+    }
+
+
+def _cycle_gas_property_basis_state(
+    ns: dict,
+) -> tuple[str, str, object | None, str | None]:
+    """Resolve the actual cycle basis from installed construction metadata.
+
+    The mutable ``ns["_cycle_gas_property_basis"]`` marker is only a coherence
+    check, exactly as for the stage basis.  If it disagrees with the metadata
+    fixed when the namespace was built, the namespace is rejected before any
+    physical evaluation.  The default legacy path has no method dictionary, so
+    ``method_diagnostics`` is ``None``.
+    """
+
+    marker = ns.get("_cycle_gas_property_basis")
+    metadata = _installed_cycle_metadata(ns.get("газ"))
+    installed = metadata["gas_property_basis"] if metadata is not None else None
+    alpha_basis = (
+        metadata["alpha_basis"] if metadata is not None else ALPHA_BASIS_LEGACY
+    )
+    diagnostics = (
+        metadata["method_diagnostics"] if metadata is not None else None
+    )
+
+    if installed is not None and installed not in CYCLE_GAS_PROPERTY_BASES:
+        return installed, alpha_basis, diagnostics, (
+            f"unknown installed cycle gas_property_basis {installed!r}; "
+            f"expected one of {CYCLE_GAS_PROPERTY_BASES!r}"
+        )
+    if marker is not None and (
+        not isinstance(marker, str) or marker not in CYCLE_GAS_PROPERTY_BASES
+    ):
+        basis = installed if installed in CYCLE_GAS_PROPERTY_BASES else (
+            CYCLE_GAS_PROPERTY_BASIS_LEGACY
+        )
+        return basis, alpha_basis, diagnostics, (
+            f"unknown cycle gas_property_basis marker {marker!r}; "
+            f"expected one of {CYCLE_GAS_PROPERTY_BASES!r}"
+        )
+    if metadata is None:
+        if marker is not None:
+            return marker, alpha_basis, None, (
+                "cycle gas_property_basis marker is present but installed газ "
+                "wiring has no cycle construction metadata; rebuild the namespace"
+            )
+        return (
+            CYCLE_GAS_PROPERTY_BASIS_LEGACY,
+            ALPHA_BASIS_LEGACY,
+            None,
+            None,
+        )
+    if marker is not None and marker != installed:
+        return installed, alpha_basis, diagnostics, (
+            f"cycle gas_property_basis marker {marker!r} does not match "
+            f"installed cycle wiring {installed!r}; rebuild the namespace "
+            "instead of mutating the marker"
+        )
+    return installed, alpha_basis, diagnostics, None
+
 
 SCENARIOS = {
     "A87_strict":  dict(a2=[(70, 90), (70, 90), (80, 90)], lD=(None, 1 / 3.5)),
@@ -97,19 +278,60 @@ def _graph_diagnostic(rho: float) -> tuple[float | None, str, str]:
         return None, "NOT_CHECKED", str(exc)
 
 
-def _const_hub_provenance(st: list[dict], requested_a1) -> dict:
+def _const_hub_provenance(
+    st: list[dict],
+    requested_a1,
+    gas_property_basis: str = GAS_PROPERTY_BASIS_LEGACY,
+    *,
+    cycle_gas_property_basis: str = CYCLE_GAS_PROPERTY_BASIS_LEGACY,
+    cycle_alpha_basis: str = ALPHA_BASIS_LEGACY,
+    cycle_method_diagnostics: object | None = None,
+) -> dict:
     """Запрошенные и фактические параметры const-hub кандидата.
 
     ``ρ`` здесь не вход, а результат внутренней итерации; ``α1`` передаётся
     явно. Ветка не запускает ячейку-14 ``ступень_авто``, поэтому её инженерные
     подборы ρ/α1 не приписываются этому результату. При этом const-hub сам
     является инженерным замыканием, а не подтверждением RAW.
+
+    ``stage_gas_property_basis`` — основа ``cp``/``k`` именно ступени и
+    давления. ``cycle_gas_property_basis`` — отдельно выбранная и фактически
+    использованная основа цикла; ``cycle_alpha_basis`` и
+    ``cycle_method_diagnostics`` берутся из того же построения. Опции не
+    связаны: разрешён как stage-only, так и cycle-only диагностический вариант;
+    по умолчанию обе остаются ``legacy``. Для любого неlegacy варианта
+    добавляется ``NOT_PHYSICALLY_VALIDATED``: это диагностика метода, а не
+    подтверждение полной физики. Охлаждение учитывается только балансом
+    расхода, без смешения температур.
     """
 
     actual_a1 = [float(s["α1"]) for s in st]
     actual_rho = [float(s["ρ"]) for s in st]
-    return {
-        "model_variant": "extended_const_hub",
+    stage_textbook = gas_property_basis == GAS_PROPERTY_BASIS_TEXTBOOK
+    cycle_textbook = (
+        cycle_gas_property_basis == CYCLE_GAS_PROPERTY_BASIS_TEXTBOOK
+    )
+    textbook = stage_textbook or cycle_textbook
+    if stage_textbook and cycle_textbook:
+        model_variant = TEXTBOOK_BOTH_DIAGNOSTIC_MODEL_VARIANT
+    elif stage_textbook:
+        model_variant = TEXTBOOK_DIAGNOSTIC_MODEL_VARIANT
+    elif cycle_textbook:
+        model_variant = TEXTBOOK_CYCLE_DIAGNOSTIC_MODEL_VARIANT
+    else:
+        model_variant = "extended_const_hub"
+    fuel_relation = None
+    if isinstance(cycle_method_diagnostics, dict):
+        fuel_relation = cycle_method_diagnostics.get("fuel", {}).get("relation")
+    if fuel_relation is None:
+        fuel_relation = "source calc_g_m mean-cp balance at T_ref"
+    provenance = {
+        "model_variant": model_variant,
+        "stage_gas_property_basis": gas_property_basis,
+        "cycle_gas_property_basis": cycle_gas_property_basis,
+        "cycle_alpha_basis": cycle_alpha_basis,
+        "cycle_fuel_relation": fuel_relation,
+        "cycle_method_diagnostics": cycle_method_diagnostics,
         "a1_requested": [float(v) for v in requested_a1],
         "a1_actual": actual_a1,
         "rho_requested": None,
@@ -128,10 +350,34 @@ def _const_hub_provenance(st: list[dict], requested_a1) -> dict:
             ),
         },
     }
+    if textbook:
+        provenance["NOT_PHYSICALLY_VALIDATED"] = True
+        if stage_textbook and cycle_textbook:
+            diagnostic_label = (
+                "textbook_true_cp_cycle_and_stage_properties_"
+                "not_physically_validated"
+            )
+        elif stage_textbook:
+            # Preserve the pre-existing stage-only label.
+            diagnostic_label = (
+                "textbook_true_cp_stage_properties_not_physically_validated"
+            )
+        else:
+            diagnostic_label = (
+                "textbook_true_cp_cycle_properties_not_physically_validated"
+            )
+        provenance["gas_property_diagnostic_label"] = diagnostic_label
+        provenance["cycle_assumptions"] = {
+            "cooling": "cooling_bookkeeping_only_no_temperature_mixing",
+            "physical_validation": "NOT_PHYSICALLY_VALIDATED",
+        }
+    return provenance
 
 
 def build_ns(m: oc.Model, q_n_limit: float = 0.995, sigma_lim: float = SIGMA_LIM,
-             fast: bool = True, orchestration_core: bool = True) -> tuple[dict, dict]:
+             fast: bool = True, orchestration_core: bool = True, *,
+             gas_property_basis: str = GAS_PROPERTY_BASIS_LEGACY,
+             cycle_gas_property_basis: str = CYCLE_GAS_PROPERTY_BASIS_LEGACY) -> tuple[dict, dict]:
     """Пространство имён модели + функции const-hub.
 
     ``orchestration_core=True`` (по умолчанию) сразу после исполнения
@@ -147,9 +393,62 @@ def build_ns(m: oc.Model, q_n_limit: float = 0.995, sigma_lim: float = SIGMA_LIM
     ``orchestration_core=False`` её определения остаются независимым
     эталоном (никаких подмен). Верхний семиточечный перебор ``D_hub`` из
     ячейки в обоих случаях исключён (источник обрезается до ``rows = []``).
+
+    ``gas_property_basis`` — явная опция выбора основы ``cp``/``k`` для
+    ступени, ``H0_по_p`` и функции ``газ``. Допустимы только
+    ``legacy_derivative`` (по умолчанию: исходная notebook-аппроксимация
+    производной ``calc_cp``/среднего ``cp``, поведение не меняется) и
+    диагностическая ``textbook_true_cp`` (опубликованный прямой fit
+    ``cp(T)``). Выбор фиксируется в этом собранном пространстве имён
+    (``ns["_gas_property_basis"]`` и атрибут установленных адаптеров);
+    не меняйте маркер на месте — для другой основы пересоберите пространство
+    имён, иначе ``eval_candidate`` отклонит несовпадение до физического
+    расчёта. Кэши чистых функций принадлежат только этому построению и между
+    построениями не разделяются. ``textbook_true_cp`` требует
+    ``orchestration_core=True``: эталонная ветка блокнота не имеет такой
+    подмены.
+
+    ``cycle_gas_property_basis`` — независимая keyword-only опция метода
+    цикла. По умолчанию ``legacy_mean_cp`` сохраняет прежний расчёт;
+    ``textbook_true_cp`` использует тот же явно выбранный вариант в
+    ``oc.cycle_point`` и переносит его ``G``, ``g_t``, ``alpha``, ``L_k``,
+    давления и ``c_t`` во всё построение. Любая textbook-опция (цикл или
+    ступень) требует ``orchestration_core=True``. Основы не связываются
+    автоматически: stage-only и cycle-only варианты остаются явными.
     """
-    c = oc.cycle_point(m, 11.0, 1250.0, 110e3)
+    if (not isinstance(gas_property_basis, str)
+            or gas_property_basis not in GAS_PROPERTY_BASES):
+        raise ValueError(
+            f"unknown gas_property_basis {gas_property_basis!r}; "
+            f"expected one of {GAS_PROPERTY_BASES!r}"
+        )
+    if (not isinstance(cycle_gas_property_basis, str)
+            or cycle_gas_property_basis not in CYCLE_GAS_PROPERTY_BASES):
+        raise ValueError(
+            f"unknown cycle gas_property_basis {cycle_gas_property_basis!r}; "
+            f"expected one of {CYCLE_GAS_PROPERTY_BASES!r}"
+        )
+    if ((gas_property_basis == GAS_PROPERTY_BASIS_TEXTBOOK
+         or cycle_gas_property_basis == CYCLE_GAS_PROPERTY_BASIS_TEXTBOOK)
+            and not orchestration_core):
+        raise ValueError(
+            "textbook_true_cp (stage or cycle) requires "
+            "orchestration_core=True; the notebook reference branch has no "
+            "textbook gas/property wiring"
+        )
+    if cycle_gas_property_basis == CYCLE_GAS_PROPERTY_BASIS_LEGACY:
+        # Preserve the historical call shape on the default path.
+        c = oc.cycle_point(m, 11.0, 1250.0, 110e3)
+    else:
+        c = oc.cycle_point(
+            m, 11.0, 1250.0, 110e3,
+            gas_property_basis=cycle_gas_property_basis,
+        )
     ns = dict(m.base)
+    ns["_gas_property_basis"] = gas_property_basis
+    ns["_cycle_gas_property_basis"] = c.get(
+        "cycle_gas_property_basis", CYCLE_GAS_PROPERTY_BASIS_LEGACY
+    )
     ns["T_г_полн"] = 1250.0
     ns["охлаждение_лопаток"] = c["охлаждение"]
     ns["g_охл"] = c["g_ohl"]
@@ -198,12 +497,44 @@ def build_ns(m: oc.Model, q_n_limit: float = 0.995, sigma_lim: float = SIGMA_LIM
         # те же адаптеры и тот же порядок, что в _evaluate(stage_core=True):
         # ячейки 16/20 дальше видят уже подменённые определения
         if orchestration_core and i == gas_cell:
-            ns["газ"] = oc._газ_ядро(ns)
-            ns["H0_по_p"] = oc._h0_по_p_ядро(ns)
+            if gas_property_basis == GAS_PROPERTY_BASIS_LEGACY:
+                # Keep the historical no-keyword factory calls so existing
+                # adapter/mock seams observe exactly the same construction.
+                ns["газ"] = oc._газ_ядро(ns)
+                ns["H0_по_p"] = oc._h0_по_p_ядро(ns)
+            else:
+                ns["газ"] = oc._газ_ядро(
+                    ns, gas_property_basis=gas_property_basis
+                )
+                ns["H0_по_p"] = oc._h0_по_p_ядро(
+                    ns, gas_property_basis=gas_property_basis
+                )
+            # Cycle metadata is construction-bound on the installed gas
+            # closure, separately from the stage basis above.
+            oc._mark_cycle_metadata(ns["газ"], c)
         if orchestration_core and i == stage_cell:
-            ns["ступень"] = oc._ступень_ядро(ns)
+            if gas_property_basis == GAS_PROPERTY_BASIS_LEGACY:
+                ns["ступень"] = oc._ступень_ядро(ns)
+            else:
+                ns["ступень"] = oc._ступень_ядро(
+                    ns, gas_property_basis=gas_property_basis
+                )
         if orchestration_core and i == reaction_cell:
             ns["ρ_корня"] = oc._ρ_корня_ядро(ns)
+    if not orchestration_core:
+        # Reference branch: keep the notebook functions, but record the
+        # construction-time basis on them so the mutable namespace marker
+        # cannot mislabel this namespace later.
+        for _name in ("газ", "H0_по_p", "ступень"):
+            _function = ns.get(_name)
+            if _function is not None and _installed_gas_property_basis(_function) is None:
+                setattr(
+                    _function,
+                    oc.GAS_PROPERTY_BASIS_ATTR,
+                    gas_property_basis,
+                )
+        if ns.get("газ") is not None:
+            oc._mark_cycle_metadata(ns["газ"], c)
     # базовый расход — из цикла, не из старого G-фита
     ns["G_в"] = c["G"]
     ns["G_c1"] = c["G"] * c["g_t"]
@@ -242,15 +573,23 @@ def eval_candidate(x, ns: dict, scenario: str, q_n_limit: float, soft: bool = Fa
     n, Dh, w1, w2, a11, a12, a13, k1, k2, k3 = map(float, x)
     sc = SCENARIOS[scenario]
     lD_lo, lD_hi = sc["lD"]
-    ns["π_веса"] = [w1, w2, 1.0]
-    ns["α1_ст"] = [a11, a12, a13]
-    ns["κ_ст"] = [k1, k2, k3]
+    gas_basis, gas_basis_error = _gas_property_basis_state(ns)
+    cycle_basis, cycle_alpha_basis, cycle_diagnostics, cycle_basis_error = (
+        _cycle_gas_property_basis_state(ns)
+    )
     requested_a1 = (a11, a12, a13)
     st: list[dict] | None = None
     opt: list[float | None] = []
     opt_status: list[str] = []
     opt_reason: list[str] = []
     try:
+        if gas_basis_error:
+            raise ValueError(gas_basis_error)
+        if cycle_basis_error:
+            raise ValueError(cycle_basis_error)
+        ns["π_веса"] = [w1, w2, 1.0]
+        ns["α1_ст"] = [a11, a12, a13]
+        ns["κ_ст"] = [k1, k2, k3]
         # каждый кандидат — от фиксированного расхода цикла, не от предыдущего
         baseG = tuple(ns["G_base"]) if "G_base" in ns else (ns["G_в"], ns["G_c1"], ns["G_л_ост"])
         # масштабирование расхода до N=110 кВт на входе редуктора
@@ -346,7 +685,12 @@ def eval_candidate(x, ns: dict, scenario: str, q_n_limit: float, soft: bool = Fa
                         uc0_opt_status=opt_status,
                         uc0_opt_reason=opt_reason,
                         scoring_status="not_scored",
-                        **_const_hub_provenance(st, requested_a1))
+                        **_const_hub_provenance(
+                            st, requested_a1, gas_basis,
+                            cycle_gas_property_basis=cycle_basis,
+                            cycle_alpha_basis=cycle_alpha_basis,
+                            cycle_method_diagnostics=cycle_diagnostics,
+                        ))
         # нарушения: имя, значение, предел, нормированная величина
         violations = []
 
@@ -421,7 +765,12 @@ def eval_candidate(x, ns: dict, scenario: str, q_n_limit: float, soft: bool = Fa
             uc0_opt_missing=missing_opt,
             scoring_status=scoring_status,
             soft_score_applied=score2_soft_applied,
-            **_const_hub_provenance(st, requested_a1),
+            **_const_hub_provenance(
+                st, requested_a1, gas_basis,
+                cycle_gas_property_basis=cycle_basis,
+                cycle_alpha_basis=cycle_alpha_basis,
+                cycle_method_diagnostics=cycle_diagnostics,
+            ),
         )
     except Exception as e:  # noqa: BLE001
         return dict(score=1e9, score1=1e9, score2=1e9, feasible=False, hard=1e9,
@@ -437,7 +786,12 @@ def eval_candidate(x, ns: dict, scenario: str, q_n_limit: float, soft: bool = Fa
                     uc0_opt_status=opt_status,
                     uc0_opt_reason=opt_reason,
                     scoring_status="not_scored",
-                    **_const_hub_provenance(st or [], requested_a1))
+                    **_const_hub_provenance(
+                        st or [], requested_a1, gas_basis,
+                        cycle_gas_property_basis=cycle_basis,
+                        cycle_alpha_basis=cycle_alpha_basis,
+                        cycle_method_diagnostics=cycle_diagnostics,
+                    ))
 
 
 def run_scenario(m, scenario: str, seeds: int, maxiter: int, popsize: int,

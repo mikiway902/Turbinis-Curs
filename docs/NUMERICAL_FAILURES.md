@@ -17,6 +17,8 @@ failure branches, however, used to leak ambiguous Python outcomes:
   could exhaust their limits and return a stale iterate as if it had closed.
 - `expansion.calculate_turbine_expansion` returned its last temperature iterate
   after 50 iterations without marking non-convergence.
+- `gas.calc_stage_cp_k` and `gas.calc_h0_for_pressure` returned their 50th
+  iterate after exhausting the fixed-point loop without marking non-convergence.
 
 The original notebooks remain the independent reference and are not modified.
 The extracted modules deliberately diverge only on these failure outcomes, not
@@ -53,6 +55,11 @@ the evaluated state and the next relaxed state:
   Deltas are never halved by relaxation before being recorded.
 - `baseline.calculate` records the evaluated `N_b` and its `residual` /
   `relative_residual` against `N_target`.
+- `gas.calc_stage_cp_k` and `gas.calc_h0_for_pressure` record the evaluated
+  `cp`/`k`, the proposal `cp_new`/`k_new`, the unhalved `cp_new - cp`
+  residual, `T_mean = T0 - H0 * phi**2 / (2 * cp)`, and `H0` (the input for
+  the first, the same-iteration computed drop for the second). A successful
+  loop still returns the pre-update `cp`/`k` and that iteration's `H0`.
 
 ## Sites now explicit
 
@@ -71,6 +78,8 @@ the evaluated state and the next relaxed state:
 | | `non_finite_residual`, `non_finite_secant_denominator` | non-finite evaluated arithmetic |
 | `orchestration.ступень_const_hub` | `reaction_fixed_point_exhausted` | 60 iterations without the existing `1e-7` reaction/geometry test |
 | `expansion.calculate_turbine_expansion` | `temperature_iteration_exhausted` | 50 iterations without `abs(T_т_н - T_т) < 1e-6` |
+| `gas.calc_stage_cp_k` | `cp_k_iteration_exhausted` | 50 iterations without `abs(cp_new - cp) < 1e-9` |
+| `gas.calc_h0_for_pressure` | `h0_pressure_iteration_exhausted` | 50 iterations without `abs(cp_new - cp) < 1e-9` |
 
 An invalid initial pressure-ratio evaluation still raises the namespace's
 `НетРешения` in both baseline and const-hub orchestration, preserving the
@@ -88,6 +97,7 @@ Focused tests:
 - `turbine_engine.tests.test_baseline_core.ExplicitDiagnosticsTests`
 - `turbine_engine.tests.test_orchestration.ExplicitDiagnosticsTests`
 - `turbine_engine.tests.test_expansion_core.FormulaTests.test_exact_iteration_limit_raises_typed_nonconvergence`
+- `turbine_engine.tests.test_gas_core.ExplicitNonconvergenceTests`
 
 The existing numerical-success parity tests in the same modules are unchanged.
 They compare successful extracted results with the executed notebook reference

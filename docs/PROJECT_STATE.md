@@ -1,8 +1,206 @@
 # Project State
 
 Last updated: 2026-11-11
-Git commit: `85e6102` — `docs(exports): add turbine calculation workbooks` (branch `main`)
-Working tree: dirty from prior work. M2 now also records the user-confirmed 110 kW
+Git checkpoint: `0952832` (branch `main`); RAW integration below is subsequent working-tree work.
+
+## Current route — two-textbook scope correction
+
+### Latest bounded actual-boundary RAW continuation
+
+`scripts/architecture_coupled_stage_smoke.py` now evaluates 15 explicit alternatives:
+A/B MAIN with 1/2/3 stages, and C GG 1/2/3 × FPT 1/2/3. It uses existing pressure/work
+closures and fresh namespaces, with exact actual GG→FPT total-state/flow continuity.
+There is no flow, geometry, speed or bracket fitting. All attempts and complete
+successful closure stages are persisted, including partial GG results on typed FPT
+failure. This is boundary coupling, not achieved engine power closure.
+
+Parent saved `reference/architecture_stage_smoke/2026-11-11-actual-coupled/`:
+13 SUCCESS + 2 NUMERICAL_FAILURE (A/B MAIN/1, boundary_not_bracketed within the
+explicit 120000–150000 Pa static bracket). These are not physical impossibility
+claims. Reproduce 15/15; resume zero appends. Journal: 185924 bytes, SHA-256
+`2277f4e544954c68a259f46f94be30bddddc11ac81d1fe4b0793acb3ca1e8fa2`.
+
+No successful alternative achieves 110 kW at the supplied flow/controls. A MAIN/3
+net output is 104894.03 W, B MAIN/3 is 104880.83 W. C GG2/FPT1 yields 108141.98 W;
+C GG3/FPT1 remains 106095.69 W. These are fixed illustrative controls, not a ranking
+of valid designs. Pi-profile violations remain annotations; overall feasibility is
+NOT_CHECKED. The earlier independent 12-point journals are untouched.
+
+Parent checks: 536 engine tests OK (1 GPU skip), 146 scripts tests OK;
+static verifier 6 PASS / 7 WARN / 0 FAIL; diff check clean. Independent reviewer PASS
+after replacing Python-3.11-only file hashing with streamed hashing (3.10 runtime
+itself not exercised; tests ran on 3.12.10). New files: coupled smoke and its tests.
+No commit/push. Checklist remains 54 unclosed items: bounded evidence does not close
+stage selection, engineering checks or 110 kW engine closure.
+
+Next P0: investigate explicit physical static brackets for A/B MAIN/1 and the
+remaining power mismatch using source-supported work distribution/control alternatives;
+retain all attempts, avoid silent mass-flow resizing and do not start a global sweep.
+
+### Previous single-link diagnostic
+
+Latest actual-boundary continuation: `ConstHubOrchestration` now closes actual
+outlet total pressure or prescribed mechanical work using an explicit static-pressure
+bracket, without changing flow, geometry or speed. Both require `raw_unbounded`;
+the original namespace pressure is restored even on failure/interrupt.
+
+Lead independently checked A MAIN/3: target 150000 Pa, actual 150000.036502 Pa
+(relative residual 2.43347e-7). C GG/3 closes compressor power 200200.924926 W
+at 200201.071151 W (7.30389e-7). Its actual outlet, 1009.505001 K / 281298.344088 Pa,
+is now explicitly passed into a fresh FPT/1 meanline regression. FPT outlet closes
+at 149999.898810 Pa (6.74598e-7), but mechanical output is 106095.685758 W:
+**3904.314242 W below 110 kW**. This is a verified linkage, not a closed 110 kW engine.
+Full successful closure stage records and inputs are saved separately in
+`reference/architecture_stage_smoke/2026-11-11-actual-link-diagnostic.json`.
+The older 12-point journals remain independent assembly snapshots and are unchanged.
+
+Latest parent checks after the linkage regression: 536 engine tests OK (1 GPU skip),
+131 scripts tests OK; static verifier 6 PASS / 7 WARN / 0 FAIL; `git diff --check`
+clean. Independent reviewer PASS for the linkage regression, diagnostic and docs.
+No commit or push was performed for this continuation.
+
+The paragraph below describes the preceding snapshot; its outstanding coupling
+statement is superseded only for this single fixed C GG/3 → FPT/1 regression.
+
+Latest accepted step-3/M3 continuation: shared `baseline.estimate_stage_count`
+implements original part-1 p.87 item 54 without rounding or selecting an integer.
+The existing const-hub meanline now has an explicit `raw_unbounded` secant policy;
+it does not read the engineering pressure-ratio cap. Legacy remains clipped by default.
+Pi-profile margins/pass are separate from unknown overall engineering feasibility.
+
+Saved assembly checks: `reference/architecture_stage_smoke/2026-11-11-raw/` and
+`2026-11-11-legacy-clipped/`. Four assemblies × stage counts 1/2/3 = 12 attempts
+per run. RAW: 12 SUCCESS, 12/12 reproduce, resume zero appends. Reference: 7 SUCCESS
++ 5 NUMERICAL_FAILURE, 12/12 reproduce. These five stalls were caused by the
+engineering pressure-ratio clip, not proof that the corresponding stages cannot
+be calculated. High-pi successes are retained and fail the separate pi profile.
+
+Latest parent checks: 523 active engine tests OK (1 optional GPU skip), 131 scripts
+tests OK; static verifier 6 PASS/7 WARN/0 FAIL; diff check clean. Independent reviews
+PASS for the count/meanline runner and RAW policy after digest/acceptance fixes.
+
+No stage count or best architecture is selected. These assembly runs are labelled
+NOT_COUPLED_ARCHITECTURE_STAGE: prescribed static pressure was derived from the 0D
+total outlet using an explicit fixture Mach, not the solved meanline velocity.
+Actual total-pressure/power mismatches are saved; coupling those actual assembly
+outlets/work back into the cycle is the remaining P0 item. See PROJECT_GUIDE and
+the new section in ENERGY_METHOD_AUDIT for measured mismatches.
+
+### Prior aggregate/RAW-v2 checkpoint (historical results below)
+
+Latest accepted continuation: textbook process means are now wired through the
+existing compressor/turbine components and A/B/C architecture calculation. Component
+records separate process cp/k from local endpoint properties; GG outlet is the exact
+FPT inlet, with independent GG/FPT process means. Source method requires fuel-based
+alpha and the retained mean-cp combustor relation. External composition is not inferred.
+
+RAW input/output v2 now preserves `gas_property_basis` and complete process metadata;
+v1 payloads/output dictionaries still describe the unchanged legacy model. New saved
+grid: `reference/architecture_smoke/2026-11-11-textbook-v2/`, 13 attempts: 9 SUCCESS,
+3 MODEL_ERROR (deliberately incompatible external-state fixtures), 1 NON_PHYSICAL_STATE
+(nonpositive-output fixture). All 13 reproduce; resume appended zero duplicates.
+Journal SHA-256: `febe2ab92a3dfaf868a280a5c6d684ad7cf2749815d276a787739845a5681a87`.
+Maximum target-power residual 8.73115e-11 W; mass residual 0 kg/s. NOT_PHYSICALLY_VALIDATED.
+
+Latest parent suites: 510 active engine tests OK (1 optional GPU skip), 116 scripts
+tests OK; static verifier 6 PASS / 7 WARN / 0 FAIL; diff check clean. Independent
+reviews PASS for components (after residual/oracle fixes), A/B/C wiring and RAW v2.
+Mandatory continuation is source-backed stage inventory/work distribution and
+connection to existing meanline/geometry/strength calculations, not another gas model.
+
+### Prior single-cycle checkpoint (historical results below)
+
+Latest accepted P0 continuation: `cycle.calculate_cycle_point(...,
+gas_property_basis="textbook_true_cp")` implements the opt-in process-mean textbook
+variant in the existing calculation. The p.20 fuel formula and configured cooling
+fractions are retained; all gas properties use fuel-based alpha; turbine/nozzle
+temperatures are refined and local exit k is consistent with both Mach and pressure
+conversion. Invalid mass bookkeeping is diagnosed, not normalized or accepted.
+
+`optimize_extended.build_ns(..., gas_property_basis="textbook_true_cp",
+cycle_gas_property_basis="textbook_true_cp")` connects it to existing stage equations.
+Default anchors remain unchanged. New cycle/source-state diagnostics and actual basis
+metadata propagate to successful and failed stage records. Independent reviews PASS
+for cycle closure (after exhaustion-residual fix) and combined wiring.
+
+Latest parent checks: 460 active engine tests OK (1 GPU skip), 116 scripts tests OK;
+static verifier 6 PASS / 7 WARN / 0 FAIL; diff check clean. Fixed B87_relaxed point:
+cycle G=0.532339684442 kg/s versus legacy 0.577155550361; first stator height
+11.031705 mm versus 11.295345 mm; both remain infeasible. No search/sweep was run.
+
+Earlier remaining step-2 scope (subsequently implemented above): per-aggregate process properties in A/B/C architecture
+components (including independent GG/FPT process means) and source-backed stage
+inventory. The previously saved 13/55-point datasets still describe their labelled
+legacy reduced model; they were not overwritten or promoted to textbook results.
+
+### Earlier scope-correction checkpoint (historical results below)
+
+User instruction: follow the cycle textbook and turbine textbook part 1; do not
+develop an unnecessary alternative integral cycle. Mandatory route is now the
+ordered P0/P1 sequence in `AUTONOMOUS_EXECUTION.md`. The original prompt is preserved.
+
+Audit outcome: keep RAW, reference anchors, diagnostics, shaft/architecture contracts
+and bounded experiments. Freeze integral `caloric*` work in `experiments/caloric/`.
+It is no longer imported by the active calculation. Its optional 45-test suite has
+one known unaccepted-combustor one-ULP assertion failure; this is disclosed, not fixed
+by loosening a tolerance and not counted as an active-suite success.
+
+Completed necessary P0 continuation: published cycle-book p.57 true-cp correlation
+in existing `gas.py`; explicit `gas_property_basis="textbook_true_cp"` in existing
+const-hub `build_ns`. Stage gas, stage cp/k iteration and pressure closure use the
+same selected basis. Construction-bound provenance rejects a relabelled namespace.
+Legacy defaults/anchors are unchanged; cycle still uses legacy mean cp, reported
+separately. No new combustor, integral-cycle integration, search or large sweep.
+
+Latest parent verification: 443 active engine tests OK (1 optional GPU skip),
+107 scripts tests OK; static verifier 6 PASS/7 WARN/0 FAIL; diff check clean.
+Independent gas-property and stage-wiring reviews PASS after provenance fix.
+Fixed B87_relaxed control point remains infeasible in both methods: blade height
+11.295345 mm legacy versus 11.153120 mm textbook stage option. This is a method
+comparison, not a validated engine or a new optimum.
+
+Remaining P0 work is the existing cycle's process-property/fuel/cooling reconciliation
+and source-backed stage-count/meanline integration, not an integral thermochemistry
+replacement. Absent maps/material life remain affected-check limitations rather than
+reasons to halt every supported calculation.
+
+## Historical continuation evidence — superseded route notes below
+
+Subsequent P0/P1 evidence: `ENERGY_METHOD_AUDIT.md`, saved independent energy audit,
+and `current_host_profile_2026-11-11.json`. Original cycle-book pp.20/54/56/57 visually
+checked. Typed architecture failure propagation corrected; reviewer PASS. Experimental
+`caloric.py` source true-cp units passed the subsequent user-requested correction:
+eta*R underflow and component-power overflow now have typed diagnostics; independent
+reviewer PASS. Full architecture integration and physical validation remain open.
+Latest parent suites: 466 engine tests OK (1 GPU skip), 94 scripts tests OK;
+static verifier 6 PASS/7 WARN/0 FAIL; git diff --check clean.
+Reconciled checklist: 134 task bullets, 79 done, 23 in progress, 31 TODO,
+1 justified skip. 54 remain open; this is not an effort/physical-readiness percentage.
+Independent completed work: silent gas fixed-point exhaustion now raises coherent
+typed diagnostics (success parity unchanged; reviewer PASS). Saved bounded coarse
+experiment `reference/architecture_coarse/2026-11-11-pi3-13/`: 55 attempts, all
+SUCCESS, 55/55 reproduced, resume zero appends; reviewer PASS. It is illustrative,
+not production: stage rho/strength NOT_CHECKED. See `COARSE_0D_EXPERIMENT.md`.
+
+- `architecture_raw.py` now connects both explicit combustor closures and all three
+  0D architectures to immutable RAW, with strict versioned JSON and typed failures.
+- Saved grid: `reference/architecture_smoke/2026-11-11-grid/` — 13 attempts,
+  12 SUCCESS and 1 NON_PHYSICAL_STATE; all retained. Reproduction matched 13/13;
+  resume appended zero duplicates and preserved the journal hash.
+- Independent checks: 427 engine tests OK (1 GPU skip), 43 scripts tests OK;
+  static verifier 6 PASS / 7 WARN / 0 FAIL. Independent reviewer: PASS after fixes.
+- Interrupted runs remain incomplete; actual interruption/resume tests compare
+  journal, manifest and checkpoint with uninterrupted execution byte-for-byte.
+- This closes bounded RAW integration, not M2 physical validation or M6 production.
+  Next P0: independent energy/enthalpy audit of retained fuel, alpha and cp/k
+  assumptions, then stage-level physical closure. See `ARCHITECTURE_RAW_SMOKE.md`.
+- Newly identified SOURCE_DISCREPANCY: FPT inherits GG outlet cp/k rather than
+  refreshing them at its lower inlet temperature, despite module prose implying
+  per-turbine inlet evaluation. Confirmed in the saved RAW states; no silent fix.
+
+## Earlier checkpoint context
+
+M2 records the user-confirmed 110 kW
 **pre-reducer (gearbox-input)** power plane and applies it consistently to the active
 cycle, stage baseline, and performance aggregation. The standalone 0D turbine-expansion
 unit (`turbine_engine/turbine.py`, now with a prescribed-work inverse), scalar

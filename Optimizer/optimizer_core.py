@@ -44,6 +44,10 @@ import constraints as cs  # noqa: E402
 if str(ПРОЕКТ) not in sys.path:
     sys.path.insert(0, str(ПРОЕКТ))
 from turbine_engine.cycle import (  # noqa: E402
+    ALPHA_BASIS_LEGACY,
+    CYCLE_GAS_PROPERTY_BASES,
+    CYCLE_GAS_PROPERTY_BASIS_LEGACY,
+    CYCLE_GAS_PROPERTY_BASIS_TEXTBOOK,
     CycleConfig,
     CycleState,
     calculate_cycle_point,
@@ -59,9 +63,12 @@ from turbine_engine.geometry import (  # noqa: E402
     calculate_meridional_geometry,
 )
 from turbine_engine.gas import (  # noqa: E402
+    GAS_PROPERTY_BASES,
+    GAS_PROPERTY_BASIS_LEGACY,
     calc_gas_cp_k,
     calc_h0_for_pressure,
     calc_stage_cp_k,
+    calc_textbook_gas_cp_k,
 )
 from turbine_engine.performance import (  # noqa: E402
     calculate_turbine_performance,
@@ -166,7 +173,9 @@ def load_model(calc_dir: Path | str | None = None, quiet: bool = True) -> Model:
 # ---------------------------------------------------------------------------
 # Цикл для произвольных pi*к, T*г, N
 # ---------------------------------------------------------------------------
-def cycle_point(m: Model, pi: float = 11.0, T_g: float = 1250.0, N: float = 110000.0) -> dict[str, Any]:
+def cycle_point(m: Model, pi: float = 11.0, T_g: float = 1250.0,
+                N: float = 110000.0, *,
+                gas_property_basis: str = CYCLE_GAS_PROPERTY_BASIS_LEGACY) -> dict[str, Any]:
     """Пересчитывает цикл через stateless-ядро ``turbine_engine.cycle``.
 
     Публичная сигнатура и состав результата сохранены (добавлено явное поле
@@ -174,15 +183,30 @@ def cycle_point(m: Model, pi: float = 11.0, T_g: float = 1250.0, N: float = 1100
     из фактически загруженного namespace ``m.cycle``, поэтому изменения
     блокнота не игнорируются. Состояние ``m.cycle`` не изменяется.
 
+    ``gas_property_basis`` — явная keyword-only опция выбора метода цикла.
+    Значение по умолчанию ``legacy_mean_cp`` сохраняет исходную
+    notebook-аппроксимацию среднего/производного ``cp`` и старую форму
+    результата. ``textbook_true_cp`` — диагностический вариант с опубликованным
+    прямым fit; для него дополнительно возвращаются фактические
+    ``cycle_gas_property_basis``, ``cycle_alpha_basis`` и
+    ``cycle_method_diagnostics``. Неизвестное значение отклоняется ядром
+    :func:`calculate_cycle_point` до физического расчёта.
+
     ``N`` — мощность на входе редуктора (до потерь редуктора). ``N_ud`` —
     удельная мощность на той же плоскости; ``N_reducer_out_ud = N_ud*η_р`` —
     отдельная downstream-величина на выходе редуктора. ``C_e``/``eta_e``
     отнесены к входной (pre-reducer) плоскости.
     """
     config = CycleConfig.from_namespace(m.cycle)
-    r = calculate_cycle_point(
-        CycleState(pi=float(pi), T_g=float(T_g), N=float(N)), config
-    )
+    state = CycleState(pi=float(pi), T_g=float(T_g), N=float(N))
+    if gas_property_basis == CYCLE_GAS_PROPERTY_BASIS_LEGACY:
+        # Keep the historical call shape for existing adapter/mock seams; the
+        # keyword is only passed when the caller explicitly opts in.
+        r = calculate_cycle_point(state, config)
+    else:
+        r = calculate_cycle_point(
+            state, config, gas_property_basis=gas_property_basis
+        )
     d = {
         "g_m": r.g_m, "g_т": r.g_t, "α": r.alpha,
         "L_к": r.L_k, "L_т": r.L_t, "π_т": r.pi_t,
@@ -191,7 +215,7 @@ def cycle_point(m: Model, pi: float = 11.0, T_g: float = 1250.0, N: float = 1100
         "N_в_уд": r.N_ud, "N_ред_уд": r.N_reducer_out_ud,
         "R_уд": r.R_ud, "N_e_уд": r.N_e_ud,
     }
-    return {
+    result = {
         "pi": r.pi, "T_g": r.T_g, "N": r.N,
         "G": r.G, "p_g": r.p_g, "p_t": r.p_t, "c_t": r.c_t,
         "g_t": r.g_t, "alpha_g": r.alpha,
@@ -202,6 +226,11 @@ def cycle_point(m: Model, pi: float = 11.0, T_g: float = 1250.0, N: float = 1100
         "g_ohl": r.g_cooling, "g_voz": r.g_return, "охлаждение": r.cooled,
         "d": d,
     }
+    if r.gas_property_basis != CYCLE_GAS_PROPERTY_BASIS_LEGACY:
+        result["cycle_gas_property_basis"] = r.gas_property_basis
+        result["cycle_alpha_basis"] = r.alpha_basis
+        result["cycle_method_diagnostics"] = r.method_diagnostics
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -291,7 +320,75 @@ def декодировать(x, cfg):
 # ---------------------------------------------------------------------------
 # Один расчёт
 # ---------------------------------------------------------------------------
-def _ступень_ядро(ns: dict[str, Any]):
+GAS_PROPERTY_BASIS_ATTR = "gas_property_basis_build"
+CYCLE_GAS_PROPERTY_BASIS_ATTR = "cycle_gas_property_basis_build"
+CYCLE_ALPHA_BASIS_ATTR = "cycle_alpha_basis_build"
+CYCLE_METHOD_DIAGNOSTICS_ATTR = "cycle_method_diagnostics_build"
+
+
+def _validate_gas_property_basis(value: str) -> str:
+    """Return a valid property-basis selector or raise ``ValueError``."""
+
+    if value not in GAS_PROPERTY_BASES:
+        raise ValueError(
+            f"unknown gas_property_basis {value!r}; "
+            f"expected one of {GAS_PROPERTY_BASES!r}"
+        )
+    return value
+
+
+def _validate_cycle_gas_property_basis(value: str) -> str:
+    """Return a valid cycle property-basis selector or raise ``ValueError``."""
+
+    if not isinstance(value, str) or value not in CYCLE_GAS_PROPERTY_BASES:
+        raise ValueError(
+            f"unknown cycle gas_property_basis {value!r}; "
+            f"expected one of {CYCLE_GAS_PROPERTY_BASES!r}"
+        )
+    return value
+
+
+def _mark_gas_property_basis(function, value: str):
+    """Attach the construction-time basis to an adapter closure.
+
+    The attribute is a plain immutable string on the function object, so
+    callers can recover the wiring actually installed in a namespace without
+    trusting the mutable namespace marker.
+    """
+
+    setattr(function, GAS_PROPERTY_BASIS_ATTR, _validate_gas_property_basis(value))
+    return function
+
+
+def _mark_cycle_metadata(function, result: dict[str, Any]):
+    """Attach the construction-time cycle method metadata to a closure.
+
+    ``result`` is the dictionary returned by :func:`cycle_point` for the basis
+    actually used to build the surrounding namespace.  The legacy path carries
+    no method dictionary, which is recorded explicitly as ``None``.  These
+    attributes are construction-bound and independent of the stage-property
+    attribute so the two selectors cannot silently couple.
+    """
+
+    basis = _validate_cycle_gas_property_basis(
+        result.get("cycle_gas_property_basis", CYCLE_GAS_PROPERTY_BASIS_LEGACY)
+    )
+    setattr(function, CYCLE_GAS_PROPERTY_BASIS_ATTR, basis)
+    setattr(
+        function,
+        CYCLE_ALPHA_BASIS_ATTR,
+        result.get("cycle_alpha_basis", ALPHA_BASIS_LEGACY),
+    )
+    setattr(
+        function,
+        CYCLE_METHOD_DIAGNOSTICS_ATTR,
+        copy.deepcopy(result.get("cycle_method_diagnostics")),
+    )
+    return function
+
+
+def _ступень_ядро(ns: dict[str, Any], *,
+                  gas_property_basis: str = GAS_PROPERTY_BASIS_LEGACY):
     """Адаптер ``turbine_engine.stage`` под сигнатуру и результат ячейки блокнота.
 
     Сигнатура, ключи результата и источники ``cp``/``k`` сохранены: значения
@@ -302,15 +399,19 @@ def _ступень_ядро(ns: dict[str, Any]):
     (φ/ψ, зазоры, парциальность) читаются после настройки параметров, а не из
     значений по умолчанию ядра.
 
-    ``StageCalculationError`` переводится в ``НетРешения`` этого пространства
-    имён: внешние итераторы блокнота (подбор ρ, распределение π) обрабатывают
-    недопустимое состояние ровно так же, как при вызове исходной функции.
+    ``gas_property_basis`` фиксируется при создании адаптера. По умолчанию
+    используется ``legacy_derivative`` — исходная notebook-аппроксимация
+    производной ``calc_cp`` (средняя/конечно-разностная), а не опубликованный
+    прямой fit. ``textbook_true_cp`` — только явный диагностический вариант
+    с опубликованным прямым fit; он не меняет формулу ступени.
     """
+    _validate_gas_property_basis(gas_property_basis)
     нет_решения = ns["НетРешения"]
 
     def ступень(T0, p0, H0, ρ, D_c, D_л, n, G_c, G_л, α1_град, κ):
         cp, k = calc_stage_cp_k(
-            T0, H0, alpha=ns["α_г"], R=ns["R"], phi=ns["φ"]
+            T0, H0, alpha=ns["α_г"], R=ns["R"], phi=ns["φ"],
+            gas_property_basis=gas_property_basis,
         )
         state = StageState(
             T0=T0, p0=p0, H0=H0, rho=ρ, D_c=D_c, D_l=D_л, n=n,
@@ -323,37 +424,52 @@ def _ступень_ядро(ns: dict[str, Any]):
         except StageCalculationError as exc:
             raise нет_решения(str(exc)) from exc
 
-    return ступень
+    return _mark_gas_property_basis(ступень, gas_property_basis)
 
 
-def _газ_ядро(ns: dict[str, Any]):
-    """Adapter ``газ(T)`` backed by :func:`turbine_engine.gas.calc_gas_cp_k`.
+def _газ_ядро(ns: dict[str, Any], *,
+              gas_property_basis: str = GAS_PROPERTY_BASIS_LEGACY):
+    """Adapter ``газ(T)`` backed by the selected pure gas core.
 
     Like the notebook function, the closure resolves ``α_г`` and ``R`` from the
     active namespace at call time, so later helpers that look up ``газ`` in
     their globals keep the same composition semantics as the source.
+
+    ``legacy_derivative`` (default) keeps :func:`calc_gas_cp_k` and therefore the
+    original notebook derivative/mean-``cp`` approximation.  It is not the
+    published direct ``cp(T)`` fit.  ``textbook_true_cp`` evaluates
+    :func:`calc_textbook_gas_cp_k` directly at the requested temperature; no
+    mean-``cp`` or cycle substitution is introduced here.
     """
 
+    _validate_gas_property_basis(gas_property_basis)
+
     def газ(T):
-        return calc_gas_cp_k(T, ns["α_г"], ns["R"])
+        if gas_property_basis == GAS_PROPERTY_BASIS_LEGACY:
+            return calc_gas_cp_k(T, ns["α_г"], ns["R"])
+        return calc_textbook_gas_cp_k(T, ns["α_г"], ns["R"])
 
-    return газ
+    return _mark_gas_property_basis(газ, gas_property_basis)
 
 
-def _h0_по_p_ядро(ns: dict[str, Any]):
+def _h0_по_p_ядро(ns: dict[str, Any], *,
+                  gas_property_basis: str = GAS_PROPERTY_BASIS_LEGACY):
     """Adapter ``H0_по_p(T0, p0, p2)`` backed by the pure gas core.
 
     Resolves ``α_г``, ``R`` and ``φ`` from the active namespace at call time,
     so cell 16 (and any later cell that looks up ``H0_по_p``) sees the same
-    design values as the notebook reference path.
+    design values as the notebook reference path.  ``gas_property_basis`` is
+    fixed when the adapter is built and is passed to the pressure closure.
     """
+    _validate_gas_property_basis(gas_property_basis)
 
     def H0_по_p(T0, p0, p2):
         return calc_h0_for_pressure(
-            T0, p0, p2, ns["α_г"], ns["R"], ns["φ"]
+            T0, p0, p2, ns["α_г"], ns["R"], ns["φ"],
+            gas_property_basis=gas_property_basis,
         )
 
-    return H0_по_p
+    return _mark_gas_property_basis(H0_по_p, gas_property_basis)
 
 
 def _ρ_корня_ядро(ns: dict[str, Any]):

@@ -15,6 +15,7 @@ import sys
 import unittest
 from dataclasses import FrozenInstanceError, asdict, replace
 from pathlib import Path
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
@@ -36,6 +37,7 @@ from turbine_engine.architecture_cycle import (  # noqa: E402
 )
 from turbine_engine.cycle import (  # noqa: E402
     CycleConfig,
+    CycleSolverError,
     CycleState,
     calc_alpha,
     calc_compressor,
@@ -45,6 +47,7 @@ from turbine_engine.cycle import (  # noqa: E402
     calc_k_kerosene,
     calculate_cycle_point,
 )
+from turbine_engine.diagnostics import SolverDiagnosticsError  # noqa: E402
 from turbine_engine.shaft import ShaftPowerBalance  # noqa: E402
 
 
@@ -577,6 +580,52 @@ class RecomputeTests(unittest.TestCase):
         )
         self.assertNotEqual(first.air_mass_flow, changed.air_mass_flow)
         self.assertEqual(changed.target_power_status, "met")
+
+
+class TypedFailurePropagationTests(unittest.TestCase):
+    def test_cycle_solver_error_from_fuel_air_ratio_is_not_physical(self) -> None:
+        request = request_for(Architecture.SINGLE_SHAFT_SINGLE_CC)
+        error = CycleSolverError("calc_g_m denominator is zero")
+        with mock.patch.object(
+            PolynomialGasModel, "fuel_air_ratio", side_effect=error
+        ):
+            with self.assertRaises(CycleSolverError) as raised:
+                calculate_architecture_cycle(request)
+        self.assertIs(raised.exception, error)
+        self.assertNotIsInstance(
+            raised.exception, ArchitectureCyclePhysicalError
+        )
+
+    def test_solver_diagnostics_from_gas_cp_k_is_not_physical(self) -> None:
+        request = request_for(Architecture.SINGLE_SHAFT_SINGLE_CC)
+        error = SolverDiagnosticsError(
+            "gas-property solve did not close",
+            stage="architecture_cycle.gas_cp_k",
+            reason="gas_property_iteration_exhausted",
+            last_valid_state={"T_g": 1250.0, "alpha": 4.0},
+        )
+        with mock.patch.object(
+            PolynomialGasModel, "gas_cp_k", side_effect=error
+        ):
+            with self.assertRaises(SolverDiagnosticsError) as raised:
+                calculate_architecture_cycle(request)
+        self.assertIs(raised.exception, error)
+        self.assertNotIsInstance(
+            raised.exception, ArchitectureCyclePhysicalError
+        )
+
+    def test_unexpected_runtime_error_is_not_converted_to_physical(self) -> None:
+        request = request_for(Architecture.SINGLE_SHAFT_SINGLE_CC)
+        error = RuntimeError("unexpected implementation failure")
+        with mock.patch.object(
+            PolynomialGasModel, "fuel_air_ratio", side_effect=error
+        ):
+            with self.assertRaises(RuntimeError) as raised:
+                calculate_architecture_cycle(request)
+        self.assertIs(raised.exception, error)
+        self.assertNotIsInstance(
+            raised.exception, ArchitectureCyclePhysicalError
+        )
 
 
 class ValidationTests(unittest.TestCase):

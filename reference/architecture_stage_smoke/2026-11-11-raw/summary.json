@@ -1,0 +1,1163 @@
+{
+  "coupling_label": "NOT_COUPLED_ARCHITECTURE_STAGE",
+  "experiment": {
+    "model_digest": "a71fa4698e07b081030db24763125778e3d443c9ca4230b3fe221c9f1ad3240a",
+    "payload_plan_count": 12,
+    "payload_plan_sha256": "5cabfa8ef89fd9f342b05ebf0fe3fab627eafde37383106ae1da88888e5b5f83",
+    "plan_name": "four-assemblies-three-stage-counts",
+    "pressure_ratio_policy": "raw_unbounded"
+  },
+  "illustrative_only": true,
+  "physically_validated": false,
+  "points": [
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "assembly": "A_MAIN",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_1d6af6ce41639b7e15989fdcf7926f9950f1eb427db63a549caee42a9f5a963c",
+      "coupling_label": "NOT_COUPLED_ARCHITECTURE_STAGE",
+      "failure_reason": null,
+      "failure_stage": null,
+      "index": 0,
+      "metrics": {
+        "fpt_target_residual_W": {
+          "status": "NOT_CHECKED"
+        },
+        "gg_stage_minus_compressor_power_W": {
+          "status": "NOT_CHECKED"
+        },
+        "last_stage_static_outlet_error_Pa": 1.5832483768463135e-08,
+        "last_stage_total_minus_aggregate_total_Pa": 61949.036262695736,
+        "main_target_residual_W": -67103.716972266,
+        "posthoc_pi_acceptance": {
+          "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK_FUNDAMENTAL",
+          "bounds": [
+            1.8,
+            2.4
+          ],
+          "note": "post-hoc engineering profile only; overall feasibility NOT_CHECKED",
+          "overall_engineering_feasibility": null,
+          "overall_engineering_feasibility_reason": "strength_verification_missing",
+          "overall_engineering_feasibility_status": "NOT_CHECKED",
+          "pass": false,
+          "profile": "PROMPT_STAGE_PI_1_8_2_4",
+          "stages": [
+            {
+              "actual": 7.692838158971433,
+              "actual_pi_stage": 7.692838158971433,
+              "lower_margin": 5.892838158971434,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 1,
+              "status": "FAIL",
+              "upper_margin": -5.292838158971433
+            }
+          ]
+        },
+        "stage_count_estimate": {
+          "automatic_selection": "NONE",
+          "c0_basis": "PRELIMINARY_0D_END_STATE_TOTAL_TO_STATIC_ASSUMPTION",
+          "c0_total_m_s": 1074.7928930658823,
+          "cp_reference_J_kgK": 1179.7483635132787,
+          "end_state_assumption": "aggregate 0D outlet total state with fixture Mach; preliminary only",
+          "estimate_rounded": false,
+          "k_reference": 1.3220715269409729,
+          "mach_assumption": 0.3379,
+          "mach_solved_by_meanline": false,
+          "mean_c2_m_s": 454.1202901267107,
+          "recovered_exit_velocity_m_s": 408.70826111403966,
+          "reference_mean_temperature_K": 1023.7666707269564,
+          "requested_stage_count": 1,
+          "status": "COMPUTED",
+          "total_to_static_drop_J_kg": 577589.8814924645,
+          "total_to_static_pressure_ratio": 7.692838158972309,
+          "u_mean_m_s": 360.6791514664146,
+          "y0": 0.54,
+          "z_estimate": 3.540689219517647
+        },
+        "stage_minus_aggregate_mechanical_power_W": -67103.71697226603
+      },
+      "pressure_ratio_policy": "raw_unbounded",
+      "stage_count_requested": 1,
+      "stage_count_selection": "NONE",
+      "turbine_role": "main"
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "assembly": "A_MAIN",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_b91b70495b1c7b154497693e890dd88fc0b962ace21e1116491f98c50c36f5be",
+      "coupling_label": "NOT_COUPLED_ARCHITECTURE_STAGE",
+      "failure_reason": null,
+      "failure_stage": null,
+      "index": 1,
+      "metrics": {
+        "fpt_target_residual_W": {
+          "status": "NOT_CHECKED"
+        },
+        "gg_stage_minus_compressor_power_W": {
+          "status": "NOT_CHECKED"
+        },
+        "last_stage_static_outlet_error_Pa": 2.0081643015146255e-09,
+        "last_stage_total_minus_aggregate_total_Pa": 58.251347358949715,
+        "main_target_residual_W": -7853.644548479788,
+        "posthoc_pi_acceptance": {
+          "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK_FUNDAMENTAL",
+          "bounds": [
+            1.8,
+            2.4
+          ],
+          "note": "post-hoc engineering profile only; overall feasibility NOT_CHECKED",
+          "overall_engineering_feasibility": null,
+          "overall_engineering_feasibility_reason": "strength_verification_missing",
+          "overall_engineering_feasibility_status": "NOT_CHECKED",
+          "pass": false,
+          "profile": "PROMPT_STAGE_PI_1_8_2_4",
+          "stages": [
+            {
+              "actual": 2.4533158333373555,
+              "actual_pi_stage": 2.4533158333373555,
+              "lower_margin": 0.6533158333373554,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 1,
+              "status": "FAIL",
+              "upper_margin": -0.05331583333735557
+            },
+            {
+              "actual": 3.3088058332360095,
+              "actual_pi_stage": 3.3088058332360095,
+              "lower_margin": 1.5088058332360095,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 2,
+              "status": "FAIL",
+              "upper_margin": -0.9088058332360096
+            }
+          ]
+        },
+        "stage_count_estimate": {
+          "automatic_selection": "NONE",
+          "c0_basis": "PRELIMINARY_0D_END_STATE_TOTAL_TO_STATIC_ASSUMPTION",
+          "c0_total_m_s": 1074.7928930658823,
+          "cp_reference_J_kgK": 1179.7483635132787,
+          "end_state_assumption": "aggregate 0D outlet total state with fixture Mach; preliminary only",
+          "estimate_rounded": false,
+          "k_reference": 1.3220715269409729,
+          "mach_assumption": 0.3379,
+          "mach_solved_by_meanline": false,
+          "mean_c2_m_s": 194.03013164865462,
+          "recovered_exit_velocity_m_s": 174.62711848378916,
+          "reference_mean_temperature_K": 1023.7666707269564,
+          "requested_stage_count": 2,
+          "status": "COMPUTED",
+          "total_to_static_drop_J_kg": 577589.8814924645,
+          "total_to_static_pressure_ratio": 7.692838158972309,
+          "u_mean_m_s": 384.65986236322306,
+          "y0": 0.54,
+          "z_estimate": 2.3582072646931915
+        },
+        "stage_minus_aggregate_mechanical_power_W": -7853.644548479817
+      },
+      "pressure_ratio_policy": "raw_unbounded",
+      "stage_count_requested": 2,
+      "stage_count_selection": "NONE",
+      "turbine_role": "main"
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "assembly": "A_MAIN",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_87dbedb8858d6da9b0036474d8893348d0a06c4b454e80c010ee81892c1347e3",
+      "coupling_label": "NOT_COUPLED_ARCHITECTURE_STAGE",
+      "failure_reason": null,
+      "failure_stage": null,
+      "index": 2,
+      "metrics": {
+        "fpt_target_residual_W": {
+          "status": "NOT_CHECKED"
+        },
+        "gg_stage_minus_compressor_power_W": {
+          "status": "NOT_CHECKED"
+        },
+        "last_stage_static_outlet_error_Pa": 2.0372681319713593e-09,
+        "last_stage_total_minus_aggregate_total_Pa": -1137.812161443202,
+        "main_target_residual_W": -4035.9058042282995,
+        "posthoc_pi_acceptance": {
+          "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK_FUNDAMENTAL",
+          "bounds": [
+            1.8,
+            2.4
+          ],
+          "note": "post-hoc engineering profile only; overall feasibility NOT_CHECKED",
+          "overall_engineering_feasibility": null,
+          "overall_engineering_feasibility_reason": "strength_verification_missing",
+          "overall_engineering_feasibility_status": "NOT_CHECKED",
+          "pass": true,
+          "profile": "PROMPT_STAGE_PI_1_8_2_4",
+          "stages": [
+            {
+              "actual": 1.8435970807982989,
+              "actual_pi_stage": 1.8435970807982989,
+              "lower_margin": 0.043597080798298826,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 1,
+              "status": "PASS",
+              "upper_margin": 0.556402919201701
+            },
+            {
+              "actual": 1.920335361690431,
+              "actual_pi_stage": 1.920335361690431,
+              "lower_margin": 0.12033536169043102,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 2,
+              "status": "PASS",
+              "upper_margin": 0.47966463830956885
+            },
+            {
+              "actual": 2.2605877175249884,
+              "actual_pi_stage": 2.2605877175249884,
+              "lower_margin": 0.4605877175249884,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 3,
+              "status": "PASS",
+              "upper_margin": 0.13941228247501147
+            }
+          ]
+        },
+        "stage_count_estimate": {
+          "automatic_selection": "NONE",
+          "c0_basis": "PRELIMINARY_0D_END_STATE_TOTAL_TO_STATIC_ASSUMPTION",
+          "c0_total_m_s": 1074.7928930658823,
+          "cp_reference_J_kgK": 1179.7483635132787,
+          "end_state_assumption": "aggregate 0D outlet total state with fixture Mach; preliminary only",
+          "estimate_rounded": false,
+          "k_reference": 1.3220715269409729,
+          "mach_assumption": 0.3379,
+          "mach_solved_by_meanline": false,
+          "mean_c2_m_s": 139.18508376623728,
+          "recovered_exit_velocity_m_s": 125.26657538961356,
+          "reference_mean_temperature_K": 1023.7666707269564,
+          "requested_stage_count": 3,
+          "status": "COMPUTED",
+          "total_to_static_drop_J_kg": 577589.8814924645,
+          "total_to_static_pressure_ratio": 7.692838158972309,
+          "u_mean_m_s": 365.39676639078783,
+          "y0": 0.54,
+          "z_estimate": 2.57698970536136
+        },
+        "stage_minus_aggregate_mechanical_power_W": -4035.9058042283286
+      },
+      "pressure_ratio_policy": "raw_unbounded",
+      "stage_count_requested": 3,
+      "stage_count_selection": "NONE",
+      "turbine_role": "main"
+    },
+    {
+      "architecture": "SINGLE_SHAFT_SINGLE_CC",
+      "assembly": "B_MAIN",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_0d5ae3977dd58d65bc2bc20cf79810befc096cb0de77757d7d2f792f437e6958",
+      "coupling_label": "NOT_COUPLED_ARCHITECTURE_STAGE",
+      "failure_reason": null,
+      "failure_stage": null,
+      "index": 3,
+      "metrics": {
+        "fpt_target_residual_W": {
+          "status": "NOT_CHECKED"
+        },
+        "gg_stage_minus_compressor_power_W": {
+          "status": "NOT_CHECKED"
+        },
+        "last_stage_static_outlet_error_Pa": 1.594889909029007e-08,
+        "last_stage_total_minus_aggregate_total_Pa": 62019.68964688372,
+        "main_target_residual_W": -66753.06204410171,
+        "posthoc_pi_acceptance": {
+          "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK_FUNDAMENTAL",
+          "bounds": [
+            1.8,
+            2.4
+          ],
+          "note": "post-hoc engineering profile only; overall feasibility NOT_CHECKED",
+          "overall_engineering_feasibility": null,
+          "overall_engineering_feasibility_reason": "strength_verification_missing",
+          "overall_engineering_feasibility_status": "NOT_CHECKED",
+          "pass": false,
+          "profile": "PROMPT_STAGE_PI_1_8_2_4",
+          "stages": [
+            {
+              "actual": 7.692833529418174,
+              "actual_pi_stage": 7.692833529418174,
+              "lower_margin": 5.892833529418175,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 1,
+              "status": "FAIL",
+              "upper_margin": -5.292833529418175
+            }
+          ]
+        },
+        "stage_count_estimate": {
+          "automatic_selection": "NONE",
+          "c0_basis": "PRELIMINARY_0D_END_STATE_TOTAL_TO_STATIC_ASSUMPTION",
+          "c0_total_m_s": 1074.7959046585195,
+          "cp_reference_J_kgK": 1179.7785375247192,
+          "end_state_assumption": "aggregate 0D outlet total state with fixture Mach; preliminary only",
+          "estimate_rounded": false,
+          "k_reference": 1.3220606367306753,
+          "mach_assumption": 0.3379,
+          "mach_solved_by_meanline": false,
+          "mean_c2_m_s": 454.32769070440156,
+          "recovered_exit_velocity_m_s": 408.8949216339614,
+          "reference_mean_temperature_K": 1023.77131195102,
+          "requested_stage_count": 1,
+          "status": "COMPUTED",
+          "total_to_static_drop_J_kg": 577593.1183353628,
+          "total_to_static_pressure_ratio": 7.692833529419057,
+          "u_mean_m_s": 360.2470755113308,
+          "y0": 0.54,
+          "z_estimate": 3.555720108047866
+        },
+        "stage_minus_aggregate_mechanical_power_W": -66753.06204410177
+      },
+      "pressure_ratio_policy": "raw_unbounded",
+      "stage_count_requested": 1,
+      "stage_count_selection": "NONE",
+      "turbine_role": "main"
+    },
+    {
+      "architecture": "SINGLE_SHAFT_SINGLE_CC",
+      "assembly": "B_MAIN",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_db79e6fe5f6562380efffca5df1807de21fc48fe078840a61aa77583d00e57f4",
+      "coupling_label": "NOT_COUPLED_ARCHITECTURE_STAGE",
+      "failure_reason": null,
+      "failure_stage": null,
+      "index": 4,
+      "metrics": {
+        "fpt_target_residual_W": {
+          "status": "NOT_CHECKED"
+        },
+        "gg_stage_minus_compressor_power_W": {
+          "status": "NOT_CHECKED"
+        },
+        "last_stage_static_outlet_error_Pa": 1.8917489796876907e-09,
+        "last_stage_total_minus_aggregate_total_Pa": 87.19682864140486,
+        "main_target_residual_W": -7873.665781342366,
+        "posthoc_pi_acceptance": {
+          "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK_FUNDAMENTAL",
+          "bounds": [
+            1.8,
+            2.4
+          ],
+          "note": "post-hoc engineering profile only; overall feasibility NOT_CHECKED",
+          "overall_engineering_feasibility": null,
+          "overall_engineering_feasibility_reason": "strength_verification_missing",
+          "overall_engineering_feasibility_status": "NOT_CHECKED",
+          "pass": false,
+          "profile": "PROMPT_STAGE_PI_1_8_2_4",
+          "stages": [
+            {
+              "actual": 2.4533768133872633,
+              "actual_pi_stage": 2.4533768133872633,
+              "lower_margin": 0.6533768133872633,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 1,
+              "status": "FAIL",
+              "upper_margin": -0.05337681338726341
+            },
+            {
+              "actual": 3.3089154927076154,
+              "actual_pi_stage": 3.3089154927076154,
+              "lower_margin": 1.5089154927076154,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 2,
+              "status": "FAIL",
+              "upper_margin": -0.9089154927076155
+            }
+          ]
+        },
+        "stage_count_estimate": {
+          "automatic_selection": "NONE",
+          "c0_basis": "PRELIMINARY_0D_END_STATE_TOTAL_TO_STATIC_ASSUMPTION",
+          "c0_total_m_s": 1074.7959046585195,
+          "cp_reference_J_kgK": 1179.7785375247192,
+          "end_state_assumption": "aggregate 0D outlet total state with fixture Mach; preliminary only",
+          "estimate_rounded": false,
+          "k_reference": 1.3220606367306753,
+          "mach_assumption": 0.3379,
+          "mach_solved_by_meanline": false,
+          "mean_c2_m_s": 194.21098387333143,
+          "recovered_exit_velocity_m_s": 174.7898854859983,
+          "reference_mean_temperature_K": 1023.77131195102,
+          "requested_stage_count": 2,
+          "status": "COMPUTED",
+          "total_to_static_drop_J_kg": 577593.1183353628,
+          "total_to_static_pressure_ratio": 7.692833529419057,
+          "u_mean_m_s": 384.0408514836437,
+          "y0": 0.54,
+          "z_estimate": 2.3664807534029175
+        },
+        "stage_minus_aggregate_mechanical_power_W": -7873.665781342424
+      },
+      "pressure_ratio_policy": "raw_unbounded",
+      "stage_count_requested": 2,
+      "stage_count_selection": "NONE",
+      "turbine_role": "main"
+    },
+    {
+      "architecture": "SINGLE_SHAFT_SINGLE_CC",
+      "assembly": "B_MAIN",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_30ab38f1fa2458389ed640733735ffb7e3066051dbea4c092d68d041fd50ca81",
+      "coupling_label": "NOT_COUPLED_ARCHITECTURE_STAGE",
+      "failure_reason": null,
+      "failure_stage": null,
+      "index": 5,
+      "metrics": {
+        "fpt_target_residual_W": {
+          "status": "NOT_CHECKED"
+        },
+        "gg_stage_minus_compressor_power_W": {
+          "status": "NOT_CHECKED"
+        },
+        "last_stage_static_outlet_error_Pa": 2.066371962428093e-09,
+        "last_stage_total_minus_aggregate_total_Pa": -1111.7845630950178,
+        "main_target_residual_W": -4080.9005080059287,
+        "posthoc_pi_acceptance": {
+          "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK_FUNDAMENTAL",
+          "bounds": [
+            1.8,
+            2.4
+          ],
+          "note": "post-hoc engineering profile only; overall feasibility NOT_CHECKED",
+          "overall_engineering_feasibility": null,
+          "overall_engineering_feasibility_reason": "strength_verification_missing",
+          "overall_engineering_feasibility_status": "NOT_CHECKED",
+          "pass": true,
+          "profile": "PROMPT_STAGE_PI_1_8_2_4",
+          "stages": [
+            {
+              "actual": 1.8436458299360845,
+              "actual_pi_stage": 1.8436458299360845,
+              "lower_margin": 0.04364582993608446,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 1,
+              "status": "PASS",
+              "upper_margin": 0.5563541700639154
+            },
+            {
+              "actual": 1.9203895252393617,
+              "actual_pi_stage": 1.9203895252393617,
+              "lower_margin": 0.12038952523936164,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 2,
+              "status": "PASS",
+              "upper_margin": 0.47961047476063823
+            },
+            {
+              "actual": 2.2606674185960975,
+              "actual_pi_stage": 2.2606674185960975,
+              "lower_margin": 0.4606674185960975,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 3,
+              "status": "PASS",
+              "upper_margin": 0.13933258140390237
+            }
+          ]
+        },
+        "stage_count_estimate": {
+          "automatic_selection": "NONE",
+          "c0_basis": "PRELIMINARY_0D_END_STATE_TOTAL_TO_STATIC_ASSUMPTION",
+          "c0_total_m_s": 1074.7959046585195,
+          "cp_reference_J_kgK": 1179.7785375247192,
+          "end_state_assumption": "aggregate 0D outlet total state with fixture Mach; preliminary only",
+          "estimate_rounded": false,
+          "k_reference": 1.3220606367306753,
+          "mach_assumption": 0.3379,
+          "mach_solved_by_meanline": false,
+          "mean_c2_m_s": 139.35821647422742,
+          "recovered_exit_velocity_m_s": 125.42239482680468,
+          "reference_mean_temperature_K": 1023.77131195102,
+          "requested_stage_count": 3,
+          "status": "COMPUTED",
+          "total_to_static_drop_J_kg": 577593.1183353628,
+          "total_to_static_pressure_ratio": 7.692833529419057,
+          "u_mean_m_s": 364.89239240713835,
+          "y0": 0.54,
+          "z_estimate": 2.5845275143408766
+        },
+        "stage_minus_aggregate_mechanical_power_W": -4080.900508005987
+      },
+      "pressure_ratio_policy": "raw_unbounded",
+      "stage_count_requested": 3,
+      "stage_count_selection": "NONE",
+      "turbine_role": "main"
+    },
+    {
+      "architecture": "FREE_POWER_TURBINE",
+      "assembly": "C_GG",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_c987e51cbe7c6a9de058fdaf3a79e72918bc6f722fc14ea3f5686e3430d1ddf4",
+      "coupling_label": "NOT_COUPLED_ARCHITECTURE_STAGE",
+      "failure_reason": null,
+      "failure_stage": null,
+      "index": 6,
+      "metrics": {
+        "fpt_target_residual_W": {
+          "status": "NOT_CHECKED"
+        },
+        "gg_stage_minus_compressor_power_W": -8228.137115324906,
+        "last_stage_static_outlet_error_Pa": -2.5203917175531387e-08,
+        "last_stage_total_minus_aggregate_total_Pa": 5788.01894977811,
+        "main_target_residual_W": {
+          "status": "NOT_CHECKED"
+        },
+        "posthoc_pi_acceptance": {
+          "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK_FUNDAMENTAL",
+          "bounds": [
+            1.8,
+            2.4
+          ],
+          "note": "post-hoc engineering profile only; overall feasibility NOT_CHECKED",
+          "overall_engineering_feasibility": null,
+          "overall_engineering_feasibility_reason": "strength_verification_missing",
+          "overall_engineering_feasibility_status": "NOT_CHECKED",
+          "pass": false,
+          "profile": "PROMPT_STAGE_PI_1_8_2_4",
+          "stages": [
+            {
+              "actual": 2.9084787826073146,
+              "actual_pi_stage": 2.9084787826073146,
+              "lower_margin": 1.1084787826073146,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 1,
+              "status": "FAIL",
+              "upper_margin": -0.5084787826073147
+            }
+          ]
+        },
+        "stage_count_estimate": {
+          "automatic_selection": "NONE",
+          "c0_basis": "PRELIMINARY_0D_END_STATE_TOTAL_TO_STATIC_ASSUMPTION",
+          "c0_total_m_s": 822.8053883852026,
+          "cp_reference_J_kgK": 1201.9932782400554,
+          "end_state_assumption": "aggregate 0D outlet total state with fixture Mach; preliminary only",
+          "estimate_rounded": false,
+          "k_reference": 1.314238040927921,
+          "mach_assumption": 0.3379,
+          "mach_solved_by_meanline": false,
+          "mean_c2_m_s": 234.17231909582088,
+          "recovered_exit_velocity_m_s": 210.7550871862388,
+          "reference_mean_temperature_K": 1120.806731266182,
+          "requested_stage_count": 1,
+          "status": "COMPUTED",
+          "total_to_static_drop_J_kg": 338504.353577862,
+          "total_to_static_pressure_ratio": 2.9084787826070406,
+          "u_mean_m_s": 360.8162616863764,
+          "y0": 0.54,
+          "z_estimate": 1.573435344275142
+        },
+        "stage_minus_aggregate_mechanical_power_W": -8228.137115195394
+      },
+      "pressure_ratio_policy": "raw_unbounded",
+      "stage_count_requested": 1,
+      "stage_count_selection": "NONE",
+      "turbine_role": "gas_generator"
+    },
+    {
+      "architecture": "FREE_POWER_TURBINE",
+      "assembly": "C_GG",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_999d38b606cff28ac8f6090dc0d5e5a225f3923bd55cbc201862f1cbd7481703",
+      "coupling_label": "NOT_COUPLED_ARCHITECTURE_STAGE",
+      "failure_reason": null,
+      "failure_stage": null,
+      "index": 7,
+      "metrics": {
+        "fpt_target_residual_W": {
+          "status": "NOT_CHECKED"
+        },
+        "gg_stage_minus_compressor_power_W": 8560.74108782818,
+        "last_stage_static_outlet_error_Pa": 5.820766091346741e-11,
+        "last_stage_total_minus_aggregate_total_Pa": -16600.44343985879,
+        "main_target_residual_W": {
+          "status": "NOT_CHECKED"
+        },
+        "posthoc_pi_acceptance": {
+          "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK_FUNDAMENTAL",
+          "bounds": [
+            1.8,
+            2.4
+          ],
+          "note": "post-hoc engineering profile only; overall feasibility NOT_CHECKED",
+          "overall_engineering_feasibility": null,
+          "overall_engineering_feasibility_reason": "strength_verification_missing",
+          "overall_engineering_feasibility_status": "NOT_CHECKED",
+          "pass": false,
+          "profile": "PROMPT_STAGE_PI_1_8_2_4",
+          "stages": [
+            {
+              "actual": 1.594846271089938,
+              "actual_pi_stage": 1.594846271089938,
+              "lower_margin": -0.205153728910062,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 1,
+              "status": "FAIL",
+              "upper_margin": 0.8051537289100619
+            },
+            {
+              "actual": 1.8633389393542994,
+              "actual_pi_stage": 1.8633389393542994,
+              "lower_margin": 0.06333893935429935,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 2,
+              "status": "PASS",
+              "upper_margin": 0.5366610606457005
+            }
+          ]
+        },
+        "stage_count_estimate": {
+          "automatic_selection": "NONE",
+          "c0_basis": "PRELIMINARY_0D_END_STATE_TOTAL_TO_STATIC_ASSUMPTION",
+          "c0_total_m_s": 822.8053883852026,
+          "cp_reference_J_kgK": 1201.9932782400554,
+          "end_state_assumption": "aggregate 0D outlet total state with fixture Mach; preliminary only",
+          "estimate_rounded": false,
+          "k_reference": 1.314238040927921,
+          "mach_assumption": 0.3379,
+          "mach_solved_by_meanline": false,
+          "mean_c2_m_s": 112.9022923292311,
+          "recovered_exit_velocity_m_s": 101.61206309630799,
+          "reference_mean_temperature_K": 1120.806731266182,
+          "requested_stage_count": 2,
+          "status": "COMPUTED",
+          "total_to_static_drop_J_kg": 338504.353577862,
+          "total_to_static_pressure_ratio": 2.9084787826070406,
+          "u_mean_m_s": 386.28981978428516,
+          "y0": 0.54,
+          "z_estimate": 1.329637006910514
+        },
+        "stage_minus_aggregate_mechanical_power_W": 8560.741087957693
+      },
+      "pressure_ratio_policy": "raw_unbounded",
+      "stage_count_requested": 2,
+      "stage_count_selection": "NONE",
+      "turbine_role": "gas_generator"
+    },
+    {
+      "architecture": "FREE_POWER_TURBINE",
+      "assembly": "C_GG",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_e62647ac69bb3e656822e4f1fa042ebd92f3eb06d0d34a2f33e4ef7fffb0ea4b",
+      "coupling_label": "NOT_COUPLED_ARCHITECTURE_STAGE",
+      "failure_reason": null,
+      "failure_stage": null,
+      "index": 8,
+      "metrics": {
+        "fpt_target_residual_W": {
+          "status": "NOT_CHECKED"
+        },
+        "gg_stage_minus_compressor_power_W": 257.4375909482769,
+        "last_stage_static_outlet_error_Pa": 6.402842700481415e-10,
+        "last_stage_total_minus_aggregate_total_Pa": -7353.98051456199,
+        "main_target_residual_W": {
+          "status": "NOT_CHECKED"
+        },
+        "posthoc_pi_acceptance": {
+          "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK_FUNDAMENTAL",
+          "bounds": [
+            1.8,
+            2.4
+          ],
+          "note": "post-hoc engineering profile only; overall feasibility NOT_CHECKED",
+          "overall_engineering_feasibility": null,
+          "overall_engineering_feasibility_reason": "strength_verification_missing",
+          "overall_engineering_feasibility_status": "NOT_CHECKED",
+          "pass": false,
+          "profile": "PROMPT_STAGE_PI_1_8_2_4",
+          "stages": [
+            {
+              "actual": 1.3879658132541817,
+              "actual_pi_stage": 1.3879658132541817,
+              "lower_margin": -0.4120341867458184,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 1,
+              "status": "FAIL",
+              "upper_margin": 1.0120341867458182
+            },
+            {
+              "actual": 1.4186350548134297,
+              "actual_pi_stage": 1.4186350548134297,
+              "lower_margin": -0.3813649451865704,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 2,
+              "status": "FAIL",
+              "upper_margin": 0.9813649451865702
+            },
+            {
+              "actual": 1.5482434256996433,
+              "actual_pi_stage": 1.5482434256996433,
+              "lower_margin": -0.2517565743003567,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 3,
+              "status": "FAIL",
+              "upper_margin": 0.8517565743003566
+            }
+          ]
+        },
+        "stage_count_estimate": {
+          "automatic_selection": "NONE",
+          "c0_basis": "PRELIMINARY_0D_END_STATE_TOTAL_TO_STATIC_ASSUMPTION",
+          "c0_total_m_s": 822.8053883852026,
+          "cp_reference_J_kgK": 1201.9932782400554,
+          "end_state_assumption": "aggregate 0D outlet total state with fixture Mach; preliminary only",
+          "estimate_rounded": false,
+          "k_reference": 1.314238040927921,
+          "mach_assumption": 0.3379,
+          "mach_solved_by_meanline": false,
+          "mean_c2_m_s": 147.09659176439988,
+          "recovered_exit_velocity_m_s": 132.3869325879599,
+          "reference_mean_temperature_K": 1120.806731266182,
+          "requested_stage_count": 3,
+          "status": "COMPUTED",
+          "total_to_static_drop_J_kg": 338504.353577862,
+          "total_to_static_pressure_ratio": 2.9084787826070406,
+          "u_mean_m_s": 372.1085740049883,
+          "y0": 0.54,
+          "z_estimate": 1.4420631875992882
+        },
+        "stage_minus_aggregate_mechanical_power_W": 257.43759107778897
+      },
+      "pressure_ratio_policy": "raw_unbounded",
+      "stage_count_requested": 3,
+      "stage_count_selection": "NONE",
+      "turbine_role": "gas_generator"
+    },
+    {
+      "architecture": "FREE_POWER_TURBINE",
+      "assembly": "C_FPT",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_4f6b1ac11b46b02dd96ee3a7e4016f8f42a4898d5bbe823001c5d986e1d51b6f",
+      "coupling_label": "NOT_COUPLED_ARCHITECTURE_STAGE",
+      "failure_reason": null,
+      "failure_stage": null,
+      "index": 9,
+      "metrics": {
+        "fpt_target_residual_W": 7504.30174924084,
+        "gg_stage_minus_compressor_power_W": {
+          "status": "NOT_CHECKED"
+        },
+        "last_stage_static_outlet_error_Pa": 7.8580342233181e-10,
+        "last_stage_total_minus_aggregate_total_Pa": -7095.3208223861875,
+        "main_target_residual_W": {
+          "status": "NOT_CHECKED"
+        },
+        "posthoc_pi_acceptance": {
+          "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK_FUNDAMENTAL",
+          "bounds": [
+            1.8,
+            2.4
+          ],
+          "note": "post-hoc engineering profile only; overall feasibility NOT_CHECKED",
+          "overall_engineering_feasibility": null,
+          "overall_engineering_feasibility_reason": "strength_verification_missing",
+          "overall_engineering_feasibility_status": "NOT_CHECKED",
+          "pass": true,
+          "profile": "PROMPT_STAGE_PI_1_8_2_4",
+          "stages": [
+            {
+              "actual": 2.0722093776580772,
+              "actual_pi_stage": 2.0722093776580772,
+              "lower_margin": 0.2722093776580772,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 1,
+              "status": "PASS",
+              "upper_margin": 0.3277906223419227
+            }
+          ]
+        },
+        "stage_count_estimate": {
+          "automatic_selection": "NONE",
+          "c0_basis": "PRELIMINARY_0D_END_STATE_TOTAL_TO_STATIC_ASSUMPTION",
+          "c0_total_m_s": 622.141578944609,
+          "cp_reference_J_kgK": 1163.7264960601842,
+          "end_state_assumption": "aggregate 0D outlet total state with fixture Mach; preliminary only",
+          "estimate_rounded": false,
+          "k_reference": 1.3279599570389595,
+          "mach_assumption": 0.3379,
+          "mach_solved_by_meanline": false,
+          "mean_c2_m_s": 115.46596032343115,
+          "recovered_exit_velocity_m_s": 103.91936429108803,
+          "reference_mean_temperature_K": 933.5476113320894,
+          "requested_stage_count": 1,
+          "status": "COMPUTED",
+          "total_to_static_drop_J_kg": 193530.0721258456,
+          "total_to_static_pressure_ratio": 2.0722093776580888,
+          "u_mean_m_s": 441.38495244619673,
+          "y0": 0.54,
+          "z_estimate": 0.57242528454404
+        },
+        "stage_minus_aggregate_mechanical_power_W": 7504.30174924084
+      },
+      "pressure_ratio_policy": "raw_unbounded",
+      "stage_count_requested": 1,
+      "stage_count_selection": "NONE",
+      "turbine_role": "free_power"
+    },
+    {
+      "architecture": "FREE_POWER_TURBINE",
+      "assembly": "C_FPT",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_d7b1e5d2d84f611f4d76725217d122570d7af86adb0ab616c8dbca7a7ac35229",
+      "coupling_label": "NOT_COUPLED_ARCHITECTURE_STAGE",
+      "failure_reason": null,
+      "failure_stage": null,
+      "index": 10,
+      "metrics": {
+        "fpt_target_residual_W": 428.7746625668369,
+        "gg_stage_minus_compressor_power_W": {
+          "status": "NOT_CHECKED"
+        },
+        "last_stage_static_outlet_error_Pa": 4.656612873077393e-10,
+        "last_stage_total_minus_aggregate_total_Pa": -4735.195204741962,
+        "main_target_residual_W": {
+          "status": "NOT_CHECKED"
+        },
+        "posthoc_pi_acceptance": {
+          "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK_FUNDAMENTAL",
+          "bounds": [
+            1.8,
+            2.4
+          ],
+          "note": "post-hoc engineering profile only; overall feasibility NOT_CHECKED",
+          "overall_engineering_feasibility": null,
+          "overall_engineering_feasibility_reason": "strength_verification_missing",
+          "overall_engineering_feasibility_status": "NOT_CHECKED",
+          "pass": false,
+          "profile": "PROMPT_STAGE_PI_1_8_2_4",
+          "stages": [
+            {
+              "actual": 1.390030748819853,
+              "actual_pi_stage": 1.390030748819853,
+              "lower_margin": -0.40996925118014715,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 1,
+              "status": "FAIL",
+              "upper_margin": 1.009969251180147
+            },
+            {
+              "actual": 1.5513122502582097,
+              "actual_pi_stage": 1.5513122502582097,
+              "lower_margin": -0.2486877497417903,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 2,
+              "status": "FAIL",
+              "upper_margin": 0.8486877497417902
+            }
+          ]
+        },
+        "stage_count_estimate": {
+          "automatic_selection": "NONE",
+          "c0_basis": "PRELIMINARY_0D_END_STATE_TOTAL_TO_STATIC_ASSUMPTION",
+          "c0_total_m_s": 622.141578944609,
+          "cp_reference_J_kgK": 1163.7264960601842,
+          "end_state_assumption": "aggregate 0D outlet total state with fixture Mach; preliminary only",
+          "estimate_rounded": false,
+          "k_reference": 1.3279599570389595,
+          "mach_assumption": 0.3379,
+          "mach_solved_by_meanline": false,
+          "mean_c2_m_s": 155.1706642341225,
+          "recovered_exit_velocity_m_s": 139.65359781071027,
+          "reference_mean_temperature_K": 933.5476113320894,
+          "requested_stage_count": 2,
+          "status": "COMPUTED",
+          "total_to_static_drop_J_kg": 193530.0721258456,
+          "total_to_static_pressure_ratio": 2.0722093776580888,
+          "u_mean_m_s": 487.54086161024003,
+          "y0": 0.54,
+          "z_estimate": 0.46196326630959345
+        },
+        "stage_minus_aggregate_mechanical_power_W": 428.7746625668369
+      },
+      "pressure_ratio_policy": "raw_unbounded",
+      "stage_count_requested": 2,
+      "stage_count_selection": "NONE",
+      "turbine_role": "free_power"
+    },
+    {
+      "architecture": "FREE_POWER_TURBINE",
+      "assembly": "C_FPT",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_5e943ee7e1f3a4ccf7e2044844a34e3af4f60c01fc08ef1db09147503a694a77",
+      "coupling_label": "NOT_COUPLED_ARCHITECTURE_STAGE",
+      "failure_reason": null,
+      "failure_stage": null,
+      "index": 11,
+      "metrics": {
+        "fpt_target_residual_W": -6845.224032050348,
+        "gg_stage_minus_compressor_power_W": {
+          "status": "NOT_CHECKED"
+        },
+        "last_stage_static_outlet_error_Pa": -2.9103830456733704e-11,
+        "last_stage_total_minus_aggregate_total_Pa": -3207.6632928323816,
+        "main_target_residual_W": {
+          "status": "NOT_CHECKED"
+        },
+        "posthoc_pi_acceptance": {
+          "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK_FUNDAMENTAL",
+          "bounds": [
+            1.8,
+            2.4
+          ],
+          "note": "post-hoc engineering profile only; overall feasibility NOT_CHECKED",
+          "overall_engineering_feasibility": null,
+          "overall_engineering_feasibility_reason": "strength_verification_missing",
+          "overall_engineering_feasibility_status": "NOT_CHECKED",
+          "pass": false,
+          "profile": "PROMPT_STAGE_PI_1_8_2_4",
+          "stages": [
+            {
+              "actual": 1.2711533102922659,
+              "actual_pi_stage": 1.2711533102922659,
+              "lower_margin": -0.5288466897077342,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 1,
+              "status": "FAIL",
+              "upper_margin": 1.128846689707734
+            },
+            {
+              "actual": 1.2916488500110843,
+              "actual_pi_stage": 1.2916488500110843,
+              "lower_margin": -0.5083511499889157,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 2,
+              "status": "FAIL",
+              "upper_margin": 1.1083511499889156
+            },
+            {
+              "actual": 1.3769898309351265,
+              "actual_pi_stage": 1.3769898309351265,
+              "lower_margin": -0.42301016906487354,
+              "max": 2.4,
+              "max_pi_stage": 2.4,
+              "min": 1.8,
+              "min_pi_stage": 1.8,
+              "stage": 3,
+              "status": "FAIL",
+              "upper_margin": 1.0230101690648734
+            }
+          ]
+        },
+        "stage_count_estimate": {
+          "automatic_selection": "NONE",
+          "c0_basis": "PRELIMINARY_0D_END_STATE_TOTAL_TO_STATIC_ASSUMPTION",
+          "c0_total_m_s": 622.141578944609,
+          "cp_reference_J_kgK": 1163.7264960601842,
+          "end_state_assumption": "aggregate 0D outlet total state with fixture Mach; preliminary only",
+          "estimate_rounded": false,
+          "k_reference": 1.3279599570389595,
+          "mach_assumption": 0.3379,
+          "mach_solved_by_meanline": false,
+          "mean_c2_m_s": 168.83182584766732,
+          "recovered_exit_velocity_m_s": 151.9486432629006,
+          "reference_mean_temperature_K": 933.5476113320894,
+          "requested_stage_count": 3,
+          "status": "COMPUTED",
+          "total_to_static_drop_J_kg": 193530.0721258456,
+          "total_to_static_pressure_ratio": 2.0722093776580888,
+          "u_mean_m_s": 469.2353494629651,
+          "y0": 0.54,
+          "z_estimate": 0.497233741274988
+        },
+        "stage_minus_aggregate_mechanical_power_W": -6845.224032050348
+      },
+      "pressure_ratio_policy": "raw_unbounded",
+      "stage_count_requested": 3,
+      "stage_count_selection": "NONE",
+      "turbine_role": "free_power"
+    }
+  ],
+  "report_version": "architecture-stage-meanline-summary-v1",
+  "reproduce": {
+    "atol": 1e-09,
+    "checked": 12,
+    "differences": [],
+    "matches": true,
+    "rtol": 1e-12
+  },
+  "run": {
+    "complete": true,
+    "elapsed_seconds": 0.004132,
+    "journal_sha256": "9c7ae704ce9cd13238e1327eb7f7a62040150efa53460648b3bda05565308f9b",
+    "model_variant": "architecture_stage_meanline_smoke_v1",
+    "points_attempted": 12,
+    "record_count": 12,
+    "records_appended_this_invocation": 0,
+    "run_config_hash": "d4e7bb9580177bf9531c9693242cb469dd6c700eec1fc895ffc870bee56d59c3",
+    "run_id": "run_82e2bd3667ced5fb90582109a1a85d143a072e01516ae5639c79e3aac65afac8"
+  },
+  "status_by_assembly_and_count": {
+    "A_MAIN": {
+      "1": {
+        "MODEL_ERROR": 0,
+        "NON_PHYSICAL_STATE": 0,
+        "NUMERICAL_FAILURE": 0,
+        "SUCCESS": 1,
+        "total": 1
+      },
+      "2": {
+        "MODEL_ERROR": 0,
+        "NON_PHYSICAL_STATE": 0,
+        "NUMERICAL_FAILURE": 0,
+        "SUCCESS": 1,
+        "total": 1
+      },
+      "3": {
+        "MODEL_ERROR": 0,
+        "NON_PHYSICAL_STATE": 0,
+        "NUMERICAL_FAILURE": 0,
+        "SUCCESS": 1,
+        "total": 1
+      }
+    },
+    "B_MAIN": {
+      "1": {
+        "MODEL_ERROR": 0,
+        "NON_PHYSICAL_STATE": 0,
+        "NUMERICAL_FAILURE": 0,
+        "SUCCESS": 1,
+        "total": 1
+      },
+      "2": {
+        "MODEL_ERROR": 0,
+        "NON_PHYSICAL_STATE": 0,
+        "NUMERICAL_FAILURE": 0,
+        "SUCCESS": 1,
+        "total": 1
+      },
+      "3": {
+        "MODEL_ERROR": 0,
+        "NON_PHYSICAL_STATE": 0,
+        "NUMERICAL_FAILURE": 0,
+        "SUCCESS": 1,
+        "total": 1
+      }
+    },
+    "C_FPT": {
+      "1": {
+        "MODEL_ERROR": 0,
+        "NON_PHYSICAL_STATE": 0,
+        "NUMERICAL_FAILURE": 0,
+        "SUCCESS": 1,
+        "total": 1
+      },
+      "2": {
+        "MODEL_ERROR": 0,
+        "NON_PHYSICAL_STATE": 0,
+        "NUMERICAL_FAILURE": 0,
+        "SUCCESS": 1,
+        "total": 1
+      },
+      "3": {
+        "MODEL_ERROR": 0,
+        "NON_PHYSICAL_STATE": 0,
+        "NUMERICAL_FAILURE": 0,
+        "SUCCESS": 1,
+        "total": 1
+      }
+    },
+    "C_GG": {
+      "1": {
+        "MODEL_ERROR": 0,
+        "NON_PHYSICAL_STATE": 0,
+        "NUMERICAL_FAILURE": 0,
+        "SUCCESS": 1,
+        "total": 1
+      },
+      "2": {
+        "MODEL_ERROR": 0,
+        "NON_PHYSICAL_STATE": 0,
+        "NUMERICAL_FAILURE": 0,
+        "SUCCESS": 1,
+        "total": 1
+      },
+      "3": {
+        "MODEL_ERROR": 0,
+        "NON_PHYSICAL_STATE": 0,
+        "NUMERICAL_FAILURE": 0,
+        "SUCCESS": 1,
+        "total": 1
+      }
+    }
+  },
+  "status_counts": {
+    "SUCCESS": 12
+  },
+  "validation_status": "NOT_PHYSICALLY_VALIDATED"
+}

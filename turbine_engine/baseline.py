@@ -99,6 +99,7 @@ conversion.
 from __future__ import annotations
 
 import math
+import numbers
 from dataclasses import dataclass
 from typing import Any, Callable, Mapping, Sequence
 
@@ -177,6 +178,70 @@ def mean_scalar(values: Sequence[float]) -> float:
 
     values = tuple(values)
     return sum(values) / len(values)
+
+
+def _stage_count_error(
+    reason: str, context: Mapping[str, float], **derived: Any
+) -> None:
+    raise NumericalConvergenceError(
+        reason.replace("_", " "),
+        stage="baseline.estimate_stage_count",
+        reason=reason,
+        last_valid_state={**context, **derived},
+    )
+
+
+def estimate_stage_count(c0, u_mean, y0, recovered_exit_velocity):
+    """Return the source item-54 stage-count estimate without rounding.
+
+    Exact inline arithmetic with ``recovered_exit_velocity = μ * c2_mean``::
+
+        z = (c0**2 / v**2 - 1) / (u_mean**2 / (v**2 * y0**2) - 1)
+
+    The result is not clamped, rounded or filtered.  A zero/non-finite
+    denominator, non-finite numerator or non-finite result raises the typed
+    numerical diagnostic; a near-zero denominator is never convergence.
+    """
+
+    context = {"c0": c0, "u_mean": u_mean, "y0": y0,
+               "recovered_exit_velocity": recovered_exit_velocity}
+    for name, value in context.items():
+        if isinstance(value, bool) or not isinstance(value, numbers.Real):
+            raise TypeError(f"{name} must be a real number, got {type(value).__name__}")
+        number = float(value)
+        if not math.isfinite(number) or number <= 0.0:
+            raise ValueError(f"{name} must be finite and positive, got {value!r}")
+        context[name] = number
+
+    try:
+        numerator = context["c0"] ** 2 / context["recovered_exit_velocity"] ** 2 - 1.0
+    except (ZeroDivisionError, OverflowError):
+        _stage_count_error("stage_count_numerator_non_finite", context)
+    if not math.isfinite(numerator):
+        _stage_count_error("stage_count_numerator_non_finite", context)
+    try:
+        denominator = (context["u_mean"] ** 2
+                       / (context["recovered_exit_velocity"] ** 2 * context["y0"] ** 2)
+                       - 1.0)
+    except ZeroDivisionError:
+        _stage_count_error("stage_count_denominator_zero", context, numerator=numerator)
+    except OverflowError:
+        _stage_count_error("stage_count_denominator_non_finite", context,
+                           numerator=numerator)
+    if denominator == 0.0 or not math.isfinite(denominator):
+        _stage_count_error("stage_count_denominator_zero" if denominator == 0.0
+                           else "stage_count_denominator_non_finite", context,
+                           numerator=numerator, denominator=denominator)
+    try:
+        estimate = numerator / denominator
+    except OverflowError:
+        _stage_count_error("stage_count_estimate_non_finite", context,
+                           numerator=numerator, denominator=denominator)
+    if not math.isfinite(estimate):
+        _stage_count_error("stage_count_estimate_non_finite", context,
+                           numerator=numerator, denominator=denominator,
+                           estimate=estimate)
+    return estimate
 
 
 @dataclass(frozen=True)
@@ -505,10 +570,11 @@ class BaselineTurbine:
             u_1 = math.pi * self._value("D_ст")[0] * D_т * n_т / 60
             u_ср = 0.5 * (u_т + u_1)
             μc = self._value("μ") * c2_ср
-            z_расч = (
-                self._value("c0_т") ** 2 / μc**2 - 1
-            ) / (
-                u_ср**2 / (μc**2 * self._value("y0") ** 2) - 1
+            z_расч = estimate_stage_count(
+                self._value("c0_т"),
+                u_ср,
+                self._value("y0"),
+                μc,
             )
             π0, ст = self.распределить_π(n_т, D_т, π0)
             if not ст:
@@ -801,5 +867,6 @@ __all__ = [
     "REQUIRED_NAMESPACE_KEYS",
     "calculate_baseline_turbine",
     "clip_scalar",
+    "estimate_stage_count",
     "mean_scalar",
 ]

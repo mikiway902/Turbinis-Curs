@@ -9,7 +9,7 @@ or the optimizer to a new formulation.  The legacy cycle remains the behavioural
 source of truth for the current engine and is only compared where its
 assumptions are explicitly reproduced.
 
-The implemented variant is named
+The default implemented variant is named
 ``uncooled_no_bleed_0d_ideal_mixing``.  Its assumptions are explicit:
 
 * no turbine cooling flow, no leak, no bleed, and no cooling-air return flow;
@@ -17,9 +17,10 @@ The implemented variant is named
 * ideal mixing to the requested combustor-exit **total** temperature;
 * total-to-total turbine expansions only; the prescribed turbine outlet is a
   total pressure, never a static pressure;
-* constant ``cp``/``k`` through each turbine, evaluated once at that turbine's
-  inlet total temperature; the compressor keeps the existing variable-k
-  mean-property relation;
+* constant ``cp``/``k`` through the whole turbine train, evaluated once at the
+  combustor-exit (first turbine inlet) total temperature and held for every
+  subsequent turbine inlet, including the free power turbine; the compressor
+  keeps the existing variable-k mean-property relation;
 * one explicit mechanical efficiency per turbine and one explicit gearbox
   efficiency downstream of the pre-reducer power plane;
 * fuel/air ratio from the retained :func:`turbine_engine.cycle.calc_g_m`
@@ -27,9 +28,25 @@ The implemented variant is named
 * no compressor map, corrected-flow, speed, diameter, stage count, blade
   geometry, gear ratio, propeller load, or radial-equilibrium model.
 
+The opt-in ``gas_property_basis="textbook_true_cp"`` variant is named
+``uncooled_no_bleed_0d_textbook_process_mean``.  It keeps every structural
+assumption above but evaluates the published true ``cp`` correlation at each
+actual component process-mean temperature and stores local endpoint ``cp``/``k``
+at each station's own total temperature.  It is still one common ``R``, one
+fuel-based ``alpha`` from the calculated fuel/air ratio, and the same retained
+mean-``cp`` fuel relation; it is not a new cycle, a composition model, or a
+physical validation.  The free power turbine receives the actual gas-generator
+outlet :class:`StationState` and evaluates its own process properties from that
+state.  This option requires the retained :class:`LegacyCombustorClosure` and a
+fuel-based ``alpha``; it never infers composition from externally supplied
+``cp``/fuel values and never silently changes another method.
+
 The ``alpha`` used for the turbine gas ``cp``/``k`` is not hidden.  The
 :class:`PolynomialGasModel` records whether it is the fuel-based value
 ``1 / (f * l0)`` or the retained empirical ``calc_alpha`` polynomial.
+``PolynomialGasModel.model_variant`` is caller provenance only: it is never a
+physics selector, and this module does not mutate it.  The selected method is
+recorded explicitly on the input and result.
 
 SOURCE EQUATIONS
 ================
@@ -110,11 +127,14 @@ VALIDATION SCOPE / LIMITATIONS
 * no gear ratio, shaft speed, propeller load, accessory loss, or control law;
 * the fuel/air relation and the gas-property polynomials retain the current
   project assumptions; they are not independently validated;
-* the two gas-property models are deliberately not claimed equivalent: the
-  compressor uses mean-temperature variable ``k``, while each turbine holds its
-  inlet ``cp``/``k`` constant.  The shaft/mass closure is exact arithmetic for
-  the supplied component models; it is not a proof that those models are
-  physically complete.
+* the default and textbook gas-property variants are deliberately not claimed
+  equivalent.  The default compressor uses mean-temperature variable ``k`` and
+  the default turbine train holds the combustor-exit ``cp``/``k`` constant
+  through every turbine inlet.  The opt-in textbook variant evaluates the
+  published true ``cp`` at each actual process mean and keeps local endpoint
+  ``cp``/``k``.  The shaft/mass closure is exact arithmetic for the supplied
+  component models; it is not a proof that those models are physically
+  complete.
 """
 
 from __future__ import annotations
@@ -132,11 +152,13 @@ from turbine_engine.architecture import (
 from turbine_engine.compressor import CompressorResult, compressor_train
 from turbine_engine.cycle import (
     CycleConfig,
+    CycleSolverError,
     calc_alpha,
     calc_cp_kerosene,
     calc_g_m,
     calc_k_kerosene,
 )
+from turbine_engine.diagnostics import SolverDiagnosticsError
 from turbine_engine.shaft import ShaftPowerBalance, evaluate_shaft_power_balance
 from turbine_engine.turbine import (
     TurbineResult,
@@ -166,7 +188,21 @@ class AlphaBasis(str, Enum):
     EMPIRICAL_POLYNOMIAL = "empirical_polynomial"
 
 
-#: Stable limitation markers included in every result.
+#: Architecture-cycle property-basis selectors.  The default is unchanged.
+ARCHITECTURE_GAS_PROPERTY_BASIS_LEGACY = "legacy_mean_cp"
+ARCHITECTURE_GAS_PROPERTY_BASIS_TEXTBOOK = "textbook_true_cp"
+ARCHITECTURE_GAS_PROPERTY_BASES = (
+    ARCHITECTURE_GAS_PROPERTY_BASIS_LEGACY,
+    ARCHITECTURE_GAS_PROPERTY_BASIS_TEXTBOOK,
+)
+
+#: Method labels recorded in results.  They select no physics by themselves.
+ARCHITECTURE_MODEL_VARIANT_LEGACY = "uncooled_no_bleed_0d_ideal_mixing"
+ARCHITECTURE_MODEL_VARIANT_TEXTBOOK = (
+    "uncooled_no_bleed_0d_textbook_process_mean"
+)
+
+#: Stable limitation markers included in every default-legacy result.
 ARCHITECTURE_CYCLE_LIMITATIONS: tuple[str, ...] = (
     "NOT_PHYSICALLY_VALIDATED",
     "UNCOOLED_NO_BLEED_0D_IDEAL_MIXING",
@@ -182,6 +218,42 @@ ARCHITECTURE_CYCLE_LIMITATIONS: tuple[str, ...] = (
     "constant cp/k at the turbine inlet total temperature",
     "TOTAL_STATES_ONLY: prescribed turbine outlet is a total pressure",
 )
+
+#: Stable limitation markers included in every opt-in textbook-basis result.
+ARCHITECTURE_CYCLE_TEXTBOOK_LIMITATIONS: tuple[str, ...] = (
+    "NOT_PHYSICALLY_VALIDATED",
+    "UNCOOLED_NO_BLEED_0D_IDEAL_MIXING",
+    "MISSING_COMPRESSOR_PHYSICS: no map, blading, corrected flow, speed, "
+    "diameter, surge or diffusion model",
+    "MISSING_TURBINE_STAGE_PHYSICS: no stage count, velocity triangles, "
+    "cooling or map",
+    "MISSING_GEARBOX_PROPELLER: no ratio, speed, propeller load or control law",
+    "MISSING_COOLING_BLEED: no cooling, leak, bleed or return flow in this variant",
+    "MISSING_THERMOCHEMISTRY_VALIDATION: the retained mean-cp calc_g_m fuel "
+    "relation and the fuel-based alpha are source relations, not an "
+    "independently validated combustor",
+    "GAS_PROPERTY_BASIS: published true cp/k evaluated at each actual compressor "
+    "or turbine process mean 0.5*(T_in+T_out) with one common R; endpoint cp/k "
+    "are local true values at each endpoint total temperature",
+    "TOTAL_STATES_ONLY: prescribed turbine outlet is a total pressure",
+)
+
+
+def _resolve_architecture_gas_property_basis(value: Any) -> str:
+    """Validate the architecture-cycle property selector before arithmetic."""
+
+    if not isinstance(value, str):
+        raise ArchitectureCycleError(
+            "gas_property_basis must be a string, got "
+            f"{value!r}; expected one of "
+            f"{ARCHITECTURE_GAS_PROPERTY_BASES!r}"
+        )
+    if value not in ARCHITECTURE_GAS_PROPERTY_BASES:
+        raise ArchitectureCycleError(
+            f"unknown gas_property_basis {value!r}; expected one of "
+            f"{ARCHITECTURE_GAS_PROPERTY_BASES!r}"
+        )
+    return value
 
 
 def _as_finite_float(name: str, value: Any) -> float:
@@ -277,6 +349,11 @@ class PolynomialGasModel:
     ``cp``/``k`` polynomial.  ``FUEL_BASED`` uses ``1 / (f * l0)``;
     ``EMPIRICAL_POLYNOMIAL`` uses the retained ``calc_alpha`` polynomial.  The
     choice is stored in the result and is never silently selected.
+
+    ``model_variant`` is caller-supplied provenance for diagnostics.  It does
+    **not** select the gas-property physics: the explicit input/result
+    ``gas_property_basis`` selector does.  This module never rewrites the
+    supplied model or treats its label as a method switch.
     """
 
     R: float
@@ -486,6 +563,17 @@ class ArchitectureCycleInput:
     ``combustor`` is either a :class:`LegacyCombustorClosure` (fuel flow from
     ``calc_g_m``) or an :class:`ExternalCombustorClosure` (explicit state and
     fuel flow).
+
+    ``gas_property_basis`` selects the property method explicitly:
+
+    * ``"legacy_mean_cp"`` (default) preserves the original arithmetic and
+      labels exactly;
+    * ``"textbook_true_cp"`` uses the published true-``cp`` correlation at each
+      actual process mean.  That option requires a legacy combustor closure and
+      ``PolynomialGasModel.alpha_basis`` set to ``FUEL_BASED``; an externally
+      supplied state or empirical alpha is rejected rather than treated as
+      equivalent, because the source option needs the calculated fuel-based
+      composition.  The method is never selected from a model label.
     """
 
     architecture: Architecture
@@ -500,6 +588,7 @@ class ArchitectureCycleInput:
     target_gearbox_input_power: float
     gearbox_efficiency: float
     gas_model: PolynomialGasModel
+    gas_property_basis: str = ARCHITECTURE_GAS_PROPERTY_BASIS_LEGACY
 
     def __post_init__(self) -> None:
         if not isinstance(self.architecture, Architecture):
@@ -590,6 +679,28 @@ class ArchitectureCycleInput:
                 "gas_model must be a PolynomialGasModel, "
                 f"got {type(self.gas_model).__name__}"
             )
+        basis = _resolve_architecture_gas_property_basis(
+            self.gas_property_basis
+        )
+        object.__setattr__(self, "gas_property_basis", basis)
+        if basis == ARCHITECTURE_GAS_PROPERTY_BASIS_TEXTBOOK:
+            if not isinstance(self.combustor, LegacyCombustorClosure):
+                raise ArchitectureCycleError(
+                    "gas_property_basis='textbook_true_cp' requires "
+                    "LegacyCombustorClosure: the textbook source option needs "
+                    "the calculated fuel-based alpha and composition, so an "
+                    "externally supplied combustor state cannot be used and "
+                    "composition is not inferred from its supplied cp/fuel"
+                )
+            if self.gas_model.alpha_basis is not AlphaBasis.FUEL_BASED:
+                raise ArchitectureCycleError(
+                    "gas_property_basis='textbook_true_cp' requires "
+                    "PolynomialGasModel.alpha_basis=FUEL_BASED: the textbook "
+                    "source option needs the fuel-based alpha "
+                    "1/(f*l0) from the calculated fuel/air ratio; empirical "
+                    "calc_alpha is not accepted as a substitute and the "
+                    "method is not silently changed"
+                )
 
         if len(self.compressor_pressure_ratios) != descriptor.compressor_units:
             raise ArchitectureCycleError(
@@ -714,6 +825,9 @@ class ArchitectureCycleResult:
     ``target_power_status`` is a **reporting** status, not a feasibility filter:
     ``"met"`` means the solved actual gearbox-input power matches the request
     to numerical tolerance; no engineering range or map filter is applied.
+    ``gas_property_basis`` records the explicitly selected property method;
+    ``model_variant`` is the method label selected by that basis and does not
+    itself change any arithmetic.
     """
 
     architecture: Architecture
@@ -736,6 +850,7 @@ class ArchitectureCycleResult:
     pressure_ratio_product: float
     compressor_pressure_residual: float
     turbine_pressure_residuals: tuple[float, ...]
+    gas_property_basis: str = ARCHITECTURE_GAS_PROPERTY_BASIS_LEGACY
 
     def __post_init__(self) -> None:
         if not isinstance(self.architecture, Architecture):
@@ -762,6 +877,17 @@ class ArchitectureCycleResult:
             raise ArchitectureCycleError(
                 "gas_model must be a PolynomialGasModel, "
                 f"got {type(self.gas_model).__name__}"
+            )
+        basis = _resolve_architecture_gas_property_basis(
+            self.gas_property_basis
+        )
+        object.__setattr__(self, "gas_property_basis", basis)
+        if (
+            basis == ARCHITECTURE_GAS_PROPERTY_BASIS_TEXTBOOK
+            and self.gas_model.alpha_basis is not AlphaBasis.FUEL_BASED
+        ):
+            raise ArchitectureCycleError(
+                "textbook_true_cp results require a fuel-based gas model alpha"
             )
         if not isinstance(self.shaft, ShaftPowerBalance):
             raise ArchitectureCycleError(
@@ -1023,6 +1149,153 @@ class ArchitectureCycleResult:
         return report
 
 
+def _textbook_cp_k_bridge(
+    gas_model: PolynomialGasModel,
+    T_total: float,
+    alpha: float,
+    *,
+    context: str,
+) -> tuple[float, float]:
+    """Call the public published true-cp helper with a precise domain error.
+
+    Typed solver diagnostics are deliberately not caught: only the source
+    property domain/invalid-input exceptions are translated at this boundary.
+    """
+
+    from turbine_engine.gas import GasPropertyError, calc_textbook_gas_cp_k
+
+    try:
+        return calc_textbook_gas_cp_k(T_total, alpha, gas_model.R)
+    except GasPropertyError as exc:
+        raise ArchitectureCycleError(
+            "textbook true-cp source properties are undefined for "
+            f"{context}: {exc}"
+        ) from exc
+    except (TypeError, ValueError) as exc:
+        raise ArchitectureCycleError(
+            "textbook true-cp source properties are invalid for "
+            f"{context}: {exc}"
+        ) from exc
+
+
+def _air_cp_k(
+    gas_model: PolynomialGasModel,
+    T_total: float,
+    gas_property_basis: str,
+) -> tuple[float, float]:
+    """Return air ``(cp, k)`` on the selected basis, legacy path unchanged."""
+
+    if gas_property_basis == ARCHITECTURE_GAS_PROPERTY_BASIS_LEGACY:
+        return gas_model.air_cp_k(T_total)
+    return _textbook_cp_k_bridge(
+        gas_model,
+        T_total,
+        math.inf,
+        context=f"dry air at T_total={T_total!r} K",
+    )
+
+
+def _compressor_train_for_basis(
+    inlet: StationState,
+    pressure_ratios: tuple[float, ...],
+    config: CycleConfig,
+    gas_property_basis: str,
+) -> CompressorResult:
+    """Call the existing compressor train with the selected property basis."""
+
+    if gas_property_basis == ARCHITECTURE_GAS_PROPERTY_BASIS_LEGACY:
+        # No new keyword is passed on the default path.
+        return compressor_train(inlet, pressure_ratios, config)
+
+    from turbine_engine.gas import GasPropertyError
+
+    try:
+        return compressor_train(
+            inlet,
+            pressure_ratios,
+            config,
+            gas_property_basis=gas_property_basis,
+        )
+    except (CycleSolverError, SolverDiagnosticsError, ArchitectureCycleError):
+        raise
+    except GasPropertyError as exc:
+        raise ArchitectureCycleError(
+            "textbook true-cp compressor source properties are undefined at "
+            f"T_in={inlet.T_total!r} K: {exc}"
+        ) from exc
+    except (ValueError, ArithmeticError) as exc:
+        raise ArchitectureCycleError(
+            "textbook true-cp compressor source properties are invalid at "
+            f"T_in={inlet.T_total!r} K: {exc}"
+        ) from exc
+
+
+def _turbine_expand_for_basis(
+    inlet: StationState,
+    pressure_ratio: float,
+    eta_turbine_poly: float,
+    gas_property_basis: str,
+    alpha: float | None,
+    R: float | None,
+) -> TurbineResult:
+    """Call the existing turbine expansion with the selected property basis."""
+
+    if gas_property_basis == ARCHITECTURE_GAS_PROPERTY_BASIS_LEGACY:
+        # No new keyword is passed on the default path.
+        return turbine_expansion(inlet, pressure_ratio, eta_turbine_poly)
+
+    from turbine_engine.gas import GasPropertyError
+
+    try:
+        return turbine_expansion(
+            inlet,
+            pressure_ratio,
+            eta_turbine_poly,
+            gas_property_basis=gas_property_basis,
+            alpha=alpha,
+            R=R,
+        )
+    except GasPropertyError as exc:
+        raise ArchitectureCycleError(
+            "textbook true-cp turbine source properties are undefined at "
+            f"T_in={inlet.T_total!r} K: {exc}"
+        ) from exc
+
+
+def _turbine_inverse_for_basis(
+    inlet: StationState,
+    required_specific_work: float,
+    eta_turbine_poly: float,
+    gas_property_basis: str,
+    alpha: float | None,
+    R: float | None,
+) -> TurbineResult:
+    """Call the existing prescribed-work inverse with the selected basis."""
+
+    if gas_property_basis == ARCHITECTURE_GAS_PROPERTY_BASIS_LEGACY:
+        # No new keyword is passed on the default path.
+        return turbine_pressure_ratio_for_work(
+            inlet, required_specific_work, eta_turbine_poly
+        )
+
+    from turbine_engine.gas import GasPropertyError
+
+    try:
+        return turbine_pressure_ratio_for_work(
+            inlet,
+            required_specific_work,
+            eta_turbine_poly,
+            gas_property_basis=gas_property_basis,
+            alpha=alpha,
+            R=R,
+        )
+    except GasPropertyError as exc:
+        raise ArchitectureCycleError(
+            "textbook true-cp turbine source properties are undefined at "
+            f"T_in={inlet.T_total!r} K: {exc}"
+        ) from exc
+
+
 def _compressor_config(
     request: ArchitectureCycleInput, inlet_k: float
 ) -> CycleConfig:
@@ -1049,8 +1322,10 @@ def _air_state(
     p_total: float,
     mass_flow: float,
     identifier: str = "compressor_inlet",
+    *,
+    gas_property_basis: str = ARCHITECTURE_GAS_PROPERTY_BASIS_LEGACY,
 ) -> StationState:
-    cp, k = gas_model.air_cp_k(T_total)
+    cp, k = _air_cp_k(gas_model, T_total, gas_property_basis)
     return StationState(
         T_total=T_total,
         p_total=p_total,
@@ -1103,7 +1378,11 @@ def _resolve_combustor(
             f = request.gas_model.fuel_air_ratio(
                 compressor_outlet.T_total, T_g
             )
-        except (ValueError, ArithmeticError, RuntimeError) as exc:
+        except (CycleSolverError, SolverDiagnosticsError):
+            # Typed solver outcomes keep their numeric status; they are not a
+            # statement about the physical feasibility of the requested cycle.
+            raise
+        except (ValueError, ArithmeticError) as exc:
             raise ArchitectureCyclePhysicalError(
                 "calc_g_m is undefined for the supplied combustor "
                 f"temperatures T_comp={compressor_outlet.T_total!r} K and "
@@ -1115,17 +1394,47 @@ def _resolve_combustor(
                 f"{f!r} for T_comp={compressor_outlet.T_total!r} K and "
                 f"T_g={T_g!r} K"
             )
-        try:
-            alpha = request.gas_model.alpha_for(
-                compressor_outlet.T_total, T_g, f
+        if (
+            request.gas_property_basis
+            == ARCHITECTURE_GAS_PROPERTY_BASIS_LEGACY
+        ):
+            # Default path: identical calls and error translation.
+            try:
+                alpha = request.gas_model.alpha_for(
+                    compressor_outlet.T_total, T_g, f
+                )
+                cp, k = request.gas_model.gas_cp_k(T_g, alpha)
+            except (CycleSolverError, SolverDiagnosticsError):
+                # Typed solver outcomes keep their numeric status; they are not
+                # a statement about the physical feasibility of the request.
+                raise
+            except (ValueError, ArithmeticError) as exc:
+                raise ArchitectureCyclePhysicalError(
+                    "combustor gas properties are undefined for the selected "
+                    f"alpha basis {request.gas_model.alpha_basis.value!r} and "
+                    f"T_g={T_g!r} K: {exc}"
+                ) from exc
+        else:
+            try:
+                alpha = request.gas_model.alpha_for(
+                    compressor_outlet.T_total, T_g, f
+                )
+            except (CycleSolverError, SolverDiagnosticsError):
+                raise
+            except (ValueError, ArithmeticError) as exc:
+                raise ArchitectureCyclePhysicalError(
+                    "combustor alpha is undefined for the selected fuel-based "
+                    f"relation and T_g={T_g!r} K: {exc}"
+                ) from exc
+            cp, k = _textbook_cp_k_bridge(
+                request.gas_model,
+                T_g,
+                alpha,
+                context=(
+                    "combustor products at "
+                    f"T_total={T_g!r} K and alpha={alpha!r}"
+                ),
             )
-            cp, k = request.gas_model.gas_cp_k(T_g, alpha)
-        except (ValueError, ArithmeticError, RuntimeError) as exc:
-            raise ArchitectureCyclePhysicalError(
-                "combustor gas properties are undefined for the selected "
-                f"alpha basis {request.gas_model.alpha_basis.value!r} and "
-                f"T_g={T_g!r} K: {exc}"
-            ) from exc
         p_out = (
             compressor_outlet.p_total * closure.total_pressure_recovery
         )
@@ -1239,24 +1548,34 @@ def calculate_architecture_cycle(
     architecture = request.architecture
     descriptor = ARCHITECTURES[architecture]
     gas_model = request.gas_model
+    basis = request.gas_property_basis
 
     # --- unit-air compressor chain ---------------------------------------
     # Start with 1 kg/s air.  All per-kilogram works are independent of the
     # later flow size; the final states are rebuilt with the solved flow.
-    _, inlet_k = gas_model.air_cp_k(
-        request.inlet_total_temperature
-    )
+    if basis == ARCHITECTURE_GAS_PROPERTY_BASIS_LEGACY:
+        _, inlet_k = gas_model.air_cp_k(
+            request.inlet_total_temperature
+        )
+    else:
+        _, inlet_k = _air_cp_k(
+            gas_model,
+            request.inlet_total_temperature,
+            basis,
+        )
     inlet_unit = _air_state(
         gas_model,
         request.inlet_total_temperature,
         request.inlet_total_pressure,
         1.0,
+        gas_property_basis=basis,
     )
     compressor_config = _compressor_config(request, inlet_k)
-    compressor_unit = compressor_train(
+    compressor_unit = _compressor_train_for_basis(
         inlet_unit,
         request.compressor_pressure_ratios,
         compressor_config,
+        basis,
     )
 
     (
@@ -1284,7 +1603,12 @@ def calculate_architecture_cycle(
         identifier="combustor_exit",
     )
 
-    model_variant = "uncooled_no_bleed_0d_ideal_mixing"
+    if basis == ARCHITECTURE_GAS_PROPERTY_BASIS_TEXTBOOK:
+        model_variant = ARCHITECTURE_MODEL_VARIANT_TEXTBOOK
+        validation_scope = ARCHITECTURE_CYCLE_TEXTBOOK_LIMITATIONS
+    else:
+        model_variant = ARCHITECTURE_MODEL_VARIANT_LEGACY
+        validation_scope = ARCHITECTURE_CYCLE_LIMITATIONS
     eta_t = request.turbine_polytropic_efficiencies
     eta_m = request.turbine_mechanical_efficiencies
     p_t_out = request.turbine_outlet_total_pressure
@@ -1302,9 +1626,20 @@ def calculate_architecture_cycle(
                 f"p_in={p_gas!r} Pa and p_out={p_t_out!r} Pa"
             )
         try:
-            turbine_unit = turbine_expansion(
-                gas_unit, expansion_ratio, eta_t[0]
+            turbine_unit = _turbine_expand_for_basis(
+                gas_unit,
+                expansion_ratio,
+                eta_t[0],
+                basis,
+                alpha,
+                gas_model.R,
             )
+        except (
+            CycleSolverError,
+            SolverDiagnosticsError,
+            ArchitectureCycleError,
+        ):
+            raise
         except ValueError as exc:
             raise _physical_error_from_turbine(
                 exc, "main turbine expansion is not physically available"
@@ -1330,11 +1665,13 @@ def calculate_architecture_cycle(
             request.inlet_total_temperature,
             request.inlet_total_pressure,
             air_flow,
+            gas_property_basis=basis,
         )
-        compressor_final = compressor_train(
+        compressor_final = _compressor_train_for_basis(
             inlet_final,
             request.compressor_pressure_ratios,
             compressor_config,
+            basis,
         )
         combustor_final = _combustor_result(
             compressor_final.outlet,
@@ -1349,9 +1686,20 @@ def calculate_architecture_cycle(
             heat_per_air,
         )
         try:
-            turbine_final = turbine_expansion(
-                combustor_final.outlet, expansion_ratio, eta_t[0]
+            turbine_final = _turbine_expand_for_basis(
+                combustor_final.outlet,
+                expansion_ratio,
+                eta_t[0],
+                basis,
+                alpha,
+                gas_model.R,
             )
+        except (
+            CycleSolverError,
+            SolverDiagnosticsError,
+            ArchitectureCycleError,
+        ):
+            raise
         except ValueError as exc:
             raise _physical_error_from_turbine(
                 exc, "main turbine expansion is not physically available"
@@ -1385,9 +1733,20 @@ def calculate_architecture_cycle(
             eta_m[0] * (1.0 + fuel_air_ratio)
         )
         try:
-            gg_unit = turbine_pressure_ratio_for_work(
-                gas_unit, required_gg_work, eta_t[0]
+            gg_unit = _turbine_inverse_for_basis(
+                gas_unit,
+                required_gg_work,
+                eta_t[0],
+                basis,
+                alpha,
+                gas_model.R,
             )
+        except (
+            CycleSolverError,
+            SolverDiagnosticsError,
+            ArchitectureCycleError,
+        ):
+            raise
         except ValueError as exc:
             raise _physical_error_from_turbine(
                 exc,
@@ -1402,9 +1761,20 @@ def calculate_architecture_cycle(
             )
         fpt_ratio = gg_unit.outlet.p_total / p_t_out
         try:
-            fpt_unit = turbine_expansion(
-                gg_unit.outlet, fpt_ratio, eta_t[1]
+            fpt_unit = _turbine_expand_for_basis(
+                gg_unit.outlet,
+                fpt_ratio,
+                eta_t[1],
+                basis,
+                alpha,
+                gas_model.R,
             )
+        except (
+            CycleSolverError,
+            SolverDiagnosticsError,
+            ArchitectureCycleError,
+        ):
+            raise
         except ValueError as exc:
             raise _physical_error_from_turbine(
                 exc, "free power turbine expansion is not physically available"
@@ -1425,11 +1795,13 @@ def calculate_architecture_cycle(
             request.inlet_total_temperature,
             request.inlet_total_pressure,
             air_flow,
+            gas_property_basis=basis,
         )
-        compressor_final = compressor_train(
+        compressor_final = _compressor_train_for_basis(
             inlet_final,
             request.compressor_pressure_ratios,
             compressor_config,
+            basis,
         )
         combustor_final = _combustor_result(
             compressor_final.outlet,
@@ -1447,11 +1819,20 @@ def calculate_architecture_cycle(
             eta_m[0] * (1.0 + fuel_air_ratio)
         )
         try:
-            gg_final = turbine_pressure_ratio_for_work(
+            gg_final = _turbine_inverse_for_basis(
                 combustor_final.outlet,
                 required_gg_work_final,
                 eta_t[0],
+                basis,
+                alpha,
+                gas_model.R,
             )
+        except (
+            CycleSolverError,
+            SolverDiagnosticsError,
+            ArchitectureCycleError,
+        ):
+            raise
         except ValueError as exc:
             raise _physical_error_from_turbine(
                 exc,
@@ -1466,9 +1847,20 @@ def calculate_architecture_cycle(
             )
         fpt_ratio_final = gg_final.outlet.p_total / p_t_out
         try:
-            fpt_final = turbine_expansion(
-                gg_final.outlet, fpt_ratio_final, eta_t[1]
+            fpt_final = _turbine_expand_for_basis(
+                gg_final.outlet,
+                fpt_ratio_final,
+                eta_t[1],
+                basis,
+                alpha,
+                gas_model.R,
             )
+        except (
+            CycleSolverError,
+            SolverDiagnosticsError,
+            ArchitectureCycleError,
+        ):
+            raise
         except ValueError as exc:
             raise _physical_error_from_turbine(
                 exc,
@@ -1495,7 +1887,7 @@ def calculate_architecture_cycle(
         model_variant=model_variant,
         combustor_closure=closure_name,
         gas_model=gas_model,
-        validation_scope=ARCHITECTURE_CYCLE_LIMITATIONS,
+        validation_scope=validation_scope,
         inlet=inlet_final,
         compressor=compressor_final,
         combustor=combustor_final,
@@ -1513,12 +1905,19 @@ def calculate_architecture_cycle(
         turbine_pressure_residuals=tuple(
             item.residual for item in turbines
         ),
+        gas_property_basis=basis,
     )
     return result
 
 
 __all__ = [
     "ARCHITECTURE_CYCLE_LIMITATIONS",
+    "ARCHITECTURE_CYCLE_TEXTBOOK_LIMITATIONS",
+    "ARCHITECTURE_GAS_PROPERTY_BASES",
+    "ARCHITECTURE_GAS_PROPERTY_BASIS_LEGACY",
+    "ARCHITECTURE_GAS_PROPERTY_BASIS_TEXTBOOK",
+    "ARCHITECTURE_MODEL_VARIANT_LEGACY",
+    "ARCHITECTURE_MODEL_VARIANT_TEXTBOOK",
     "AlphaBasis",
     "ArchitectureCycleError",
     "ArchitectureCycleInput",

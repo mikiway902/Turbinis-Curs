@@ -10,13 +10,22 @@ imports no NumPy/SciPy, and keeps no mutable global state.
 The notebook remains the independent legacy comparison path.  The equations,
 the 1 K finite-difference step, the 273.15 K offset, the 50-iteration limit, and
 the strict ``abs(cp_new - cp) < 1e-9`` convergence test are copied verbatim.
-Like the source, the loop returns its last iterate after 50 iterations without
-raising a convergence error.  Tests compare this module with observed legacy
-outputs only as software-drift diagnostics, never as physical validation.
+Successful fixed points return the same pre-update ``cp``/``k`` and ``H0`` as
+the source.  Unlike the source, exhaustion of either 50-iteration loop raises
+:class:`turbine_engine.diagnostics.NumericalConvergenceError` instead of
+silently returning the last iterate.  Tests compare this module with observed
+legacy outputs only as software-drift diagnostics, never as physical validation.
 
 The composition function used by ``газ`` is
 :func:`turbine_engine.cycle.calc_cp_kerosene`, which is bit-identical to the
 legacy notebook ``calc_cp``.
+
+OPT-IN TEXTBOOK CORRELATION
+===========================
+:func:`calc_textbook_gas_cp_k` separately transcribes the published Appendix 6
+true-``cp`` fit.  It is opt-in through
+``gas_property_basis="textbook_true_cp"``; the legacy notebook path remains the
+default and is unchanged.
 
 UNITS
 =====
@@ -30,15 +39,26 @@ dimensionless.  ``alpha`` is the excess-air ratio (``math.inf`` for dry air).
 from __future__ import annotations
 
 import math
+import numbers
 from typing import Any
 
 from turbine_engine.cycle import calc_cp_kerosene
+from turbine_engine.diagnostics import NumericalConvergenceError
 
 # Source-fixed numerical controls (do not tune without changing the notebook).
 GAS_FINITE_DIFFERENCE_STEP_K = 1.0
 GAS_CELSIUS_OFFSET_K = 273.15
 STAGE_CP_K_MAX_ITER = 50
 STAGE_CP_K_TOL = 1e-9
+
+# Opt-in property bases.  The default keeps the legacy notebook path.
+GAS_PROPERTY_BASIS_LEGACY = "legacy_derivative"
+GAS_PROPERTY_BASIS_TEXTBOOK = "textbook_true_cp"
+GAS_PROPERTY_BASES = (GAS_PROPERTY_BASIS_LEGACY, GAS_PROPERTY_BASIS_TEXTBOOK)
+
+# Published true-cp fit: kcal/(kg*K) converted to J/(kg*K), branch at 750 K.
+TEXTBOOK_CP_KCAL_TO_J = 4187.0
+TEXTBOOK_CP_BRANCH_T_K = 750.0
 
 
 class GasPropertyError(RuntimeError):
@@ -70,6 +90,113 @@ def _as_alpha(value: Any) -> float:
     if math.isnan(result) or result <= 0.0:
         raise ValueError(f"alpha must be > 0, got {value!r}")
     return result
+
+
+def _as_strict_real(name: str, value: Any, *, allow_infinite: bool = False) -> float:
+    """Reject booleans, strings and disallowed non-finite values for the new fit."""
+
+    if isinstance(value, bool) or not isinstance(value, numbers.Real):
+        raise ValueError(f"{name} must be a real number, got {value!r}")
+    result = float(value)
+    if math.isnan(result) or (math.isinf(result) and not allow_infinite):
+        raise ValueError(f"{name} must be finite, got {result!r}")
+    return result
+
+
+def _as_strict_positive_real(name: str, value: Any) -> float:
+    result = _as_strict_real(name, value)
+    if result <= 0.0:
+        raise ValueError(f"{name} must be > 0, got {result!r}")
+    return result
+
+
+def _resolve_gas_property_basis(value: Any) -> str:
+    """Return a validated property-basis selector; reject unknown config."""
+
+    if not isinstance(value, str):
+        raise ValueError(
+            f"gas_property_basis must be a string, got {value!r}; "
+            f"expected one of {GAS_PROPERTY_BASES!r}"
+        )
+    if value not in GAS_PROPERTY_BASES:
+        raise ValueError(
+            f"unknown gas_property_basis {value!r}; "
+            f"expected one of {GAS_PROPERTY_BASES!r}"
+        )
+    return value
+
+
+def calc_textbook_gas_cp_k(T: float, alpha: float, R: float) -> tuple[float, float]:
+    """Return the published direct true-``cp`` correlation at ``T``.
+
+    Literal transcription of the Appendix 6 true-``cp`` fit used by the cycle
+    and turbine texts: ``cp`` in kcal/(kg*K) is evaluated directly at ``T`` and
+    multiplied by 4187 J/kcal.  The published branches meet at 750 K with the
+    source's finite jump; no smoothing, mean-temperature derivative or
+    process-average substitution is applied.  The fit is published for lean
+    products (``alpha >= 1``); ``alpha`` infinity uses the analytic reciprocal
+    limit, not a numeric surrogate.  This is a source correlation, not a
+    validated extension to rich mixtures or a physical acceptance claim.
+
+    Parameters
+    ----------
+    T:
+        Gas temperature in K; must be finite and positive.
+    alpha:
+        Excess-air ratio (``math.inf`` for dry air); must be ``>= 1`` or
+        infinity, the published lean domain.
+    R:
+        Specific gas constant in J/(kg*K); must be finite and positive.
+
+    Returns
+    -------
+    tuple[float, float]
+        ``(cp, k)`` with ``cp`` in J/(kg*K) and ``k = cp / (cp - R)``.
+
+    Raises
+    ------
+    ValueError
+        For booleans, strings or non-finite ``T``/``R``, or a non-real
+        ``alpha``.
+    GasPropertyError
+        When ``alpha`` is outside the published lean domain, or the evaluated
+        ``cp`` is non-finite or not greater than ``R``.  No value is clamped.
+    """
+
+    T_value = _as_strict_positive_real("T", T)
+    alpha_value = _as_strict_real("alpha", alpha, allow_infinite=True)
+    R_value = _as_strict_positive_real("R", R)
+    if alpha_value != math.inf and alpha_value < 1.0:
+        raise GasPropertyError(
+            "textbook true-cp fit is published for lean products "
+            f"(alpha >= 1 or inf), got alpha={alpha_value!r}"
+        )
+
+    if T_value < TEXTBOOK_CP_BRANCH_T_K:
+        cp_kcal = (
+            (0.0174 / alpha_value + 0.2407)
+            + (0.0093 / alpha_value + 0.0193) * (0.0025 * T_value - 0.875)
+            + (0.002 - 0.001056 / (alpha_value - 0.2))
+            * (0.000025 * T_value * T_value - 0.0275 * T_value + 6.5625)
+        )
+    else:
+        cp_kcal = (
+            (0.0267 / alpha_value + 0.26)
+            + (0.0133 / alpha_value + 0.032) * (0.001176 * T_value - 0.88235)
+            - (0.00374 + 0.0094 / (alpha_value * alpha_value + 10.0))
+            * (0.0000055556 * T_value * T_value - 0.013056 * T_value + 6.67)
+        )
+
+    cp = cp_kcal * TEXTBOOK_CP_KCAL_TO_J
+    denominator = cp - R_value
+    if not math.isfinite(cp) or not math.isfinite(denominator) or denominator <= 0.0:
+        raise GasPropertyError(
+            f"invalid cp={cp!r} for R={R_value!r}: cp - R must be finite and positive"
+        )
+    k = cp / denominator
+    if not math.isfinite(k):
+        raise GasPropertyError(f"invalid k={k!r} for cp={cp!r}, R={R_value!r}")
+    return cp, k
 
 
 def calc_gas_cp_k(T: float, alpha: float, R: float) -> tuple[float, float]:
@@ -120,13 +247,26 @@ def calc_stage_cp_k(
     alpha: float,
     R: float,
     phi: float,
+    *,
+    gas_property_basis: str = GAS_PROPERTY_BASIS_LEGACY,
 ) -> tuple[float, float]:
     """Return stage-average ``cp`` and ``k`` from the notebook iteration.
 
     Equivalent to ``cp_k_ступени(T0, H0)`` with the namespace values ``α_г``,
     ``R`` and ``φ``.  The mean conditional temperature is
     ``T0 - H0 * phi**2 / (2 * cp)``; the loop stops on ``abs(cp_new - cp) < 1e-9``
-    and otherwise returns the 50th iterate without raising, as in the source.
+    and returns the pre-update ``cp``/``k`` exactly as the source does.
+    Exhausting the 50-iteration limit raises
+    :class:`turbine_engine.diagnostics.NumericalConvergenceError` instead of
+    returning the last iterate without marking non-convergence.
+
+    ``gas_property_basis="legacy_derivative"`` (default) preserves the notebook
+    mean-``cp`` finite-difference calls exactly.  Opting into
+    ``"textbook_true_cp"`` evaluates the published direct true-``cp``
+    correlation at the same conditional temperature on every iteration; the
+    book mean-temperature approximation, tolerance and pre-update return
+    semantics are unchanged.  The textbook basis is a source correlation and
+    is not an additional physical validation.
 
     Parameters
     ----------
@@ -140,8 +280,11 @@ def calc_stage_cp_k(
         Specific gas constant in J/(kg*K); must be finite and positive.
     phi:
         Stator velocity coefficient; must be in ``(0, 1]``.
+    gas_property_basis:
+        ``"legacy_derivative"`` (default) or ``"textbook_true_cp"``.
     """
 
+    basis = _resolve_gas_property_basis(gas_property_basis)
     T0_value = _as_positive_float("T0", T0)
     H0_value = _as_float("H0", H0)
     if H0_value < 0.0:
@@ -152,18 +295,40 @@ def calc_stage_cp_k(
     if not 0.0 < phi_value <= 1.0:
         raise ValueError(f"phi must be in (0, 1], got {phi_value!r}")
 
-    cp, k = calc_gas_cp_k(T0_value, alpha_value, R_value)
-    for _ in range(STAGE_CP_K_MAX_ITER):
+    gas_cp_k = (
+        calc_gas_cp_k
+        if basis == GAS_PROPERTY_BASIS_LEGACY
+        else calc_textbook_gas_cp_k
+    )
+    cp, k = gas_cp_k(T0_value, alpha_value, R_value)
+    for iteration in range(STAGE_CP_K_MAX_ITER):
         if cp == 0.0:
             raise GasPropertyError("stage cp is zero; mean temperature is undefined")
-        cp_new, k_new = calc_gas_cp_k(
-            T0_value - H0_value * phi_value**2 / (2 * cp),
-            alpha_value,
-            R_value,
-        )
-        if abs(cp_new - cp) < STAGE_CP_K_TOL:
+        cp_evaluated, k_evaluated = cp, k
+        T_mean = T0_value - H0_value * phi_value**2 / (2 * cp_evaluated)
+        cp_new, k_new = gas_cp_k(T_mean, alpha_value, R_value)
+        if abs(cp_new - cp_evaluated) < STAGE_CP_K_TOL:
             break
         cp, k = cp_new, k_new
+    else:
+        raise NumericalConvergenceError(
+            "stage cp/k fixed-point iteration exhausted its limit",
+            stage="gas.calc_stage_cp_k",
+            reason="cp_k_iteration_exhausted",
+            last_valid_state={
+                "gas_property_basis": basis,
+                "iterations": iteration + 1,
+                "iteration_limit": STAGE_CP_K_MAX_ITER,
+                "tolerance": STAGE_CP_K_TOL,
+                "cp": cp_evaluated,
+                "k": k_evaluated,
+                "cp_new": cp_new,
+                "k_new": k_new,
+                "residual": cp_new - cp_evaluated,
+                "T_mean": T_mean,
+                "H0": H0_value,
+            },
+        )
     return cp, k
 
 
@@ -174,14 +339,26 @@ def calc_h0_for_pressure(
     alpha: float,
     R: float,
     phi: float,
+    *,
+    gas_property_basis: str = GAS_PROPERTY_BASIS_LEGACY,
 ) -> float:
     """Return the available isentropic heat drop at a prescribed outlet pressure.
 
     Equivalent to ``H0_по_p(T0, p0, p2)`` with the namespace values ``α_г``,
     ``R`` and ``φ``.  For each iterate the drop is
     ``H0 = cp * T0 * (1 - (p2 / p0) ** ((k - 1) / k))``; the loop stops on
-    ``abs(cp_new - cp) < 1e-9`` and otherwise returns the 50th iterate without
-    raising, exactly as in the source.
+    ``abs(cp_new - cp) < 1e-9`` and returns the ``H0`` computed in that
+    iteration exactly as the source does.  Exhausting the 50-iteration limit
+    raises :class:`turbine_engine.diagnostics.NumericalConvergenceError`
+    instead of returning the last iterate without marking non-convergence.
+
+    ``gas_property_basis="legacy_derivative"`` (default) preserves the notebook
+    mean-``cp`` finite-difference calls exactly.  Opting into
+    ``"textbook_true_cp"`` evaluates the published direct true-``cp``
+    correlation at the same conditional temperature on every iteration; the
+    ``H0`` pressure process, tolerance and stop semantics are unchanged.  The
+    textbook basis is a source correlation and is not an additional physical
+    validation.
 
     Parameters
     ----------
@@ -199,8 +376,11 @@ def calc_h0_for_pressure(
         Specific gas constant in J/(kg*K); must be finite and positive.
     phi:
         Stator velocity coefficient; must be in ``(0, 1]``.
+    gas_property_basis:
+        ``"legacy_derivative"`` (default) or ``"textbook_true_cp"``.
     """
 
+    basis = _resolve_gas_property_basis(gas_property_basis)
     T0_value = _as_positive_float("T0", T0)
     p0_value = _as_positive_float("p0", p0)
     p2_value = _as_positive_float("p2", p2)
@@ -210,28 +390,56 @@ def calc_h0_for_pressure(
     if not 0.0 < phi_value <= 1.0:
         raise ValueError(f"phi must be in (0, 1], got {phi_value!r}")
 
-    cp, k = calc_gas_cp_k(T0_value, alpha_value, R_value)
+    gas_cp_k = (
+        calc_gas_cp_k
+        if basis == GAS_PROPERTY_BASIS_LEGACY
+        else calc_textbook_gas_cp_k
+    )
+    cp, k = gas_cp_k(T0_value, alpha_value, R_value)
     H0 = 0.0
-    for _ in range(STAGE_CP_K_MAX_ITER):
+    for iteration in range(STAGE_CP_K_MAX_ITER):
         H0 = cp * T0_value * (1 - (p2_value / p0_value) ** ((k - 1) / k))
-        cp_new, k_new = calc_gas_cp_k(
-            T0_value - H0 * phi_value**2 / (2 * cp),
-            alpha_value,
-            R_value,
-        )
-        if abs(cp_new - cp) < STAGE_CP_K_TOL:
+        cp_evaluated, k_evaluated = cp, k
+        T_mean = T0_value - H0 * phi_value**2 / (2 * cp_evaluated)
+        cp_new, k_new = gas_cp_k(T_mean, alpha_value, R_value)
+        if abs(cp_new - cp_evaluated) < STAGE_CP_K_TOL:
             break
         cp, k = cp_new, k_new
+    else:
+        raise NumericalConvergenceError(
+            "stage H0 pressure iteration exhausted its limit",
+            stage="gas.calc_h0_for_pressure",
+            reason="h0_pressure_iteration_exhausted",
+            last_valid_state={
+                "gas_property_basis": basis,
+                "iterations": iteration + 1,
+                "iteration_limit": STAGE_CP_K_MAX_ITER,
+                "tolerance": STAGE_CP_K_TOL,
+                "cp": cp_evaluated,
+                "k": k_evaluated,
+                "cp_new": cp_new,
+                "k_new": k_new,
+                "residual": cp_new - cp_evaluated,
+                "T_mean": T_mean,
+                "H0": H0,
+            },
+        )
     return H0
 
 
 __all__ = [
     "GAS_CELSIUS_OFFSET_K",
     "GAS_FINITE_DIFFERENCE_STEP_K",
+    "GAS_PROPERTY_BASES",
+    "GAS_PROPERTY_BASIS_LEGACY",
+    "GAS_PROPERTY_BASIS_TEXTBOOK",
     "GasPropertyError",
     "STAGE_CP_K_MAX_ITER",
     "STAGE_CP_K_TOL",
+    "TEXTBOOK_CP_BRANCH_T_K",
+    "TEXTBOOK_CP_KCAL_TO_J",
     "calc_gas_cp_k",
     "calc_h0_for_pressure",
     "calc_stage_cp_k",
+    "calc_textbook_gas_cp_k",
 ]

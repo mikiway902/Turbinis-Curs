@@ -36,6 +36,7 @@ from turbine_engine.baseline import (  # noqa: E402
     BaselineTurbine,
     BaselineTurbineResult,
     calculate_baseline_turbine,
+    estimate_stage_count,
 )
 from turbine_engine.diagnostics import (  # noqa: E402
     NUMERICAL_FAILURE,
@@ -219,6 +220,8 @@ def _minimal_namespace(**overrides):
             "T_ст": 1000.0,
             "T_ст_п": 1020.0,
             "k": 1.33,
+            "u1": math.pi * D_c * n / 60.0,
+            "u2": math.pi * D_л * n / 60.0,
         }
 
     ns = {
@@ -276,6 +279,101 @@ class _ParityAssertions(unittest.TestCase):
                         float(expected_value),
                         f"stage {index} field {field}",
                     )
+
+
+class StageCountEstimateTests(unittest.TestCase):
+    """Focused source item-54 estimate tests (no model/optimizer run)."""
+
+    def test_hand_oracle_matches_literal_source_formula_exactly(self) -> None:
+        c0 = 312.5
+        u_mean = 247.25
+        y0 = 0.54
+        velocity = 0.9 * 173.125
+        expected = (c0**2 / velocity**2 - 1.0) / (
+            u_mean**2 / (velocity**2 * y0**2) - 1.0
+        )
+        self.assertEqual(
+            estimate_stage_count(c0, u_mean, y0, velocity), expected
+        )
+
+    def test_uniform_scaling_is_arithmetically_invariant(self) -> None:
+        c0 = 300.0
+        u_mean = 250.0
+        y0 = 0.54
+        velocity = 0.9 * 180.0
+        base = estimate_stage_count(c0, u_mean, y0, velocity)
+        for scale in (0.1, 2.0, 17.5):
+            with self.subTest(scale=scale):
+                self.assertAlmostEqual(
+                    estimate_stage_count(
+                        c0 * scale,
+                        u_mean * scale,
+                        y0,
+                        velocity * scale,
+                    ),
+                    base,
+                    places=12,
+                )
+
+    def test_degenerate_denominator_raises_typed_diagnostic(self) -> None:
+        velocity = 100.0
+        with self.assertRaises(NumericalConvergenceError) as raised:
+            estimate_stage_count(300.0, velocity, 1.0, velocity)
+        error = raised.exception
+        self.assertEqual(error.status, NUMERICAL_FAILURE)
+        self.assertEqual(error.stage, "baseline.estimate_stage_count")
+        self.assertEqual(error.reason, "stage_count_denominator_zero")
+        self.assertEqual(error.last_valid_state["c0"], 300.0)
+        json.dumps(error.as_record(), allow_nan=False)
+
+    def test_nonfinite_denominator_raises_typed_diagnostic(self) -> None:
+        with self.assertRaises(NumericalConvergenceError) as raised:
+            estimate_stage_count(300.0, 1e308, 0.54, 100.0)
+        self.assertEqual(
+            raised.exception.reason,
+            "stage_count_denominator_non_finite",
+        )
+        self.assertEqual(raised.exception.status, NUMERICAL_FAILURE)
+
+    def test_negative_and_subunit_estimates_are_not_clipped(self) -> None:
+        y0 = 0.54
+        velocity = 100.0
+        negative = estimate_stage_count(120.0, 10.0, y0, velocity)
+        subunit = estimate_stage_count(90.0, 10.0, y0, velocity)
+        self.assertLess(negative, 0.0)
+        self.assertGreater(subunit, 0.0)
+        self.assertLess(subunit, 1.0)
+        self.assertEqual(
+            negative,
+            (120.0**2 / velocity**2 - 1.0)
+            / (10.0**2 / (velocity**2 * y0**2) - 1.0),
+        )
+
+    def test_bool_string_and_nonpositive_inputs_are_rejected(self) -> None:
+        for invalid in (True, "300", None, 1 + 0j):
+            with self.subTest(value=invalid):
+                with self.assertRaises(TypeError):
+                    estimate_stage_count(invalid, 250.0, 0.54, 180.0)
+        for invalid in (0.0, -1.0, math.inf, math.nan):
+            with self.subTest(value=invalid):
+                with self.assertRaises(ValueError):
+                    estimate_stage_count(300.0, invalid, 0.54, 180.0)
+
+    def test_default_baseline_inline_anchor_uses_actual_mu_c2(self) -> None:
+        namespace = _minimal_namespace()
+        turbine = BaselineTurbine(namespace)
+        result = turbine.решить(namespace["π_т"] ** (1 / namespace["z"]))
+        stages = result["ступени"]
+        u_mean = 0.5 * (stages[0]["u1"] + stages[-1]["u2"])
+        recovered = namespace["μ"] * (
+            sum(stage["c2"] for stage in stages) / len(stages)
+        )
+        expected = (
+            namespace["c0_т"] ** 2 / recovered**2 - 1.0
+        ) / (
+            u_mean**2 / (recovered**2 * namespace["y0"] ** 2) - 1.0
+        )
+        self.assertEqual(result["z_расч"], expected)
 
 
 class FormulaTests(_ParityAssertions):
