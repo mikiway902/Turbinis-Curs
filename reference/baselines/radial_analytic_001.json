@@ -1,0 +1,14 @@
+{
+  "id": "RADIAL-ANALYTIC-001",
+  "model_status": "accepted_analytical_case",
+  "input": {
+    "r_m": [0.03, 0.04, 0.05],
+    "p0_pa": 250000.0,
+    "r0_m": 0.03,
+    "temperature_k": 900.0,
+    "gas_constant_j_kg_k": 287.0,
+    "omega_rad_s": 1800.0
+  },
+  "expected_pressure_pa": [250000.0, 251099.973785449, 252521.340270728],
+  "absolute_tolerance_pa": 0.001
+}

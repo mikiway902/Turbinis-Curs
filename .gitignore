@@ -1,3 +1,15 @@
 .ipynb_checkpoints/
 __pycache__/
 .virtual_documents/
+.pytest_cache/
+*.egg-info/
+.venv/
+Optimizer/results/*_DONE
+Optimizer/results/*.zip
+Optimizer/results/scan2d.csv
+Optimizer/results/scan3d_A.csv
+Optimizer/results/scan3d_B.csv
+Optimizer/results/scan4d.csv
+Optimizer/results/scan5d.csv
+Optimizer/results/extended_*_full10.csv
+Optimizer/results/extended_*_qn1.csv

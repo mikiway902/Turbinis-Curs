@@ -1,0 +1,14 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "turbine-lead",
+  "instructions": [
+    "docs/engineering/*.md"
+  ],
+  "permissions": [
+    { "action": "external_directory", "resource": "*", "effect": "ask" },
+    { "action": "shell", "resource": "git push *", "effect": "allow" }
+  ],
+  "experimental": {
+    "subagent_depth": 1
+  }
+}

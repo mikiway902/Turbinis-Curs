@@ -1,0 +1,23 @@
+{
+  "id": "BOOK-APPROX-001",
+  "model_status": "book_approx_diagnostic",
+  "accepted_physical_solution": false,
+  "input": {
+    "n_rpm": 90000.0,
+    "hub_diameter_m": 0.062,
+    "w1": 0.70,
+    "w2": 0.8125,
+    "kappa2": 1.04375,
+    "kappa3": 1.25,
+    "alpha1_stage1_deg": 13.10
+  },
+  "expected": {
+    "alpha2_deg": [71.1, 81.2, 89.6],
+    "root_reaction_book_approx": [0.0609, 0.0673],
+    "stress_mpa": 294.6,
+    "q_n": 0.9910,
+    "eta_t_total": 0.9043,
+    "rotor_height_mm": [12.78, 14.70, 20.61]
+  },
+  "warning": "Regression-only diagnostic; rotor exits and stator fields are not physically closed."
+}
