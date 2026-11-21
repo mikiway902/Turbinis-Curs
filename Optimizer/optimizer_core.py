@@ -7,6 +7,8 @@
 Новая физическая модель не создаётся: код ячеек блокнота исполняется так же,
 как в mathcad/make_mathcad.py и podbor_parametrov.py. Здесь добавлены только:
   * пересчёт цикла для произвольных pi*к, T*г, N;
+  * расчёт ступени чистым ядром turbine_engine.stage (ячейка блокнота остаётся
+    независимым эталоном и по-прежнему исполняется);
   * независимая валидация решения;
   * численная оптимизация (DE / случайный поиск / локальная доводка);
   * исправление неустойчивого внешнего итератора по расходу G (см. _patch_cell16).
@@ -15,6 +17,7 @@
 """
 from __future__ import annotations
 
+import copy
 import json
 import math
 import sys
@@ -36,6 +39,48 @@ warnings.filterwarnings("ignore", category=RuntimeWarning)
 # единый источник книжных ограничений и оцифрованных рис. 18/19
 sys.path.insert(0, str(ПАПКА_CALC))
 import constraints as cs  # noqa: E402
+
+# Новое расчётное ядро цикла (без исполнения блокнота и без глобального состояния)
+if str(ПРОЕКТ) not in sys.path:
+    sys.path.insert(0, str(ПРОЕКТ))
+from turbine_engine.cycle import (  # noqa: E402
+    ALPHA_BASIS_LEGACY,
+    CYCLE_GAS_PROPERTY_BASES,
+    CYCLE_GAS_PROPERTY_BASIS_LEGACY,
+    CYCLE_GAS_PROPERTY_BASIS_TEXTBOOK,
+    CycleConfig,
+    CycleState,
+    calculate_cycle_point,
+)
+from turbine_engine.baseline import (  # noqa: E402
+    calculate_baseline_turbine,
+)
+from turbine_engine.expansion import (  # noqa: E402
+    calculate_turbine_expansion,
+)
+from turbine_engine.geometry import (  # noqa: E402
+    MeridionalGeometryConfig,
+    calculate_meridional_geometry,
+)
+from turbine_engine.gas import (  # noqa: E402
+    GAS_PROPERTY_BASES,
+    GAS_PROPERTY_BASIS_LEGACY,
+    calc_gas_cp_k,
+    calc_h0_for_pressure,
+    calc_stage_cp_k,
+    calc_textbook_gas_cp_k,
+)
+from turbine_engine.performance import (  # noqa: E402
+    calculate_turbine_performance,
+)
+from turbine_engine.reaction import calculate_root_reaction  # noqa: E402
+from turbine_engine.stage import (  # noqa: E402
+    StageCalculationError,
+    StageConfig,
+    StageResult,
+    StageState,
+    calculate_stage,
+)
 
 # ---------------------------------------------------------------------------
 # Исправление внешнего итератора расхода G в ячейке 16.
@@ -128,43 +173,64 @@ def load_model(calc_dir: Path | str | None = None, quiet: bool = True) -> Model:
 # ---------------------------------------------------------------------------
 # Цикл для произвольных pi*к, T*г, N
 # ---------------------------------------------------------------------------
-def cycle_point(m: Model, pi: float = 11.0, T_g: float = 1250.0, N: float = 110000.0) -> dict[str, Any]:
-    """Пересчитывает цикл существующими функциями Turbinis-Cycle."""
-    C = m.cycle
-    keys = ("T_г_полн", "охлаждение_лопаток", "g_охл", "g_воз")
-    old = {k: C[k] for k in keys if k in C}
-    try:
-        C["T_г_полн"] = float(T_g)
-        охл = bool(T_g > 1250.0)
-        C["охлаждение_лопаток"] = охл
-        C["g_охл"] = 0.05 if охл else 0.015
-        C["g_воз"] = 0.6 * C["g_охл"]
-        d = C["calc_tvd"](float(pi))
-    finally:
-        for k, v in old.items():
-            C[k] = v
+def cycle_point(m: Model, pi: float = 11.0, T_g: float = 1250.0,
+                N: float = 110000.0, *,
+                gas_property_basis: str = CYCLE_GAS_PROPERTY_BASIS_LEGACY) -> dict[str, Any]:
+    """Пересчитывает цикл через stateless-ядро ``turbine_engine.cycle``.
 
-    M = float(C["M_т"])
-    k_t = C["calc_k_kerosene"](d["T_т"], d["α"])
-    T_st = d["T_т"] / (1.0 + (k_t - 1.0) / 2.0 * M**2)
-    c_t = M * math.sqrt(k_t * C["R"] * T_st)
-    G = N / d["N_в_уд"]
-    g_ohl = 0.05 if T_g > 1250.0 else 0.015
-    g_voz = 0.6 * g_ohl
-    C_e = d["g_m"] * (1.0 - C["g_ут"] - g_ohl) * 3600.0 / (d["N_в_уд"] / 1e3)
-    eta_e = 3600.0 / (C_e * float(C["Q_н_р"]))
-    p_g = float(C["σ_г"]) * float(C["σ_вх"]) * float(C["p_а_полн"]) * pi
-    p_t = float(C["π_с"]) * float(C["p_а"])
-    return {
-        "pi": float(pi), "T_g": float(T_g), "N": float(N),
-        "G": float(G), "p_g": p_g, "p_t": p_t, "c_t": float(c_t),
-        "g_t": float(d["g_т"]), "alpha_g": float(d["α"]),
-        "L_k": float(d["L_к"]), "L_t": float(d["L_т"]), "T_t": float(d["T_т"]),
-        "eta_t_cycle": float(d["η_т"]), "N_ud": float(d["N_в_уд"]),
-        "C_e": float(C_e), "eta_e": float(eta_e),
-        "g_ohl": g_ohl, "g_voz": g_voz, "охлаждение": bool(T_g > 1250.0),
+    Публичная сигнатура и состав результата сохранены (добавлено явное поле
+    ``N_reducer_out_ud``/``N_ред_уд`` для выхода редуктора). Константы берутся
+    из фактически загруженного namespace ``m.cycle``, поэтому изменения
+    блокнота не игнорируются. Состояние ``m.cycle`` не изменяется.
+
+    ``gas_property_basis`` — явная keyword-only опция выбора метода цикла.
+    Значение по умолчанию ``legacy_mean_cp`` сохраняет исходную
+    notebook-аппроксимацию среднего/производного ``cp`` и старую форму
+    результата. ``textbook_true_cp`` — диагностический вариант с опубликованным
+    прямым fit; для него дополнительно возвращаются фактические
+    ``cycle_gas_property_basis``, ``cycle_alpha_basis`` и
+    ``cycle_method_diagnostics``. Неизвестное значение отклоняется ядром
+    :func:`calculate_cycle_point` до физического расчёта.
+
+    ``N`` — мощность на входе редуктора (до потерь редуктора). ``N_ud`` —
+    удельная мощность на той же плоскости; ``N_reducer_out_ud = N_ud*η_р`` —
+    отдельная downstream-величина на выходе редуктора. ``C_e``/``eta_e``
+    отнесены к входной (pre-reducer) плоскости.
+    """
+    config = CycleConfig.from_namespace(m.cycle)
+    state = CycleState(pi=float(pi), T_g=float(T_g), N=float(N))
+    if gas_property_basis == CYCLE_GAS_PROPERTY_BASIS_LEGACY:
+        # Keep the historical call shape for existing adapter/mock seams; the
+        # keyword is only passed when the caller explicitly opts in.
+        r = calculate_cycle_point(state, config)
+    else:
+        r = calculate_cycle_point(
+            state, config, gas_property_basis=gas_property_basis
+        )
+    d = {
+        "g_m": r.g_m, "g_т": r.g_t, "α": r.alpha,
+        "L_к": r.L_k, "L_т": r.L_t, "π_т": r.pi_t,
+        "π_с_полн": r.pi_c_full, "η_т": r.eta_t, "T_т": r.T_t,
+        "H_с_полн": r.H_c_full, "c_с": r.c_c,
+        "N_в_уд": r.N_ud, "N_ред_уд": r.N_reducer_out_ud,
+        "R_уд": r.R_ud, "N_e_уд": r.N_e_ud,
+    }
+    result = {
+        "pi": r.pi, "T_g": r.T_g, "N": r.N,
+        "G": r.G, "p_g": r.p_g, "p_t": r.p_t, "c_t": r.c_t,
+        "g_t": r.g_t, "alpha_g": r.alpha,
+        "L_k": r.L_k, "L_t": r.L_t, "T_t": r.T_t,
+        "eta_t_cycle": r.eta_t, "N_ud": r.N_ud,
+        "N_reducer_out_ud": r.N_reducer_out_ud,
+        "C_e": r.C_e, "eta_e": r.eta_e,
+        "g_ohl": r.g_cooling, "g_voz": r.g_return, "охлаждение": r.cooled,
         "d": d,
     }
+    if r.gas_property_basis != CYCLE_GAS_PROPERTY_BASIS_LEGACY:
+        result["cycle_gas_property_basis"] = r.gas_property_basis
+        result["cycle_alpha_basis"] = r.alpha_basis
+        result["cycle_method_diagnostics"] = r.method_diagnostics
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -254,7 +320,354 @@ def декодировать(x, cfg):
 # ---------------------------------------------------------------------------
 # Один расчёт
 # ---------------------------------------------------------------------------
+GAS_PROPERTY_BASIS_ATTR = "gas_property_basis_build"
+CYCLE_GAS_PROPERTY_BASIS_ATTR = "cycle_gas_property_basis_build"
+CYCLE_ALPHA_BASIS_ATTR = "cycle_alpha_basis_build"
+CYCLE_METHOD_DIAGNOSTICS_ATTR = "cycle_method_diagnostics_build"
+
+
+def _validate_gas_property_basis(value: str) -> str:
+    """Return a valid property-basis selector or raise ``ValueError``."""
+
+    if value not in GAS_PROPERTY_BASES:
+        raise ValueError(
+            f"unknown gas_property_basis {value!r}; "
+            f"expected one of {GAS_PROPERTY_BASES!r}"
+        )
+    return value
+
+
+def _validate_cycle_gas_property_basis(value: str) -> str:
+    """Return a valid cycle property-basis selector or raise ``ValueError``."""
+
+    if not isinstance(value, str) or value not in CYCLE_GAS_PROPERTY_BASES:
+        raise ValueError(
+            f"unknown cycle gas_property_basis {value!r}; "
+            f"expected one of {CYCLE_GAS_PROPERTY_BASES!r}"
+        )
+    return value
+
+
+def _mark_gas_property_basis(function, value: str):
+    """Attach the construction-time basis to an adapter closure.
+
+    The attribute is a plain immutable string on the function object, so
+    callers can recover the wiring actually installed in a namespace without
+    trusting the mutable namespace marker.
+    """
+
+    setattr(function, GAS_PROPERTY_BASIS_ATTR, _validate_gas_property_basis(value))
+    return function
+
+
+def _mark_cycle_metadata(function, result: dict[str, Any]):
+    """Attach the construction-time cycle method metadata to a closure.
+
+    ``result`` is the dictionary returned by :func:`cycle_point` for the basis
+    actually used to build the surrounding namespace.  The legacy path carries
+    no method dictionary, which is recorded explicitly as ``None``.  These
+    attributes are construction-bound and independent of the stage-property
+    attribute so the two selectors cannot silently couple.
+    """
+
+    basis = _validate_cycle_gas_property_basis(
+        result.get("cycle_gas_property_basis", CYCLE_GAS_PROPERTY_BASIS_LEGACY)
+    )
+    setattr(function, CYCLE_GAS_PROPERTY_BASIS_ATTR, basis)
+    setattr(
+        function,
+        CYCLE_ALPHA_BASIS_ATTR,
+        result.get("cycle_alpha_basis", ALPHA_BASIS_LEGACY),
+    )
+    setattr(
+        function,
+        CYCLE_METHOD_DIAGNOSTICS_ATTR,
+        copy.deepcopy(result.get("cycle_method_diagnostics")),
+    )
+    return function
+
+
+def _ступень_ядро(ns: dict[str, Any], *,
+                  gas_property_basis: str = GAS_PROPERTY_BASIS_LEGACY):
+    """Адаптер ``turbine_engine.stage`` под сигнатуру и результат ячейки блокнота.
+
+    Сигнатура, ключи результата и источники ``cp``/``k`` сохранены: значения
+    берутся из чистого ``turbine_engine.gas.calc_stage_cp_k`` с фактическими
+    ``α_г``, ``R`` и ``φ`` текущего пространства имён, а константы
+    (``R``, ``φ``, ``ψ``, ``δ_отн``, ``δ_мин``, ``ε_парц``, ``k_n``) — из него же
+    через :meth:`StageConfig.from_namespace`. Поэтому проектные допущения
+    (φ/ψ, зазоры, парциальность) читаются после настройки параметров, а не из
+    значений по умолчанию ядра.
+
+    ``gas_property_basis`` фиксируется при создании адаптера. По умолчанию
+    используется ``legacy_derivative`` — исходная notebook-аппроксимация
+    производной ``calc_cp`` (средняя/конечно-разностная), а не опубликованный
+    прямой fit. ``textbook_true_cp`` — только явный диагностический вариант
+    с опубликованным прямым fit; он не меняет формулу ступени.
+    """
+    _validate_gas_property_basis(gas_property_basis)
+    нет_решения = ns["НетРешения"]
+
+    def ступень(T0, p0, H0, ρ, D_c, D_л, n, G_c, G_л, α1_град, κ):
+        cp, k = calc_stage_cp_k(
+            T0, H0, alpha=ns["α_г"], R=ns["R"], phi=ns["φ"],
+            gas_property_basis=gas_property_basis,
+        )
+        state = StageState(
+            T0=T0, p0=p0, H0=H0, rho=ρ, D_c=D_c, D_l=D_л, n=n,
+            G_c=G_c, G_l=G_л, alpha1_deg=α1_град, kappa=κ, cp=cp, k=k,
+        )
+        try:
+            return calculate_stage(
+                state, StageConfig.from_namespace(ns)
+            ).as_legacy_dict()
+        except StageCalculationError as exc:
+            raise нет_решения(str(exc)) from exc
+
+    return _mark_gas_property_basis(ступень, gas_property_basis)
+
+
+def _газ_ядро(ns: dict[str, Any], *,
+              gas_property_basis: str = GAS_PROPERTY_BASIS_LEGACY):
+    """Adapter ``газ(T)`` backed by the selected pure gas core.
+
+    Like the notebook function, the closure resolves ``α_г`` and ``R`` from the
+    active namespace at call time, so later helpers that look up ``газ`` in
+    their globals keep the same composition semantics as the source.
+
+    ``legacy_derivative`` (default) keeps :func:`calc_gas_cp_k` and therefore the
+    original notebook derivative/mean-``cp`` approximation.  It is not the
+    published direct ``cp(T)`` fit.  ``textbook_true_cp`` evaluates
+    :func:`calc_textbook_gas_cp_k` directly at the requested temperature; no
+    mean-``cp`` or cycle substitution is introduced here.
+    """
+
+    _validate_gas_property_basis(gas_property_basis)
+
+    def газ(T):
+        if gas_property_basis == GAS_PROPERTY_BASIS_LEGACY:
+            return calc_gas_cp_k(T, ns["α_г"], ns["R"])
+        return calc_textbook_gas_cp_k(T, ns["α_г"], ns["R"])
+
+    return _mark_gas_property_basis(газ, gas_property_basis)
+
+
+def _h0_по_p_ядро(ns: dict[str, Any], *,
+                  gas_property_basis: str = GAS_PROPERTY_BASIS_LEGACY):
+    """Adapter ``H0_по_p(T0, p0, p2)`` backed by the pure gas core.
+
+    Resolves ``α_г``, ``R`` and ``φ`` from the active namespace at call time,
+    so cell 16 (and any later cell that looks up ``H0_по_p``) sees the same
+    design values as the notebook reference path.  ``gas_property_basis`` is
+    fixed when the adapter is built and is passed to the pressure closure.
+    """
+    _validate_gas_property_basis(gas_property_basis)
+
+    def H0_по_p(T0, p0, p2):
+        return calc_h0_for_pressure(
+            T0, p0, p2, ns["α_г"], ns["R"], ns["φ"],
+            gas_property_basis=gas_property_basis,
+        )
+
+    return _mark_gas_property_basis(H0_по_p, gas_property_basis)
+
+
+def _ρ_корня_ядро(ns: dict[str, Any]):
+    """Adapter ``ρ_корня(r, закон)`` backed by :mod:`turbine_engine.reaction`.
+
+    The notebook function receives the legacy stage dictionary.  It is mapped
+    back to the typed :class:`turbine_engine.stage.StageResult` without changing
+    any field, and the live namespace values ``R`` and ``φ`` are resolved at
+    call time, exactly as the source function does.
+    """
+
+    def ρ_корня(r, закон):
+        return calculate_root_reaction(
+            StageResult.from_legacy_dict(r), закон, ns["R"], ns["φ"]
+        )
+
+    return ρ_корня
+
+
+def _турбина_показатели_ядро(ns: dict[str, Any]):
+    """Adapter for the numerical aggregation at the start of notebook cell 20.
+
+    The pure function :func:`turbine_engine.performance.calculate_turbine_performance`
+    receives the live namespace values as explicit arguments, so no hidden
+    namespace lookup or notebook execution remains on the wired path.  The
+    legacy identifier keys are assigned by the caller from ``legacy_values()``.
+    """
+
+    return calculate_turbine_performance(
+        ns["ступени"],
+        G_c1=ns["G_c1"],
+        H_t=ns["H_т"],
+        T_g_total=ns["T_г_полн"],
+        p_g_total=ns["p_г_полн"],
+        eta_m=ns["η_м"],
+        G_v=ns["G_в"],
+        L_k=ns["L_к"],
+        eta_r=ns["η_р"],
+        gas=ns["газ"],
+    )
+
+
+def _расширение_ядро(ns: dict[str, Any]):
+    """Adapter for the numerical block at the start of notebook cell 9.
+
+    The pure function :func:`turbine_engine.expansion.calculate_turbine_expansion`
+    receives the live namespace values as explicit arguments.  The legacy
+    identifier keys are assigned by the caller from ``legacy_values()``; the
+    pandas presentation table from the source cell is not built on this path.
+    """
+
+    return calculate_turbine_expansion(
+        ns["p_г_полн"],
+        ns["p_т"],
+        ns["T_г_полн"],
+        ns["η_л_ожид"],
+        gas=ns["газ"],
+        R=ns["R"],
+        G_l_ost=ns["G_л_ост"],
+        c_ta=ns["c_та"],
+        sigma_l=ns["σ_л"],
+        k_n=ns["k_n"],
+        q_n=ns["q_n"],
+        y0=ns["y0"],
+        l_t_D_t=ns["l_т_D_т"],
+    )
+
+
+def _геометрия_ядро(ns: dict[str, Any]):
+    """Adapter for the numerical meridional geometry block of notebook cell 22.
+
+    :func:`turbine_engine.geometry.calculate_meridional_geometry` receives the
+    live stage mappings and every cell constant explicitly.  The legacy
+    identifier keys (``контур``, ``геом``, ``γ_max``, ``dx_т``, ``γ_турб``) are
+    assigned by the caller from ``legacy_values()``; the pandas display objects
+    from the source cell are not built on the wired path.
+    """
+
+    config = MeridionalGeometryConfig(
+        b_a_min=ns["b_a_мин"],
+        lb_c=ns["lb_c"],
+        lb_l=ns["lb_л"],
+        lb_min_c=ns["lb_мин_c"],
+        lb_min_l=ns["lb_мин_л"],
+        delta_a_ratio=ns["δа_к_ba"],
+        gamma_target=ns["γ_цель"],
+        gamma_limit=ns["γ_макс"],
+    )
+    return calculate_meridional_geometry(ns["ступени"], config)
+
+
+def _baseline_ядро(ns: dict[str, Any]):
+    """Adapter for the numerical part of notebook cell 16.
+
+    :func:`turbine_engine.baseline.calculate_baseline_turbine` receives the live
+    namespace as its dependency mapping and resolves ``ступень_авто``,
+    ``H0_по_p`` and every scalar/array from it at call time.  ``numpy.clip`` and
+    ``numpy.mean`` are injected so the arithmetic is source-identical; the
+    module returns the final legacy identifiers via ``legacy_values()`` and does
+    not mutate ``ns``.  The pandas presentation tables and ``display`` calls
+    from the source cell are not part of the wired path.
+    """
+
+    return calculate_baseline_turbine(ns, clip=np.clip, mean=np.mean)
+
+
+def _optional_graph_diagnostic(rho: float) -> tuple[float | None, str, str]:
+    """Необязательная диагностика рис. 18 без экстраполяции.
+
+    ``ValueError`` штатно означает, что ρ вне оцифрованного диапазона. Это
+    отсутствие диагностики, а не физический отказ кандидата: возвращается
+    ``(None, "NOT_CHECKED", reason)``. Прочие исключения не перехватываются
+    здесь — их должен показать вызывающий код, сохранив уже посчитанную физику.
+    """
+
+    try:
+        return float(cs.uc0_opt_from_rho(rho)), "ok", ""
+    except ValueError as exc:
+        return None, "NOT_CHECKED", str(exc)
+
+
+def _engineering_provenance(ns: dict[str, Any], res: dict[str, Any],
+                            p: dict[str, Any]) -> dict[str, Any]:
+    """Явная provenance инженерных подборов ячейки 14.
+
+    ``ступень_авто``/``ступень_с_подбором_ρ`` — часть исходной модели, а не
+    математические guard'ы: они поднимают ρ до ``ρ_корня_мин`` (с ограничением
+    ``ρ_макс``) и для закона ``Γ`` повышают α1 до ``α1_мин_корня``. Эти
+    действия сохраняются; в результат добавляются запрошенные и фактические
+    параметры, чтобы ``res["p"]["a1"]`` не принимали за фактический α1.
+    """
+
+    stages = res["stages"]
+    requested_a1 = [float(v) for v in p["a1"]]
+    actual_a1 = [float(s["α1"]) for s in stages]
+    actual_rho = [float(s["ρ"]) for s in stages]
+    laws = [str(v) for v in ns.get("закон_ст", [])]
+    repair_available = (
+        "ступень_авто" in ns and "ступень_с_подбором_ρ" in ns
+    )
+    gamma_repair = repair_available and "Γ" in laws
+    return {
+        "model_variant": "legacy_cell16+cell14_engineering_repair",
+        "a1_requested": requested_a1,
+        "a1_actual": actual_a1,
+        "rho_requested": None,
+        "rho_actual": actual_rho,
+        "engineering_adjustment": {
+            "active": repair_available,
+            "legacy_repair": repair_available,
+            "mechanisms": [
+                {
+                    "name": "rho_root_floor",
+                    "function": "ступень_с_подбором_ρ",
+                    "status": "enabled" if repair_available else "unavailable",
+                    "rho_root_min": ns.get("ρ_корня_мин"),
+                    "rho_max": ns.get("ρ_макс"),
+                },
+                {
+                    "name": "gamma_inlet_angle_floor",
+                    "function": "ступень_авто",
+                    "status": (
+                        "enabled" if gamma_repair
+                        else "not_applicable" if repair_available
+                        else "unavailable"
+                    ),
+                    "alpha1_root_min": ns.get("α1_мин_корня"),
+                },
+            ],
+            "requested": {"a1": requested_a1, "rho": None},
+            "actual": {"a1": actual_a1, "rho": actual_rho},
+            "changed": {
+                "a1": [
+                    not math.isclose(a, r, rel_tol=0.0, abs_tol=1e-9)
+                    for r, a in zip(requested_a1, actual_a1)
+                ],
+            },
+            "note": (
+                "ρ не является входом: он подбирается внутри ступени; "
+                "ступень_авто может изменить α1 для закона Γ. "
+                "Это инженерная доводка модели, не подтверждение RAW."
+            ),
+        },
+    }
+
+
 def evaluate(x, m: Model, cfg, full: bool = False) -> dict[str, Any]:
+    """Один расчёт кандидата.
+
+    Ступень считается чистым ядром ``turbine_engine.stage``; ячейка блокнота
+    по-прежнему исполняется, а её ``ступень`` нужна только как независимый
+    эталон (см. ``_evaluate(..., stage_core=False)``).
+    """
+    return _evaluate(x, m, cfg, full, stage_core=True)
+
+
+def _evaluate(x, m: Model, cfg, full: bool = False, *,
+              stage_core: bool = True) -> dict[str, Any]:
     p = декодировать(x, cfg)
     if cfg.get("D_override"):
         p["D"] = [float(v) for v in cfg["D_override"]]
@@ -293,10 +706,133 @@ def evaluate(x, m: Model, cfg, full: bool = False) -> dict[str, Any]:
         "π_веса": p["w"], "κ_ст": p["k"], "σ_л": p["sigma"],
         "φ": p["phi"], "ψ": p["psi"],
     })
+    gas_cell = next(
+        (
+            i
+            for i in m.core_idx
+            if "def газ(" in m.code[i] and "def H0_по_p(" in m.code[i]
+        ),
+        None,
+    )
+    if stage_core and gas_cell is None:
+        raise RuntimeError("notebook gas cell (cell 7) not found in core_idx")
+    stage_cell = next((i for i in m.core_idx if "def ступень(" in m.code[i]), None)
+    if stage_core and stage_cell is None:
+        raise RuntimeError("notebook stage cell not found in core_idx")
+    reaction_cell = next(
+        (i for i in m.core_idx if "def ρ_корня(" in m.code[i]), None
+    )
+    if stage_core and reaction_cell is None:
+        raise RuntimeError("notebook root-reaction cell (cell 14) not found in core_idx")
+    performance_cell = next(
+        (
+            i
+            for i in m.core_idx
+            if 'g_i = [s["G_c"] / G_c1' in m.code[i] and "N_вал = (" in m.code[i]
+        ),
+        None,
+    )
+    if stage_core and performance_cell is None:
+        raise RuntimeError(
+            "notebook turbine performance cell (cell 20) not found in core_idx"
+        )
+    expansion_cell = next(
+        (
+            i
+            for i in m.core_idx
+            if "π_т = p_г_полн / p_т" in m.code[i] and "табл_п1_31" in m.code[i]
+        ),
+        None,
+    )
+    if stage_core and expansion_cell is None:
+        raise RuntimeError(
+            "notebook turbine expansion cell (cell 9) not found in core_idx"
+        )
+    if stage_core and expansion_cell < gas_cell:
+        raise RuntimeError(
+            "notebook turbine expansion cell (cell 9) precedes the gas cell (cell 7)"
+        )
+    baseline_cell = next(
+        (
+            i
+            for i in m.core_idx
+            if "def турбина(" in m.code[i]
+            and "def распределить_π(" in m.code[i]
+            and "def решить(" in m.code[i]
+            and "def N_на_валу(" in m.code[i]
+            and "def _N_of(G)" in m.code[i]
+        ),
+        None,
+    )
+    if stage_core and baseline_cell is None:
+        raise RuntimeError(
+            "notebook baseline turbine cell (cell 16) not found in core_idx"
+        )
+    geometry_cell = next(
+        (
+            i
+            for i in m.full_idx
+            if "def γ_участка(" in m.code[i]
+            and "def ширина(" in m.code[i]
+            and "def r_нв(" in m.code[i]
+            and "контур, геом, x = [], [], 0.0" in m.code[i]
+        ),
+        None,
+    )
+    if full and stage_core and geometry_cell is None:
+        raise RuntimeError(
+            "notebook meridional geometry cell (cell 22) not found in full_idx"
+        )
     for i in m.core_idx:
+        # Числовая часть ячейки 16 (многоступенчатая турбина: подбор A_т, n_т,
+        # D_т, π ступеней и расхода G) заменена чистым модулем. Презентационные
+        # таблицы pandas/display не строятся; при stage_core=False ячейка
+        # исполняется целиком как независимый эталон. Ячейки 7/9/12/14 к этому
+        # моменту уже исполнены, поэтому baseline читает из ns подменённые
+        # газовые/ступенчатые/реактивные адаптеры.
+        if stage_core and i == baseline_cell:
+            ns.update(_baseline_ядро(ns).legacy_values())
+            continue
+        # Числовая агрегация ячейки 20 заменена чистым модулем. Таблицы
+        # DataFrame/display из этой ячейки оптимизатору не нужны; при
+        # stage_core=False ячейка исполняется целиком как независимый эталон.
+        if stage_core and i == performance_cell:
+            ns.update(_турбина_показатели_ядро(ns).legacy_values())
+            continue
+        # Числовая часть ячейки 9 (расширение и предварительное профилирование)
+        # заменена чистым модулем. Презентационная таблица pandas не строится;
+        # при stage_core=False ячейка исполняется целиком как независимый
+        # эталон. Газовая ячейка 7 уже исполнена выше и её ``газ`` заменён
+        # чистым адаптером.
+        if stage_core and i == expansion_cell:
+            ns.update(_расширение_ядро(ns).legacy_values())
+            continue
         exec(compile(m.code[i], f"ядро {i}", "exec"), ns)
+        # после газовой ячейки подменяем газовые функции чистыми ядрами; ячейки
+        # 9/16/20 уже будут читать их из пространства имён. При
+        # stage_core=False замены нет, поэтому эталонное поведение блокнота
+        # сохраняется полностью.
+        if stage_core and i == gas_cell:
+            ns["газ"] = _газ_ядро(ns)
+            ns["H0_по_p"] = _h0_по_p_ядро(ns)
+        # после определения ступени заменяем её на чистое ядро; ячейка 12 при
+        # этом уже исполнена, поэтому её определение остаётся доступным как
+        # независимый эталон при stage_core=False.
+        if stage_core and i == stage_cell:
+            ns["ступень"] = _ступень_ядро(ns)
+        # после ячейки 14 заменяем корневую реактивность чистым ядром; сама
+        # ячейка уже исполнена и остаётся эталоном при stage_core=False.
+        if stage_core and i == reaction_cell:
+            ns["ρ_корня"] = _ρ_корня_ядро(ns)
     if full:
         for i in m.full_idx:
+            # Числовая часть ячейки 22 (меридиональный контур и ширины венцов)
+            # заменена чистым модулем. Презентационные DataFrame/display не
+            # строятся; при stage_core=False ячейка исполняется целиком как
+            # независимый эталон, а при full=False не исполняется вовсе.
+            if stage_core and i == geometry_cell:
+                ns.update(_геометрия_ядро(ns).legacy_values())
+                continue
             exec(compile(m.code[i], f"полный {i}", "exec"), ns)
 
     st = ns["ступени"]
@@ -320,6 +856,7 @@ def evaluate(x, m: Model, cfg, full: bool = False) -> dict[str, Any]:
         res["phi_ref"] = [float(v) for v in ns["решётки_df"].loc["φ уточнённый"]]
         res["psi_ref"] = [float(v) for v in ns["решётки_df"].loc["ψ уточнённый"]]
         res["geom"] = ns.get("геом", [])
+    res.update(_engineering_provenance(ns, res, p))
     return res
 
 
@@ -357,13 +894,23 @@ def evaluate_sizing(m: Model, cfg: dict, full: bool = True, max_iter: int = 6, t
         r, lam = r2, new_lam
         if spread <= tol * max(hub):
             break
+    u_c0_opt: list[float | None] = []
+    u_c0_opt_status: list[str] = []
+    u_c0_opt_reason: list[str] = []
+    for s in r["stages"]:
+        value, status, reason = _optional_graph_diagnostic(s["ρ"])
+        u_c0_opt.append(value)
+        u_c0_opt_status.append(status)
+        u_c0_opt_reason.append(reason)
     r["sizing"] = dict(
         lam=lam, target=target,
         D_hub=[s["D_л"] - s["l_л"] for s in r["stages"]],
         D_mean=[s["D_л"] for s in r["stages"]],
         l_l=[s["l_л"] for s in r["stages"]],
         u_c0=[0.5 * (s["u1"] + s["u2"]) / math.sqrt(2.0 * s["H0"]) for s in r["stages"]],
-        u_c0_opt=[cs.uc0_opt_from_rho(s["ρ"]) for s in r["stages"]],
+        u_c0_opt=u_c0_opt,
+        u_c0_opt_status=u_c0_opt_status,
+        u_c0_opt_reason=u_c0_opt_reason,
     )
     return r
 
@@ -471,7 +1018,7 @@ def validate(res: dict, cfg, full: bool = False) -> list[dict[str, Any]]:
 
     # мощность, давление, невязки
     Nz = res["p"]["N"]
-    add("N на валу = требуемая", f"{res['N_val']/1e3:.2f} кВт", f"{Nz/1e3:.1f} кВт",
+    add("N на входе редуктора = требуемая", f"{res['N_val']/1e3:.2f} кВт", f"{Nz/1e3:.1f} кВт",
         abs(res["N_val"] / Nz - 1.0) < 1e-3, "hard", abs(res["N_val"] / Nz - 1.0))
     p_t = res["cycle"]["p_t"]
     add("p2z = p_т", f"{st[-1]['p2']/1e3:.2f} кПа", f"{p_t/1e3:.2f} кПа",
@@ -571,11 +1118,27 @@ def penalty(checks, res, cfg) -> float:
 
 
 def is_feasible(checks):
-    return all(c["ok"] for c in checks if c["kind"] in ("hard", "project"))
+    applicable = [c for c in checks if c["kind"] in ("hard", "project")]
+    return bool(applicable) and all(c["ok"] for c in applicable)
 
 
 def is_strict(checks):
-    return all(c["ok"] for c in checks if c["kind"] in ("hard", "project", "target"))
+    applicable = [c for c in checks if c["kind"] in ("hard", "project", "target")]
+    return bool(applicable) and all(c["ok"] for c in applicable)
+
+
+def _attempt_error(exc: BaseException) -> dict[str, Any]:
+    """Структурированная запись исключения попытки (не RAW-результат)."""
+
+    out: dict[str, Any] = {
+        "type": type(exc).__name__,
+        "message": str(exc),
+    }
+    for name in ("status", "stage", "reason", "last_valid_state"):
+        value = getattr(exc, name, None)
+        if value is not None:
+            out[name] = value
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -585,9 +1148,16 @@ def is_strict(checks):
 class Archive:
     rows: list[dict] = field(default_factory=list)
 
-    def add(self, res, checks, score):
-        self.rows.append(dict(res=res, checks=checks, score=score,
-                              feasible=is_feasible(checks), strict=is_strict(checks)))
+    def add(self, res, checks, score, **extra):
+        feasible = extra.pop("feasible", None)
+        strict = extra.pop("strict", None)
+        row = dict(
+            res=res, checks=checks, score=score,
+            feasible=is_feasible(checks) if feasible is None else bool(feasible),
+            strict=is_strict(checks) if strict is None else bool(strict),
+        )
+        row.update(extra)
+        self.rows.append(row)
 
     def best(self, strict=False):
         rows = [r for r in self.rows if (r["strict"] if strict else r["feasible"])]
@@ -597,15 +1167,41 @@ class Archive:
 
 
 def _score_x(x, m, cfg, full, archive):
+    """Оценить кандидата и сохранить попытку даже при исключении.
+
+    Возвращаемое значение остаётся совместимым (``1e9`` при отказе), но запись
+    в архиве больше не теряет вход, конфигурацию и уже посчитанные ``res`` /
+    ``checks``. ``phase`` показывает, где именно возник отказ. Это диагностика
+    попытки, а не заявка на валидированный RAW-результат.
+    """
+
+    x_attempt = np.array(x, dtype=float, copy=True)
+    cfg_attempt = copy.deepcopy(cfg)
+    res = None
+    checks: list[dict[str, Any]] = []
+    phase = "calculate"
     try:
         res = evaluate(x, m, cfg, full=full)
+        phase = "validate"
         checks = validate(res, cfg, full=full)
+        phase = "penalty"
         sc = penalty(checks, res, cfg)
-        archive.add(res, checks, sc)
-        return sc
-    except Exception:
-        archive.rows.append(dict(res=None, checks=[], score=1e9, feasible=False, strict=False))
+    except Exception as exc:  # noqa: BLE001
+        # KeyboardInterrupt/SystemExit наследуют BaseException и сюда не
+        # попадают: прерывание не превращается в запись архива.
+        archive.add(
+            res, checks, 1e9,
+            x=x_attempt, cfg=cfg_attempt, full=bool(full), phase=phase,
+            error=_attempt_error(exc), attempt=True,
+            feasible=False, strict=False,
+        )
         return 1e9
+    archive.add(
+        res, checks, sc,
+        x=x_attempt, cfg=cfg_attempt, full=bool(full), phase="score",
+        attempt=True,
+    )
+    return sc
 
 
 def run_random(m, cfg, n=40, seed=1, full=False):

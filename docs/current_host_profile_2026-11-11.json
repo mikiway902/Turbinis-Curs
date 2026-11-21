@@ -1,0 +1,630 @@
+{
+  "anchor": {
+    "evaluation_kind": "single fixed candidate repeated; no optimizer search or sweep",
+    "q_n_limit": 0.995,
+    "scenario": "B87_relaxed",
+    "source": "scripts/test_optimizer_regression.py",
+    "x": [
+      84000.0,
+      0.065,
+      0.75,
+      0.8,
+      11.0,
+      11.0,
+      19.0,
+      1.38,
+      1.12,
+      1.15
+    ]
+  },
+  "checks": {
+    "both_paths_status_ok": true,
+    "cprofile_available": true,
+    "model_loaded": true,
+    "parity_pass": true,
+    "timings_available": true
+  },
+  "generated_utc": "2026-11-11T10:35:11.251027+00:00",
+  "git": {
+    "available": true,
+    "commit": "0952832bf1bc3fe1dde6086ec73252acc5b5c4df",
+    "dirty": true
+  },
+  "host": {
+    "cpu_count": 12,
+    "cpu_processor": "AMD64 Family 26 Model 68 Stepping 0, AuthenticAMD",
+    "machine": "AMD64",
+    "numpy_version": "2.5.4",
+    "platform": "Windows-10-10.0.19045-SP0",
+    "python_compiler": "MSC v.1943 64 bit (AMD64)",
+    "python_implementation": "CPython",
+    "python_version": "3.12.10",
+    "scipy_version": "1.18.1",
+    "windows_processor_identifier": "AMD64 Family 26 Model 68 Stepping 0, AuthenticAMD"
+  },
+  "limitations": [
+    "Bounded current-host wall-clock profile; not a benchmark suite.",
+    "One fixed anchor candidate is repeated. No optimizer search, differential evolution, parameter sweep or production design-space run is performed.",
+    "The anchor is deliberately engineering-infeasible. This is software-drift and timing evidence, not physical validation or an acceptable design.",
+    "Timings depend on host load, CPU frequency/power state and Python interpreter state; the median of a small bounded repeat count is not a portable throughput guarantee.",
+    "cProfile instrumentation overhead is separate from the measured wall times and is used only to identify hot functions.",
+    "The reference path keeps notebook const-hub functions but uses the same fast=True lru_cache/interpolant setup as the existing parity test; it is not a completely unoptimized notebook execution.",
+    "No JAX/GPU path, memory profiling, allocation accounting or IO profiling is included.",
+    "Parity is a software-drift check on selected scalar outputs, not an independent physics validation.",
+    "The CPU name is the safe platform/Windows processor string only; no credentials, machine name or hardware sensor data are collected."
+  ],
+  "method": {
+    "compute_backend": "CPython + NumPy CPU; SciPy imported but no optimizer solver invoked; no JAX/GPU",
+    "cprofile_sort": "cumulative_seconds descending",
+    "cprofile_top_n": 20,
+    "parity_metric": "|extracted-reference| <= atol + rtol*max(|extracted|,|reference|) with rtol=1e-12, atol=1e-12",
+    "paths": {
+      "extracted_const_hub": "optimize_extended.build_ns(orchestration_core=True, fast=True) + optimize_extended.eval_candidate",
+      "reference_notebook": "optimize_extended.build_ns(orchestration_core=False, fast=True) + optimize_extended.eval_candidate"
+    },
+    "repeats": 3,
+    "statistic": "median of measured warm repeats",
+    "timer": "time.perf_counter",
+    "warmups": 1
+  },
+  "non_finite_replacements": [],
+  "parity": {
+    "atol": 1e-12,
+    "failed_fields": [],
+    "fields": {
+      "N": {
+        "abs_diff": 0.0,
+        "extracted": 109999.99999993911,
+        "passed": true,
+        "reason": "",
+        "reference": 109999.99999993911,
+        "rel_diff": 0.0
+      },
+      "cont": {
+        "abs_diff": 0.0,
+        "extracted": 1.3464812392189478e-16,
+        "passed": true,
+        "reason": "",
+        "reference": 1.3464812392189478e-16,
+        "rel_diff": 0.0
+      },
+      "energy": {
+        "abs_diff": 0.0,
+        "extracted": 4.3861075777582665e-16,
+        "passed": true,
+        "reason": "",
+        "reference": 4.3861075777582665e-16,
+        "rel_diff": 0.0
+      },
+      "eta_t": {
+        "abs_diff": 0.0,
+        "extracted": 0.9127057739015165,
+        "passed": true,
+        "reason": "",
+        "reference": 0.9127057739015165,
+        "rel_diff": 0.0
+      },
+      "lc1": {
+        "abs_diff": 0.0,
+        "extracted": 0.011295345088530603,
+        "passed": true,
+        "reason": "",
+        "reference": 0.011295345088530603,
+        "rel_diff": 0.0
+      },
+      "p2z": {
+        "abs_diff": 0.0,
+        "extracted": 2.4424906541753444e-14,
+        "passed": true,
+        "reason": "",
+        "reference": 2.4424906541753444e-14,
+        "rel_diff": 0.0
+      },
+      "sigma": {
+        "abs_diff": 0.0,
+        "extracted": 309.07753384083213,
+        "passed": true,
+        "reason": "",
+        "reference": 309.07753384083213,
+        "rel_diff": 0.0
+      }
+    },
+    "max_abs_diff": 0.0,
+    "max_rel_diff": 0.0,
+    "rtol": 1e-12,
+    "status": "pass"
+  },
+  "physically_validated": false,
+  "profile_complete": true,
+  "profile_schema_version": "engine-path-profile-v1",
+  "stages": {
+    "model_load": {
+      "error": "",
+      "seconds": 0.5984329000057187,
+      "status": "ok"
+    },
+    "paths": {
+      "extracted_const_hub": {
+        "backend": "CPython + NumPy CPU (no JAX/GPU); extracted const-hub orchestration adapters",
+        "build_ns_fast": true,
+        "cprofile": {
+          "error": "",
+          "profiled_calls": 3,
+          "status": "ok",
+          "top": [
+            {
+              "calls": 3,
+              "cumulative_seconds": 1.4023223,
+              "file": "scripts/profile_engine_paths.py",
+              "function": "evaluate",
+              "line": 436,
+              "primitive_calls": 3,
+              "self_seconds": 2.5e-05
+            },
+            {
+              "calls": 3,
+              "cumulative_seconds": 1.4022973,
+              "file": "Optimizer/optimize_extended.py",
+              "function": "eval_candidate",
+              "line": 240,
+              "primitive_calls": 3,
+              "self_seconds": 0.0005584
+            },
+            {
+              "calls": 33,
+              "cumulative_seconds": 1.4014173,
+              "file": "turbine_engine/orchestration.py",
+              "function": "\u0440\u0430\u0441\u043f\u0440\u0435\u0434\u0435\u043b\u0438\u0442\u044c_\u03c0_const_hub",
+              "line": 361,
+              "primitive_calls": 33,
+              "self_seconds": 0.0007226
+            },
+            {
+              "calls": 198,
+              "cumulative_seconds": 1.3988872,
+              "file": "turbine_engine/orchestration.py",
+              "function": "f",
+              "line": 378,
+              "primitive_calls": 198,
+              "self_seconds": 0.00018800000000000002
+            },
+            {
+              "calls": 198,
+              "cumulative_seconds": 1.3986652000000002,
+              "file": "turbine_engine/orchestration.py",
+              "function": "\u0442\u0443\u0440\u0431\u0438\u043d\u0430_const_hub",
+              "line": 299,
+              "primitive_calls": 198,
+              "self_seconds": 0.0026054000000000003
+            },
+            {
+              "calls": 594,
+              "cumulative_seconds": 1.3953318000000001,
+              "file": "turbine_engine/orchestration.py",
+              "function": "\u0441\u0442\u0443\u043f\u0435\u043d\u044c_const_hub",
+              "line": 217,
+              "primitive_calls": 594,
+              "self_seconds": 0.033146600000000005
+            },
+            {
+              "calls": 15708,
+              "cumulative_seconds": 1.3455713,
+              "file": "Optimizer/optimizer_core.py",
+              "function": "\u0441\u0442\u0443\u043f\u0435\u043d\u044c",
+              "line": 311,
+              "primitive_calls": 15708,
+              "self_seconds": 0.0262519
+            },
+            {
+              "calls": 15708,
+              "cumulative_seconds": 0.6020553000000001,
+              "file": "turbine_engine/gas.py",
+              "function": "calc_stage_cp_k",
+              "line": 117,
+              "primitive_calls": 15708,
+              "self_seconds": 0.059055800000000006
+            },
+            {
+              "calls": 127446,
+              "cumulative_seconds": 0.5101967000000001,
+              "file": "turbine_engine/gas.py",
+              "function": "calc_gas_cp_k",
+              "line": 75,
+              "primitive_calls": 127446,
+              "self_seconds": 0.1471802
+            },
+            {
+              "calls": 15708,
+              "cumulative_seconds": 0.2982977,
+              "file": "turbine_engine/stage.py",
+              "function": "calculate_stage",
+              "line": 393,
+              "primitive_calls": 15708,
+              "self_seconds": 0.14582810000000002
+            },
+            {
+              "calls": 382338,
+              "cumulative_seconds": 0.2213071,
+              "file": "turbine_engine/cycle.py",
+              "function": "calc_cp_kerosene",
+              "line": 262,
+              "primitive_calls": 382338,
+              "self_seconds": 0.1170307
+            },
+            {
+              "calls": 15708,
+              "cumulative_seconds": 0.1515773,
+              "file": "turbine_engine/stage.py",
+              "function": "as_legacy_dict",
+              "line": 290,
+              "primitive_calls": 15708,
+              "self_seconds": 0.0939522
+            },
+            {
+              "calls": 15708,
+              "cumulative_seconds": 0.13509580000000002,
+              "file": "turbine_engine/stage.py",
+              "function": "__post_init__",
+              "line": 183,
+              "primitive_calls": 15708,
+              "self_seconds": 0.056295700000000004
+            },
+            {
+              "calls": 15708,
+              "cumulative_seconds": 0.1107887,
+              "file": "turbine_engine/stage.py",
+              "function": "from_namespace",
+              "line": 129,
+              "primitive_calls": 15708,
+              "self_seconds": 0.027124000000000002
+            },
+            {
+              "calls": 286308,
+              "cumulative_seconds": 0.10823590000000001,
+              "file": "turbine_engine/gas.py",
+              "function": "_as_positive_float",
+              "line": 58,
+              "primitive_calls": 286308,
+              "self_seconds": 0.045164600000000006
+            },
+            {
+              "calls": 15708,
+              "cumulative_seconds": 0.0819971,
+              "file": "<string>",
+              "function": "__init__",
+              "line": 2,
+              "primitive_calls": 15708,
+              "self_seconds": 0.0141851
+            },
+            {
+              "calls": 382338,
+              "cumulative_seconds": 0.08012230000000001,
+              "file": "turbine_engine/cycle.py",
+              "function": "_as_float",
+              "line": 239,
+              "primitive_calls": 382338,
+              "self_seconds": 0.058697000000000006
+            },
+            {
+              "calls": 1269411,
+              "cumulative_seconds": 0.07309120000000001,
+              "file": "~",
+              "function": "<built-in method math.isfinite>",
+              "line": 0,
+              "primitive_calls": 1269411,
+              "self_seconds": 0.07309120000000001
+            },
+            {
+              "calls": 1272612,
+              "cumulative_seconds": 0.0705988,
+              "file": "~",
+              "function": "<built-in method builtins.getattr>",
+              "line": 0,
+              "primitive_calls": 1272612,
+              "self_seconds": 0.0705988
+            },
+            {
+              "calls": 188496,
+              "cumulative_seconds": 0.0702811,
+              "file": "turbine_engine/stage.py",
+              "function": "_as_positive_float",
+              "line": 55,
+              "primitive_calls": 188496,
+              "self_seconds": 0.0303783
+            }
+          ],
+          "wall_seconds": 1.4023818999994546
+        },
+        "measured": {
+          "error": "",
+          "max_seconds": 0.13933530000213068,
+          "median_seconds": 0.13287889999628533,
+          "min_seconds": 0.13169070000003558,
+          "repeats": 3,
+          "seconds": [
+            0.13287889999628533,
+            0.13169070000003558,
+            0.13933530000213068
+          ],
+          "status": "ok"
+        },
+        "orchestration_core": true,
+        "parity_ready": true,
+        "path": "extracted_const_hub",
+        "result_error": "",
+        "result_status": "ok",
+        "setup": {
+          "error": "",
+          "seconds": 0.649858899996616,
+          "status": "ok"
+        },
+        "signature": {
+          "N": 109999.99999993911,
+          "cont": 1.3464812392189478e-16,
+          "energy": 4.3861075777582665e-16,
+          "eta_t": 0.9127057739015165,
+          "lc1": 0.011295345088530603,
+          "p2z": 2.4424906541753444e-14,
+          "sigma": 309.07753384083213
+        },
+        "warmup": {
+          "error": "",
+          "result_statuses": [
+            "ok"
+          ],
+          "seconds": [
+            0.12886170001002029
+          ],
+          "status": "ok",
+          "total_seconds": 0.12886170001002029,
+          "warmups": 1
+        }
+      },
+      "reference_notebook": {
+        "backend": "CPython + NumPy CPU (no JAX/GPU); notebook reference const-hub functions",
+        "build_ns_fast": true,
+        "cprofile": {
+          "error": "",
+          "profiled_calls": 3,
+          "status": "ok",
+          "top": [
+            {
+              "calls": 3,
+              "cumulative_seconds": 0.19614310000000001,
+              "file": "scripts/profile_engine_paths.py",
+              "function": "evaluate",
+              "line": 436,
+              "primitive_calls": 3,
+              "self_seconds": 2.19e-05
+            },
+            {
+              "calls": 3,
+              "cumulative_seconds": 0.19612120000000002,
+              "file": "Optimizer/optimize_extended.py",
+              "function": "eval_candidate",
+              "line": 240,
+              "primitive_calls": 3,
+              "self_seconds": 0.0004538
+            },
+            {
+              "calls": 33,
+              "cumulative_seconds": 0.1953572,
+              "file": "const_hub",
+              "function": "\u0440\u0430\u0441\u043f\u0440\u0435\u0434\u0435\u043b\u0438\u0442\u044c_\u03c0_const_hub",
+              "line": 39,
+              "primitive_calls": 33,
+              "self_seconds": 0.00044360000000000005
+            },
+            {
+              "calls": 198,
+              "cumulative_seconds": 0.19384400000000002,
+              "file": "const_hub",
+              "function": "f",
+              "line": 40,
+              "primitive_calls": 198,
+              "self_seconds": 9e-05
+            },
+            {
+              "calls": 198,
+              "cumulative_seconds": 0.193754,
+              "file": "const_hub",
+              "function": "\u0442\u0443\u0440\u0431\u0438\u043d\u0430_const_hub",
+              "line": 21,
+              "primitive_calls": 198,
+              "self_seconds": 0.0011109000000000002
+            },
+            {
+              "calls": 594,
+              "cumulative_seconds": 0.1925483,
+              "file": "const_hub",
+              "function": "\u0441\u0442\u0443\u043f\u0435\u043d\u044c_const_hub",
+              "line": 3,
+              "primitive_calls": 594,
+              "self_seconds": 0.022925800000000003
+            },
+            {
+              "calls": 15708,
+              "cumulative_seconds": 0.1594586,
+              "file": "\u044f\u0434\u0440\u043e 12",
+              "function": "\u0441\u0442\u0443\u043f\u0435\u043d\u044c",
+              "line": 1,
+              "primitive_calls": 15708,
+              "self_seconds": 0.1272751
+            },
+            {
+              "calls": 108795,
+              "cumulative_seconds": 0.0102731,
+              "file": "~",
+              "function": "<built-in method math.sqrt>",
+              "line": 0,
+              "primitive_calls": 108795,
+              "self_seconds": 0.0102731
+            },
+            {
+              "calls": 15114,
+              "cumulative_seconds": 0.005749000000000001,
+              "file": "Optimizer/optimize_extended.py",
+              "function": "_\u043b\u0438\u043d\u0435\u0439\u043d\u043e",
+              "line": 76,
+              "primitive_calls": 15114,
+              "self_seconds": 0.0043109
+            },
+            {
+              "calls": 47130,
+              "cumulative_seconds": 0.0045817,
+              "file": "~",
+              "function": "<built-in method math.cos>",
+              "line": 0,
+              "primitive_calls": 47130,
+              "self_seconds": 0.0045817
+            },
+            {
+              "calls": 31416,
+              "cumulative_seconds": 0.0044299000000000005,
+              "file": "~",
+              "function": "<built-in method math.atan2>",
+              "line": 0,
+              "primitive_calls": 31416,
+              "self_seconds": 0.0044299000000000005
+            },
+            {
+              "calls": 62832,
+              "cumulative_seconds": 0.0043963000000000006,
+              "file": "~",
+              "function": "<built-in method math.degrees>",
+              "line": 0,
+              "primitive_calls": 62832,
+              "self_seconds": 0.0043963000000000006
+            },
+            {
+              "calls": 31416,
+              "cumulative_seconds": 0.0035154,
+              "file": "~",
+              "function": "<built-in method math.asin>",
+              "line": 0,
+              "primitive_calls": 31416,
+              "self_seconds": 0.0035154
+            },
+            {
+              "calls": 15708,
+              "cumulative_seconds": 0.0022828,
+              "file": "~",
+              "function": "<built-in method math.hypot>",
+              "line": 0,
+              "primitive_calls": 15708,
+              "self_seconds": 0.0022828
+            },
+            {
+              "calls": 15789,
+              "cumulative_seconds": 0.0022218000000000003,
+              "file": "~",
+              "function": "<built-in method builtins.max>",
+              "line": 0,
+              "primitive_calls": 15762,
+              "self_seconds": 0.0022069
+            },
+            {
+              "calls": 15708,
+              "cumulative_seconds": 0.0017871,
+              "file": "~",
+              "function": "<built-in method math.sin>",
+              "line": 0,
+              "primitive_calls": 15708,
+              "self_seconds": 0.0017871
+            },
+            {
+              "calls": 23373,
+              "cumulative_seconds": 0.0017241000000000001,
+              "file": "~",
+              "function": "<built-in method builtins.abs>",
+              "line": 0,
+              "primitive_calls": 23373,
+              "self_seconds": 0.0017241000000000001
+            },
+            {
+              "calls": 15714,
+              "cumulative_seconds": 0.0014645,
+              "file": "~",
+              "function": "<built-in method math.radians>",
+              "line": 0,
+              "primitive_calls": 15714,
+              "self_seconds": 0.0014645
+            },
+            {
+              "calls": 15114,
+              "cumulative_seconds": 0.0014381,
+              "file": "~",
+              "function": "<built-in method _bisect.bisect_right>",
+              "line": 0,
+              "primitive_calls": 15114,
+              "self_seconds": 0.0014381
+            },
+            {
+              "calls": 132,
+              "cumulative_seconds": 0.0010273,
+              "file": ".venv/Lib/site-packages/numpy/_core/fromnumeric.py",
+              "function": "clip",
+              "line": 2245,
+              "primitive_calls": 132,
+              "self_seconds": 0.00012080000000000001
+            }
+          ],
+          "wall_seconds": 0.19621850000112318
+        },
+        "measured": {
+          "error": "",
+          "max_seconds": 0.0731926000007661,
+          "median_seconds": 0.0649591999972472,
+          "min_seconds": 0.06492199999047443,
+          "repeats": 3,
+          "seconds": [
+            0.0731926000007661,
+            0.06492199999047443,
+            0.0649591999972472
+          ],
+          "status": "ok"
+        },
+        "orchestration_core": false,
+        "parity_ready": true,
+        "path": "reference_notebook",
+        "result_error": "",
+        "result_status": "ok",
+        "setup": {
+          "error": "",
+          "seconds": 0.2213021000061417,
+          "status": "ok"
+        },
+        "signature": {
+          "N": 109999.99999993911,
+          "cont": 1.3464812392189478e-16,
+          "energy": 4.3861075777582665e-16,
+          "eta_t": 0.9127057739015165,
+          "lc1": 0.011295345088530603,
+          "p2z": 2.4424906541753444e-14,
+          "sigma": 309.07753384083213
+        },
+        "warmup": {
+          "error": "",
+          "result_statuses": [
+            "ok"
+          ],
+          "seconds": [
+            0.06761969999934081
+          ],
+          "status": "ok",
+          "total_seconds": 0.06761969999934081,
+          "warmups": 1
+        }
+      }
+    }
+  },
+  "status": "ok",
+  "timing_comparison": {
+    "extracted_median_seconds": 0.13287889999628533,
+    "interpretation": "wall-clock ratio only; not a speedup or acceleration claim",
+    "metric": "median wall seconds over measured warm repeats",
+    "reference_median_seconds": 0.0649591999972472,
+    "reference_over_extracted_ratio": 0.48886015762519974
+  },
+  "validation_status": "NOT_PHYSICALLY_VALIDATED"
+}

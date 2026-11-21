@@ -1,0 +1,1434 @@
+{
+  "audit_digest": "740e4e1d37eefdcfae416dd476885c5465a3098dafb29f70be04681a8f3887d2",
+  "audit_version": "sized-stage-root-audit-v2",
+  "best_feasible_recommendation": null,
+  "claim_scope": "NUMERICAL_CLOSURE_AND_POSTHOC_ENGINEERING_MARGINS_ONLY",
+  "dataset": "C:\\Users\\mikiway-PC\\Desktop\\Git-Repos\\Turbinis-Curs\\reference\\architecture_stage_smoke\\2026-11-11-flow-sized",
+  "not_checked": [
+    "compressor maps and stage split",
+    "cooling and bleed semantics",
+    "material allowables, metal temperature, thermal stress",
+    "creep/resource life",
+    "3D/radial equilibrium and secondary flows",
+    "universal Mach/velocity acceptance limits (no supplied bounds)",
+    "production design-space coverage"
+  ],
+  "overall_engineering_feasibility": null,
+  "overall_engineering_feasibility_status": "NOT_CHECKED",
+  "physical_validation": "NOT_PERFORMED",
+  "roots": [
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "case": "A_MAIN_3",
+      "compressor_power": {
+        "expected_actual_minus_saved_W": 0.0,
+        "expected_actual_power_W": 252465.786050181,
+        "flow_actual_compressor_power_target_W": 252465.786050181,
+        "saved_actual_sized_compressor_power_W": 252465.786050181,
+        "saved_boundary_target_compressor_power_W": null,
+        "saved_branch_compressor_power_W": 252465.786050181,
+        "saved_reference_0d_compressor_power_W": 241446.75674201894,
+        "saved_source_air_mass_flow_kg_s": 0.6759124981728157,
+        "source_air_mass_flow_kg_s": 0.6759124981728157,
+        "source_and_actual_distinct": true,
+        "source_compressor_power_W": 241446.75674201894,
+        "source_minus_actual_W": -11019.029308162048,
+        "specific_work_J_kg": 357215.9967373268,
+        "status": "PASS",
+        "trial_air_mass_flow_kg_s": 0.7067594630590628
+      },
+      "constraints": {
+        "alpha2_source_page_38": {
+          "min_signed_margin": 0.8590387686614775,
+          "not_checked_stages": [],
+          "status": "PASS"
+        },
+        "prompt_pi_1_8_2_4": {
+          "min_signed_margin": 0.038314194493949794,
+          "not_checked_stages": [],
+          "status": "PASS"
+        },
+        "rho_065_upper": {
+          "min_signed_margin": 0.22682053732783825,
+          "not_checked_stages": [],
+          "status": "PASS"
+        },
+        "sigma_project_290MPa": {
+          "min_signed_margin": -31.253355737746972,
+          "not_checked_stages": [],
+          "status": "FAIL"
+        }
+      },
+      "groups": {
+        "main": {
+          "closure": {
+            "actual_metric": 150000.08099245155,
+            "controls": {
+              "D_hub_m": 0.065,
+              "max_iter": 40,
+              "n_rpm": 84000.0,
+              "relative_tol": 1e-06,
+              "static_pressure_bracket_Pa": [
+                120000.0,
+                150000.0
+              ]
+            },
+            "last_stage_matches_actual": true,
+            "last_stage_total_pressure_Pa": 150000.08099245155,
+            "pressure_closed": true,
+            "relative_residual": 5.399496769920612e-07,
+            "saved_relative_residual": 5.399496769920612e-07,
+            "saved_residual_consistent": true,
+            "signed_residual": 0.08099245154880919,
+            "status": "PASS",
+            "target_kind": "total_outlet_pressure",
+            "target_value": 150000.0
+          },
+          "compressor_power": {
+            "expected_actual_minus_saved_W": 0.0,
+            "expected_actual_power_W": 252465.786050181,
+            "flow_actual_compressor_power_target_W": 252465.786050181,
+            "saved_actual_sized_compressor_power_W": 252465.786050181,
+            "saved_boundary_target_compressor_power_W": null,
+            "saved_branch_compressor_power_W": 252465.786050181,
+            "saved_reference_0d_compressor_power_W": 241446.75674201894,
+            "saved_source_air_mass_flow_kg_s": 0.6759124981728157,
+            "source_air_mass_flow_kg_s": 0.6759124981728157,
+            "source_and_actual_distinct": true,
+            "source_compressor_power_W": 241446.75674201894,
+            "source_minus_actual_W": -11019.029308162048,
+            "specific_work_J_kg": 357215.9967373268,
+            "status": "PASS",
+            "trial_air_mass_flow_kg_s": 0.7067594630590628
+          },
+          "power": {
+            "compressor_power_W": 252465.786050181,
+            "engine_power_closed": true,
+            "group": "main",
+            "mechanical_efficiency": 0.99,
+            "net_mechanical_power_W": 110000.06809101204,
+            "relative_power_residual": 6.190092003883117e-07,
+            "signed_power_residual_W": 0.06809101204271428,
+            "stage_gas_power_W": 366127.1253951445,
+            "stage_mechanical_power_W": 362465.85414119303,
+            "status": "PASS",
+            "target_W": 110000.0
+          },
+          "stages": [
+            {
+              "checks": {
+                "alpha2_source_page_38": {
+                  "basis": "BOOK_REQUIREMENT_PAGE_38",
+                  "bounds": [
+                    70.0,
+                    90.0
+                  ],
+                  "lower_margin": 19.140961231338522,
+                  "margin": 0.8590387686614775,
+                  "note": "actual alpha2, no flip/abs; intermediate stage",
+                  "status": "PASS",
+                  "upper_margin": 0.8590387686614775,
+                  "value": 89.14096123133852
+                },
+                "mach_velocity_universal": {
+                  "M_c1": 0.8070024738061925,
+                  "M_w2": 0.5706443529467793,
+                  "c2": 139.0244056298224,
+                  "reason": "no universal Mach/velocity acceptance bounds supplied",
+                  "status": "NOT_CHECKED",
+                  "u1": 345.7002391868646,
+                  "u2": 336.9216233827532
+                },
+                "prompt_pi_1_8_2_4": {
+                  "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK",
+                  "bounds": [
+                    1.8,
+                    2.4
+                  ],
+                  "lower_margin": 0.038314194493949794,
+                  "margin": 0.038314194493949794,
+                  "note": "post-hoc project profile, not book fundamental",
+                  "status": "PASS",
+                  "upper_margin": 0.5616858055060501,
+                  "value": 1.8383141944939498
+                },
+                "reaction_table_lD_domain": {
+                  "clip_status": "WITHIN_TABLE",
+                  "lower_margin": 0.040368298248183276,
+                  "note": "outside domain is clipped by existing np.interp; clipped_not_rejected, not physical impossibility",
+                  "source_bounds": [
+                    0.1111111111111111,
+                    0.3333333333333333
+                  ],
+                  "source_domain_margin": 0.040368298248183276,
+                  "status": "WITHIN_SOURCE_DOMAIN",
+                  "upper_margin": 0.18185392397403893,
+                  "value": 0.15147940935929438
+                },
+                "rho_065_upper": {
+                  "basis": "USER_ACCEPTED_ACCEPTANCE_CEILING_UPPER_ONLY",
+                  "limit": 0.65,
+                  "margin": 0.37733704501184506,
+                  "note": "upper-only user acceptance ceiling; no 0.2 lower bound",
+                  "status": "PASS",
+                  "value": 0.27266295498815496
+                },
+                "sigma_project_290MPa": {
+                  "basis": "DESIGN_ASSUMPTIONS_PROJECT_ASSUMPTION_NOT_BOOK_MATERIAL_VALIDATION",
+                  "limit": 290.0,
+                  "margin": 156.00983775135543,
+                  "note": "project assumption; material/creep/thermal validation absent",
+                  "status": "PASS",
+                  "value": 133.99016224864457
+                }
+              },
+              "group": "main",
+              "last_stage": false,
+              "metrics": {
+                "D_l_m": 0.07660391685130155,
+                "M_c1": 0.8070024738061925,
+                "M_w2": 0.5706443529467793,
+                "alpha2_deg": 89.14096123133852,
+                "c2_m_s": 139.0244056298224,
+                "lD": 0.15147940935929438,
+                "l_l_m": 0.011603916079243657,
+                "pi": 1.8383141944939498,
+                "rho": 0.27266295498815496,
+                "sigma_MPa": 133.99016224864457,
+                "u1_m_s": 345.7002391868646,
+                "u2_m_s": 336.9216233827532
+              },
+              "stage": 1
+            },
+            {
+              "checks": {
+                "alpha2_source_page_38": {
+                  "basis": "BOOK_REQUIREMENT_PAGE_38",
+                  "bounds": [
+                    70.0,
+                    90.0
+                  ],
+                  "lower_margin": 16.507358360648652,
+                  "margin": 3.4926416393513477,
+                  "note": "actual alpha2, no flip/abs; intermediate stage",
+                  "status": "PASS",
+                  "upper_margin": 3.4926416393513477,
+                  "value": 86.50735836064865
+                },
+                "mach_velocity_universal": {
+                  "M_c1": 0.7361381066989804,
+                  "M_w2": 0.6744494584099847,
+                  "c2": 98.03672135924045,
+                  "reason": "no universal Mach/velocity acceptance bounds supplied",
+                  "status": "NOT_CHECKED",
+                  "u1": 380.2126956679576,
+                  "u2": 388.639362648706
+                },
+                "prompt_pi_1_8_2_4": {
+                  "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK",
+                  "bounds": [
+                    1.8,
+                    2.4
+                  ],
+                  "lower_margin": 0.11446628839323636,
+                  "margin": 0.11446628839323636,
+                  "note": "post-hoc project profile, not book fundamental",
+                  "status": "PASS",
+                  "upper_margin": 0.4855337116067635,
+                  "value": 1.9144662883932364
+                },
+                "reaction_table_lD_domain": {
+                  "clip_status": "WITHIN_TABLE",
+                  "lower_margin": 0.1532842305998467,
+                  "note": "outside domain is clipped by existing np.interp; clipped_not_rejected, not physical impossibility",
+                  "source_bounds": [
+                    0.1111111111111111,
+                    0.3333333333333333
+                  ],
+                  "source_domain_margin": 0.06893799162237552,
+                  "status": "WITHIN_SOURCE_DOMAIN",
+                  "upper_margin": 0.06893799162237552,
+                  "value": 0.2643953417109578
+                },
+                "rho_065_upper": {
+                  "basis": "USER_ACCEPTED_ACCEPTANCE_CEILING_UPPER_ONLY",
+                  "limit": 0.65,
+                  "margin": 0.2327256082192108,
+                  "note": "upper-only user acceptance ceiling; no 0.2 lower bound",
+                  "status": "PASS",
+                  "value": 0.41727439178078923
+                },
+                "sigma_project_290MPa": {
+                  "basis": "DESIGN_ASSUMPTIONS_PROJECT_ASSUMPTION_NOT_BOOK_MATERIAL_VALIDATION",
+                  "limit": 290.0,
+                  "margin": -21.17801810879689,
+                  "note": "project assumption; material/creep/thermal validation absent",
+                  "status": "FAIL",
+                  "value": 311.1780181087969
+                }
+              },
+              "group": "main",
+              "last_stage": false,
+              "metrics": {
+                "D_l_m": 0.0883626794937504,
+                "M_c1": 0.7361381066989804,
+                "M_w2": 0.6744494584099847,
+                "alpha2_deg": 86.50735836064865,
+                "c2_m_s": 98.03672135924045,
+                "lD": 0.2643953417109578,
+                "l_l_m": 0.023362680839245982,
+                "pi": 1.9144662883932364,
+                "rho": 0.41727439178078923,
+                "sigma_MPa": 311.1780181087969,
+                "u1_m_s": 380.2126956679576,
+                "u2_m_s": 388.639362648706
+              },
+              "stage": 2
+            },
+            {
+              "checks": {
+                "alpha2_source_page_38": {
+                  "basis": "BOOK_REQUIREMENT_PAGE_38",
+                  "bounds": [
+                    80.0,
+                    90.0
+                  ],
+                  "lower_margin": 6.139317371554313,
+                  "margin": 3.860682628445687,
+                  "note": "actual alpha2, no flip/abs; last stage",
+                  "status": "PASS",
+                  "upper_margin": 3.860682628445687,
+                  "value": 86.13931737155431
+                },
+                "mach_velocity_universal": {
+                  "M_c1": 0.815010115232428,
+                  "M_w2": 0.7942369965502094,
+                  "c2": 176.49126634834633,
+                  "reason": "no universal Mach/velocity acceptance bounds supplied",
+                  "status": "NOT_CHECKED",
+                  "u1": 380.0088349812283,
+                  "u2": 391.2567089469718
+                },
+                "prompt_pi_1_8_2_4": {
+                  "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK",
+                  "bounds": [
+                    1.8,
+                    2.4
+                  ],
+                  "lower_margin": 0.4519547930275729,
+                  "margin": 0.14804520697242696,
+                  "note": "post-hoc project profile, not book fundamental",
+                  "status": "PASS",
+                  "upper_margin": 0.14804520697242696,
+                  "value": 2.251954793027573
+                },
+                "reaction_table_lD_domain": {
+                  "clip_status": "WITHIN_TABLE",
+                  "lower_margin": 0.15820512548390875,
+                  "note": "outside domain is clipped by existing np.interp; clipped_not_rejected, not physical impossibility",
+                  "source_bounds": [
+                    0.1111111111111111,
+                    0.3333333333333333
+                  ],
+                  "source_domain_margin": 0.06401709673831346,
+                  "status": "WITHIN_SOURCE_DOMAIN",
+                  "upper_margin": 0.06401709673831346,
+                  "value": 0.26931623659501985
+                },
+                "rho_065_upper": {
+                  "basis": "USER_ACCEPTED_ACCEPTANCE_CEILING_UPPER_ONLY",
+                  "limit": 0.65,
+                  "margin": 0.22682053732783825,
+                  "note": "upper-only user acceptance ceiling; no 0.2 lower bound",
+                  "status": "PASS",
+                  "value": 0.4231794626721618
+                },
+                "sigma_project_290MPa": {
+                  "basis": "DESIGN_ASSUMPTIONS_PROJECT_ASSUMPTION_NOT_BOOK_MATERIAL_VALIDATION",
+                  "limit": 290.0,
+                  "margin": -31.253355737746972,
+                  "note": "project assumption; material/creep/thermal validation absent",
+                  "status": "FAIL",
+                  "value": 321.253355737747
+                }
+              },
+              "group": "main",
+              "last_stage": true,
+              "metrics": {
+                "D_l_m": 0.08895777035253936,
+                "M_c1": 0.815010115232428,
+                "M_w2": 0.7942369965502094,
+                "alpha2_deg": 86.13931737155431,
+                "c2_m_s": 176.49126634834633,
+                "lD": 0.26931623659501985,
+                "l_l_m": 0.023957771927229934,
+                "pi": 2.251954793027573,
+                "rho": 0.4231794626721618,
+                "sigma_MPa": 321.253355737747,
+                "u1_m_s": 380.0088349812283,
+                "u2_m_s": 391.2567089469718
+              },
+              "stage": 3
+            }
+          ]
+        }
+      },
+      "has_not_checked": false,
+      "known_constraint_violation": true,
+      "mass_fuel_air": {
+        "air_mass_flow_kg_s": 0.7067594630590628,
+        "fuel_air_ratio": 0.017419796631489612,
+        "fuel_mass_flow_kg_s": 0.01231160611386967,
+        "gas_mass_flow_kg_s": 0.7190710691729325,
+        "mass_balance_residual_kg_s": 0.0,
+        "pre_reducer": true,
+        "stage_flow_consistent": true,
+        "status": "PASS"
+      },
+      "numerical_closed": true,
+      "numerical_power_closed": true,
+      "overall_engineering_feasibility": null,
+      "overall_engineering_feasibility_reason": "maps_cooling_material_thermal_resource_3d_not_validated",
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "positive_residuals": {
+        "main_closure_signed_residual": 0.08099245154880919,
+        "main_power_signed_residual_W": 0.06809101204271428
+      },
+      "record_status": "SUCCESS",
+      "reported_residuals": {
+        "compressor_expected_actual_minus_saved_W": 0.0,
+        "compressor_source_minus_actual_W": -11019.029308162048,
+        "continuity_flow_delta_kg_s": null,
+        "continuity_pressure_delta_Pa": null,
+        "continuity_temperature_delta_K": null,
+        "main_closure_signed_residual": 0.08099245154880919,
+        "main_power_signed_residual_W": 0.06809101204271428,
+        "mass_balance_residual_kg_s": 0.0
+      },
+      "root_candidate_id": "cand_9a4d79e36c2fa1d1fa07fda124247aad66e4e3c6b3c67844e5c1c00841c20bb6",
+      "source_domain": {
+        "min_source_domain_margin": 0.040368298248183276,
+        "outside_stages": [],
+        "status": "WITHIN_SOURCE_DOMAIN"
+      },
+      "source_domain_violation": false,
+      "state_continuity": {
+        "reason": "AB has one turbine group",
+        "status": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_SINGLE_CC",
+      "case": "B_MAIN_3",
+      "compressor_power": {
+        "expected_actual_minus_saved_W": 0.0,
+        "expected_actual_power_W": 249968.94912347596,
+        "flow_actual_compressor_power_target_W": 249968.94912347596,
+        "saved_actual_sized_compressor_power_W": 249968.94912347596,
+        "saved_boundary_target_compressor_power_W": null,
+        "saved_branch_compressor_power_W": 249968.94912347596,
+        "saved_reference_0d_compressor_power_W": 239031.86271114135,
+        "saved_source_air_mass_flow_kg_s": 0.6712549747462719,
+        "source_air_mass_flow_kg_s": 0.6712549747462719,
+        "source_and_actual_distinct": true,
+        "source_compressor_power_W": 239031.86271114135,
+        "source_minus_actual_W": -10937.086412334611,
+        "specific_work_J_kg": 356096.97015875846,
+        "status": "PASS",
+        "trial_air_mass_flow_kg_s": 0.701968761520303
+      },
+      "constraints": {
+        "alpha2_source_page_38": {
+          "min_signed_margin": 0.8283085066060778,
+          "not_checked_stages": [],
+          "status": "PASS"
+        },
+        "prompt_pi_1_8_2_4": {
+          "min_signed_margin": 0.03846146045582688,
+          "not_checked_stages": [],
+          "status": "PASS"
+        },
+        "rho_065_upper": {
+          "min_signed_margin": 0.22829801548175477,
+          "not_checked_stages": [],
+          "status": "PASS"
+        },
+        "sigma_project_290MPa": {
+          "min_signed_margin": -28.70970007969032,
+          "not_checked_stages": [],
+          "status": "FAIL"
+        }
+      },
+      "groups": {
+        "main": {
+          "closure": {
+            "actual_metric": 150000.08017954382,
+            "controls": {
+              "D_hub_m": 0.065,
+              "max_iter": 40,
+              "n_rpm": 84000.0,
+              "relative_tol": 1e-06,
+              "static_pressure_bracket_Pa": [
+                120000.0,
+                150000.0
+              ]
+            },
+            "last_stage_matches_actual": true,
+            "last_stage_total_pressure_Pa": 150000.08017954382,
+            "pressure_closed": true,
+            "relative_residual": 5.345302921098967e-07,
+            "saved_relative_residual": 5.345302921098967e-07,
+            "saved_residual_consistent": true,
+            "signed_residual": 0.08017954381648451,
+            "status": "PASS",
+            "target_kind": "total_outlet_pressure",
+            "target_value": 150000.0
+          },
+          "compressor_power": {
+            "expected_actual_minus_saved_W": 0.0,
+            "expected_actual_power_W": 249968.94912347596,
+            "flow_actual_compressor_power_target_W": 249968.94912347596,
+            "saved_actual_sized_compressor_power_W": 249968.94912347596,
+            "saved_boundary_target_compressor_power_W": null,
+            "saved_branch_compressor_power_W": 249968.94912347596,
+            "saved_reference_0d_compressor_power_W": 239031.86271114135,
+            "saved_source_air_mass_flow_kg_s": 0.6712549747462719,
+            "source_air_mass_flow_kg_s": 0.6712549747462719,
+            "source_and_actual_distinct": true,
+            "source_compressor_power_W": 239031.86271114135,
+            "source_minus_actual_W": -10937.086412334611,
+            "specific_work_J_kg": 356096.97015875846,
+            "status": "PASS",
+            "trial_air_mass_flow_kg_s": 0.701968761520303
+          },
+          "power": {
+            "compressor_power_W": 249968.94912347596,
+            "engine_power_closed": true,
+            "group": "main",
+            "mechanical_efficiency": 0.99,
+            "net_mechanical_power_W": 110000.04820356346,
+            "relative_power_residual": 4.38214213301597e-07,
+            "signed_power_residual_W": 0.04820356346317567,
+            "stage_gas_power_W": 363605.0478050903,
+            "stage_mechanical_power_W": 359968.9973270394,
+            "status": "PASS",
+            "target_W": 110000.0
+          },
+          "stages": [
+            {
+              "checks": {
+                "alpha2_source_page_38": {
+                  "basis": "BOOK_REQUIREMENT_PAGE_38",
+                  "bounds": [
+                    70.0,
+                    90.0
+                  ],
+                  "lower_margin": 19.171691493393922,
+                  "margin": 0.8283085066060778,
+                  "note": "actual alpha2, no flip/abs; intermediate stage",
+                  "status": "PASS",
+                  "upper_margin": 0.8283085066060778,
+                  "value": 89.17169149339392
+                },
+                "mach_velocity_universal": {
+                  "M_c1": 0.8080225361086861,
+                  "M_w2": 0.5701383383118717,
+                  "c2": 139.18245267436404,
+                  "reason": "no universal Mach/velocity acceptance bounds supplied",
+                  "status": "NOT_CHECKED",
+                  "u1": 345.3383966243897,
+                  "u2": 336.57437710647105
+                },
+                "prompt_pi_1_8_2_4": {
+                  "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK",
+                  "bounds": [
+                    1.8,
+                    2.4
+                  ],
+                  "lower_margin": 0.03846146045582688,
+                  "margin": 0.03846146045582688,
+                  "note": "post-hoc project profile, not book fundamental",
+                  "status": "PASS",
+                  "upper_margin": 0.561538539544173,
+                  "value": 1.838461460455827
+                },
+                "reaction_table_lD_domain": {
+                  "clip_status": "WITHIN_TABLE",
+                  "lower_margin": 0.03949287743944063,
+                  "note": "outside domain is clipped by existing np.interp; clipped_not_rejected, not physical impossibility",
+                  "source_bounds": [
+                    0.1111111111111111,
+                    0.3333333333333333
+                  ],
+                  "source_domain_margin": 0.03949287743944063,
+                  "status": "WITHIN_SOURCE_DOMAIN",
+                  "upper_margin": 0.18272934478278158,
+                  "value": 0.15060398855055174
+                },
+                "rho_065_upper": {
+                  "basis": "USER_ACCEPTED_ACCEPTANCE_CEILING_UPPER_ONLY",
+                  "limit": 0.65,
+                  "margin": 0.3789128099469767,
+                  "note": "upper-only user acceptance ceiling; no 0.2 lower bound",
+                  "status": "PASS",
+                  "value": 0.27108719005302334
+                },
+                "sigma_project_290MPa": {
+                  "basis": "DESIGN_ASSUMPTIONS_PROJECT_ASSUMPTION_NOT_BOOK_MATERIAL_VALIDATION",
+                  "limit": 290.0,
+                  "margin": 157.05864041655929,
+                  "note": "project assumption; material/creep/thermal validation absent",
+                  "status": "PASS",
+                  "value": 132.94135958344071
+                }
+              },
+              "group": "main",
+              "last_stage": false,
+              "metrics": {
+                "D_l_m": 0.0765249654779579,
+                "M_c1": 0.8080225361086861,
+                "M_w2": 0.5701383383118717,
+                "alpha2_deg": 89.17169149339392,
+                "c2_m_s": 139.18245267436404,
+                "lD": 0.15060398855055174,
+                "l_l_m": 0.011524965024673739,
+                "pi": 1.838461460455827,
+                "rho": 0.27108719005302334,
+                "sigma_MPa": 132.94135958344071,
+                "u1_m_s": 345.3383966243897,
+                "u2_m_s": 336.57437710647105
+              },
+              "stage": 1
+            },
+            {
+              "checks": {
+                "alpha2_source_page_38": {
+                  "basis": "BOOK_REQUIREMENT_PAGE_38",
+                  "bounds": [
+                    70.0,
+                    90.0
+                  ],
+                  "lower_margin": 16.45600765413812,
+                  "margin": 3.5439923458618807,
+                  "note": "actual alpha2, no flip/abs; intermediate stage",
+                  "status": "PASS",
+                  "upper_margin": 3.5439923458618807,
+                  "value": 86.45600765413812
+                },
+                "mach_velocity_universal": {
+                  "M_c1": 0.7372031957458757,
+                  "M_w2": 0.6736102639779429,
+                  "c2": 98.1738497824431,
+                  "reason": "no universal Mach/velocity acceptance bounds supplied",
+                  "status": "NOT_CHECKED",
+                  "u1": 379.6634136139571,
+                  "u2": 387.99063556871016
+                },
+                "prompt_pi_1_8_2_4": {
+                  "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK",
+                  "bounds": [
+                    1.8,
+                    2.4
+                  ],
+                  "lower_margin": 0.11462987970858096,
+                  "margin": 0.11462987970858096,
+                  "note": "post-hoc project profile, not book fundamental",
+                  "status": "PASS",
+                  "upper_margin": 0.4853701202914189,
+                  "value": 1.914629879708581
+                },
+                "reaction_table_lD_domain": {
+                  "clip_status": "WITHIN_TABLE",
+                  "lower_margin": 0.1520542862908449,
+                  "note": "outside domain is clipped by existing np.interp; clipped_not_rejected, not physical impossibility",
+                  "source_bounds": [
+                    0.1111111111111111,
+                    0.3333333333333333
+                  ],
+                  "source_domain_margin": 0.07016793593137732,
+                  "status": "WITHIN_SOURCE_DOMAIN",
+                  "upper_margin": 0.07016793593137732,
+                  "value": 0.263165397401956
+                },
+                "rho_065_upper": {
+                  "basis": "USER_ACCEPTED_ACCEPTANCE_CEILING_UPPER_ONLY",
+                  "limit": 0.65,
+                  "margin": 0.2342015407643821,
+                  "note": "upper-only user acceptance ceiling; no 0.2 lower bound",
+                  "status": "PASS",
+                  "value": 0.4157984592356179
+                },
+                "sigma_project_290MPa": {
+                  "basis": "DESIGN_ASSUMPTIONS_PROJECT_ASSUMPTION_NOT_BOOK_MATERIAL_VALIDATION",
+                  "limit": 290.0,
+                  "margin": -18.697287370189997,
+                  "note": "project assumption; material/creep/thermal validation absent",
+                  "status": "FAIL",
+                  "value": 308.69728737019
+                }
+              },
+              "group": "main",
+              "last_stage": false,
+              "metrics": {
+                "D_l_m": 0.0882151821773234,
+                "M_c1": 0.7372031957458757,
+                "M_w2": 0.6736102639779429,
+                "alpha2_deg": 86.45600765413812,
+                "c2_m_s": 98.1738497824431,
+                "lD": 0.263165397401956,
+                "l_l_m": 0.023215183474581257,
+                "pi": 1.914629879708581,
+                "rho": 0.4157984592356179,
+                "sigma_MPa": 308.69728737019,
+                "u1_m_s": 379.6634136139571,
+                "u2_m_s": 387.99063556871016
+              },
+              "stage": 2
+            },
+            {
+              "checks": {
+                "alpha2_source_page_38": {
+                  "basis": "BOOK_REQUIREMENT_PAGE_38",
+                  "bounds": [
+                    80.0,
+                    90.0
+                  ],
+                  "lower_margin": 6.1408303532237625,
+                  "margin": 3.8591696467762375,
+                  "note": "actual alpha2, no flip/abs; last stage",
+                  "status": "PASS",
+                  "upper_margin": 3.8591696467762375,
+                  "value": 86.14083035322376
+                },
+                "mach_velocity_universal": {
+                  "M_c1": 0.816226770882411,
+                  "M_w2": 0.7933366206528633,
+                  "c2": 176.7312151659154,
+                  "reason": "no universal Mach/velocity acceptance bounds supplied",
+                  "status": "NOT_CHECKED",
+                  "u1": 379.47767052671804,
+                  "u2": 390.5985345803527
+                },
+                "prompt_pi_1_8_2_4": {
+                  "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK",
+                  "bounds": [
+                    1.8,
+                    2.4
+                  ],
+                  "lower_margin": 0.45219533303116477,
+                  "margin": 0.1478046669688351,
+                  "note": "post-hoc project profile, not book fundamental",
+                  "status": "PASS",
+                  "upper_margin": 0.1478046669688351,
+                  "value": 2.252195333031165
+                },
+                "reaction_table_lD_domain": {
+                  "clip_status": "WITHIN_TABLE",
+                  "lower_margin": 0.15697389309252957,
+                  "note": "outside domain is clipped by existing np.interp; clipped_not_rejected, not physical impossibility",
+                  "source_bounds": [
+                    0.1111111111111111,
+                    0.3333333333333333
+                  ],
+                  "source_domain_margin": 0.06524832912969264,
+                  "status": "WITHIN_SOURCE_DOMAIN",
+                  "upper_margin": 0.06524832912969264,
+                  "value": 0.2680850042036407
+                },
+                "rho_065_upper": {
+                  "basis": "USER_ACCEPTED_ACCEPTANCE_CEILING_UPPER_ONLY",
+                  "limit": 0.65,
+                  "margin": 0.22829801548175477,
+                  "note": "upper-only user acceptance ceiling; no 0.2 lower bound",
+                  "status": "PASS",
+                  "value": 0.42170198451824525
+                },
+                "sigma_project_290MPa": {
+                  "basis": "DESIGN_ASSUMPTIONS_PROJECT_ASSUMPTION_NOT_BOOK_MATERIAL_VALIDATION",
+                  "limit": 290.0,
+                  "margin": -28.70970007969032,
+                  "note": "project assumption; material/creep/thermal validation absent",
+                  "status": "FAIL",
+                  "value": 318.7097000796903
+                }
+              },
+              "group": "main",
+              "last_stage": true,
+              "metrics": {
+                "D_l_m": 0.08880812506130537,
+                "M_c1": 0.816226770882411,
+                "M_w2": 0.7933366206528633,
+                "alpha2_deg": 86.14083035322376,
+                "c2_m_s": 176.7312151659154,
+                "lD": 0.2680850042036407,
+                "l_l_m": 0.023808126580377495,
+                "pi": 2.252195333031165,
+                "rho": 0.42170198451824525,
+                "sigma_MPa": 318.7097000796903,
+                "u1_m_s": 379.47767052671804,
+                "u2_m_s": 390.5985345803527
+              },
+              "stage": 3
+            }
+          ]
+        }
+      },
+      "has_not_checked": false,
+      "known_constraint_violation": true,
+      "mass_fuel_air": {
+        "air_mass_flow_kg_s": 0.701968761520303,
+        "fuel_air_ratio": 0.017434492351046944,
+        "fuel_mass_flow_kg_s": 0.01223846900339962,
+        "gas_mass_flow_kg_s": 0.7142072305237026,
+        "mass_balance_residual_kg_s": 0.0,
+        "pre_reducer": true,
+        "stage_flow_consistent": true,
+        "status": "PASS"
+      },
+      "numerical_closed": true,
+      "numerical_power_closed": true,
+      "overall_engineering_feasibility": null,
+      "overall_engineering_feasibility_reason": "maps_cooling_material_thermal_resource_3d_not_validated",
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "positive_residuals": {
+        "main_closure_signed_residual": 0.08017954381648451,
+        "main_power_signed_residual_W": 0.04820356346317567
+      },
+      "record_status": "SUCCESS",
+      "reported_residuals": {
+        "compressor_expected_actual_minus_saved_W": 0.0,
+        "compressor_source_minus_actual_W": -10937.086412334611,
+        "continuity_flow_delta_kg_s": null,
+        "continuity_pressure_delta_Pa": null,
+        "continuity_temperature_delta_K": null,
+        "main_closure_signed_residual": 0.08017954381648451,
+        "main_power_signed_residual_W": 0.04820356346317567,
+        "mass_balance_residual_kg_s": 0.0
+      },
+      "root_candidate_id": "cand_f9bb26b26e501428a2f623364b2c8d40765c916fd8c132d96c09dd7bbd3be2cd",
+      "source_domain": {
+        "min_source_domain_margin": 0.03949287743944063,
+        "outside_stages": [],
+        "status": "WITHIN_SOURCE_DOMAIN"
+      },
+      "source_domain_violation": false,
+      "state_continuity": {
+        "reason": "AB has one turbine group",
+        "status": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "architecture": "FREE_POWER_TURBINE",
+      "case": "C_GG3_FPT1",
+      "compressor_power": {
+        "expected_actual_minus_saved_W": 0.0,
+        "expected_actual_power_W": 207390.52883588144,
+        "flow_actual_compressor_power_target_W": 207390.52883588144,
+        "saved_actual_sized_compressor_power_W": null,
+        "saved_boundary_target_compressor_power_W": 207390.52883588144,
+        "saved_branch_compressor_power_W": 207390.52883588144,
+        "saved_reference_0d_compressor_power_W": 200200.9249260225,
+        "saved_source_air_mass_flow_kg_s": 0.6864584676433249,
+        "source_air_mass_flow_kg_s": 0.6864584676433249,
+        "source_and_actual_distinct": true,
+        "source_compressor_power_W": 200200.9249260225,
+        "source_minus_actual_W": -7189.603909858939,
+        "specific_work_J_kg": 291643.17196542234,
+        "status": "PASS",
+        "trial_air_mass_flow_kg_s": 0.7111105239949522
+      },
+      "constraints": {
+        "alpha2_source_page_38": {
+          "min_signed_margin": -51.243758059334596,
+          "not_checked_stages": [],
+          "status": "FAIL"
+        },
+        "prompt_pi_1_8_2_4": {
+          "min_signed_margin": -0.41309428441940543,
+          "not_checked_stages": [],
+          "status": "FAIL"
+        },
+        "rho_065_upper": {
+          "min_signed_margin": 0.15000000000000002,
+          "not_checked_stages": [],
+          "status": "PASS"
+        },
+        "sigma_project_290MPa": {
+          "min_signed_margin": -265.2939645921856,
+          "not_checked_stages": [],
+          "status": "FAIL"
+        }
+      },
+      "groups": {
+        "free_power": {
+          "closure": {
+            "actual_metric": 149999.97224713754,
+            "controls": {
+              "D_hub_m": 0.065,
+              "max_iter": 40,
+              "n_rpm": 84000.0,
+              "relative_tol": 1e-06,
+              "static_pressure_bracket_Pa": [
+                120000.0,
+                150000.0
+              ]
+            },
+            "last_stage_matches_actual": true,
+            "last_stage_total_pressure_Pa": 149999.97224713754,
+            "pressure_closed": true,
+            "relative_residual": 1.8501908304945876e-07,
+            "saved_relative_residual": 1.8501908304945876e-07,
+            "saved_residual_consistent": true,
+            "signed_residual": -0.027752862457418814,
+            "status": "PASS",
+            "target_kind": "total_outlet_pressure",
+            "target_value": 150000.0
+          },
+          "power": {
+            "compressor_power_W": null,
+            "engine_power_closed": true,
+            "group": "free_power",
+            "mechanical_efficiency": 0.99,
+            "net_mechanical_power_W": 109999.99760392595,
+            "relative_power_residual": 2.178249137200923e-08,
+            "signed_power_residual_W": -0.0023960740509210154,
+            "stage_gas_power_W": 111111.1086908343,
+            "stage_mechanical_power_W": 109999.99760392595,
+            "status": "PASS",
+            "target_W": 110000.0
+          },
+          "stages": [
+            {
+              "checks": {
+                "alpha2_source_page_38": {
+                  "basis": "BOOK_REQUIREMENT_PAGE_38",
+                  "bounds": [
+                    80.0,
+                    90.0
+                  ],
+                  "lower_margin": 36.401499907759955,
+                  "margin": -26.401499907759955,
+                  "note": "actual alpha2, no flip/abs; last stage",
+                  "status": "FAIL",
+                  "upper_margin": -26.401499907759955,
+                  "value": 116.40149990775996
+                },
+                "mach_velocity_universal": {
+                  "M_c1": 0.6803807812894976,
+                  "M_w2": 0.7069045148959541,
+                  "c2": 119.6804992243337,
+                  "reason": "no universal Mach/velocity acceptance bounds supplied",
+                  "status": "NOT_CHECKED",
+                  "u1": 452.6209880660765,
+                  "u2": 445.7544537115436
+                },
+                "prompt_pi_1_8_2_4": {
+                  "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK",
+                  "bounds": [
+                    1.8,
+                    2.4
+                  ],
+                  "lower_margin": 0.13038215130157105,
+                  "margin": 0.13038215130157105,
+                  "note": "post-hoc project profile, not book fundamental",
+                  "status": "PASS",
+                  "upper_margin": 0.4696178486984288,
+                  "value": 1.930382151301571
+                },
+                "reaction_table_lD_domain": {
+                  "clip_status": "SOURCE_TABLE_CLIPPED_NOT_REJECTED",
+                  "lower_margin": 0.24753822419032262,
+                  "note": "outside domain is clipped by existing np.interp; clipped_not_rejected, not physical impossibility",
+                  "source_bounds": [
+                    0.1111111111111111,
+                    0.3333333333333333
+                  ],
+                  "source_domain_margin": -0.02531600196810041,
+                  "status": "OUTSIDE_SOURCE_DOMAIN",
+                  "upper_margin": -0.02531600196810041,
+                  "value": 0.3586493353014337
+                },
+                "rho_065_upper": {
+                  "basis": "USER_ACCEPTED_ACCEPTANCE_CEILING_UPPER_ONLY",
+                  "limit": 0.65,
+                  "margin": 0.15000000000000002,
+                  "note": "upper-only user acceptance ceiling; no 0.2 lower bound",
+                  "status": "PASS",
+                  "value": 0.5
+                },
+                "sigma_project_290MPa": {
+                  "basis": "DESIGN_ASSUMPTIONS_PROJECT_ASSUMPTION_NOT_BOOK_MATERIAL_VALIDATION",
+                  "limit": 290.0,
+                  "margin": -265.2939645921856,
+                  "note": "project assumption; material/creep/thermal validation absent",
+                  "status": "FAIL",
+                  "value": 555.2939645921856
+                }
+              },
+              "group": "free_power",
+              "last_stage": true,
+              "metrics": {
+                "D_l_m": 0.1013486067334566,
+                "M_c1": 0.6803807812894976,
+                "M_w2": 0.7069045148959541,
+                "alpha2_deg": 116.40149990775996,
+                "c2_m_s": 119.6804992243337,
+                "lD": 0.3586493353014337,
+                "l_l_m": 0.036348610438680616,
+                "pi": 1.930382151301571,
+                "rho": 0.5,
+                "sigma_MPa": 555.2939645921856,
+                "u1_m_s": 452.6209880660765,
+                "u2_m_s": 445.7544537115436
+              },
+              "stage": 1
+            }
+          ]
+        },
+        "gas_generator": {
+          "closure": {
+            "actual_metric": 207390.53428346067,
+            "controls": {
+              "D_hub_m": 0.065,
+              "max_iter": 40,
+              "mechanical_efficiency": 0.99,
+              "n_rpm": 84000.0,
+              "relative_tol": 1e-06,
+              "static_pressure_bracket_Pa": [
+                213990.62758233972,
+                320985.94137350953
+              ]
+            },
+            "relative_residual": 2.6267251731305817e-08,
+            "saved_relative_residual": 2.6267251731305817e-08,
+            "saved_residual_consistent": true,
+            "signed_residual": 0.005447579227620736,
+            "status": "PASS",
+            "target_kind": "mechanical_power",
+            "target_value": 207390.52883588144
+          },
+          "compressor_power": {
+            "expected_actual_minus_saved_W": 0.0,
+            "expected_actual_power_W": 207390.52883588144,
+            "flow_actual_compressor_power_target_W": 207390.52883588144,
+            "saved_actual_sized_compressor_power_W": null,
+            "saved_boundary_target_compressor_power_W": 207390.52883588144,
+            "saved_branch_compressor_power_W": 207390.52883588144,
+            "saved_reference_0d_compressor_power_W": 200200.9249260225,
+            "saved_source_air_mass_flow_kg_s": 0.6864584676433249,
+            "source_air_mass_flow_kg_s": 0.6864584676433249,
+            "source_and_actual_distinct": true,
+            "source_compressor_power_W": 200200.9249260225,
+            "source_minus_actual_W": -7189.603909858939,
+            "specific_work_J_kg": 291643.17196542234,
+            "status": "PASS",
+            "trial_air_mass_flow_kg_s": 0.7111105239949522
+          },
+          "power": {
+            "compressor_power_W": 207390.52883588144,
+            "engine_power_closed": true,
+            "group": "gas_generator",
+            "mechanical_efficiency": 0.99,
+            "net_mechanical_power_W": 207390.53428346067,
+            "relative_power_residual": 2.6267251731305817e-08,
+            "signed_power_residual_W": 0.005447579227620736,
+            "stage_gas_power_W": 209485.3881651118,
+            "stage_mechanical_power_W": 207390.53428346067,
+            "status": "PASS",
+            "target_W": 207390.52883588144
+          },
+          "stages": [
+            {
+              "checks": {
+                "alpha2_source_page_38": {
+                  "basis": "BOOK_REQUIREMENT_PAGE_38",
+                  "bounds": [
+                    70.0,
+                    90.0
+                  ],
+                  "lower_margin": 70.96675176951007,
+                  "margin": -50.96675176951007,
+                  "note": "actual alpha2, no flip/abs; intermediate stage",
+                  "status": "FAIL",
+                  "upper_margin": -50.96675176951007,
+                  "value": 140.96675176951007
+                },
+                "mach_velocity_universal": {
+                  "M_c1": 0.5551357798455943,
+                  "M_w2": 0.39225225445307044,
+                  "c2": 155.51588455628132,
+                  "reason": "no universal Mach/velocity acceptance bounds supplied",
+                  "status": "NOT_CHECKED",
+                  "u1": 376.6364679518595,
+                  "u2": 361.06670432619285
+                },
+                "prompt_pi_1_8_2_4": {
+                  "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK",
+                  "bounds": [
+                    1.8,
+                    2.4
+                  ],
+                  "lower_margin": -0.41309428441940543,
+                  "margin": -0.41309428441940543,
+                  "note": "post-hoc project profile, not book fundamental",
+                  "status": "FAIL",
+                  "upper_margin": 1.0130942844194053,
+                  "value": 1.3869057155805946
+                },
+                "reaction_table_lD_domain": {
+                  "clip_status": "WITHIN_TABLE",
+                  "lower_margin": 0.09711018569779684,
+                  "note": "outside domain is clipped by existing np.interp; clipped_not_rejected, not physical impossibility",
+                  "source_bounds": [
+                    0.1111111111111111,
+                    0.3333333333333333
+                  ],
+                  "source_domain_margin": 0.09711018569779684,
+                  "status": "WITHIN_SOURCE_DOMAIN",
+                  "upper_margin": 0.12511203652442537,
+                  "value": 0.20822129680890794
+                },
+                "rho_065_upper": {
+                  "basis": "USER_ACCEPTED_ACCEPTANCE_CEILING_UPPER_ONLY",
+                  "limit": 0.65,
+                  "margin": 0.3001344589837294,
+                  "note": "upper-only user acceptance ceiling; no 0.2 lower bound",
+                  "status": "PASS",
+                  "value": 0.3498655410162706
+                },
+                "sigma_project_290MPa": {
+                  "basis": "DESIGN_ASSUMPTIONS_PROJECT_ASSUMPTION_NOT_BOOK_MATERIAL_VALIDATION",
+                  "limit": 290.0,
+                  "margin": 78.47506436721059,
+                  "note": "project assumption; material/creep/thermal validation absent",
+                  "status": "PASS",
+                  "value": 211.5249356327894
+                }
+              },
+              "group": "gas_generator",
+              "last_stage": false,
+              "metrics": {
+                "D_l_m": 0.0820936439705906,
+                "M_c1": 0.5551357798455943,
+                "M_w2": 0.39225225445307044,
+                "alpha2_deg": 140.96675176951007,
+                "c2_m_s": 155.51588455628132,
+                "lD": 0.20822129680890794,
+                "l_l_m": 0.017093645007325162,
+                "pi": 1.3869057155805946,
+                "rho": 0.3498655410162706,
+                "sigma_MPa": 211.5249356327894,
+                "u1_m_s": 376.6364679518595,
+                "u2_m_s": 361.06670432619285
+              },
+              "stage": 1
+            },
+            {
+              "checks": {
+                "alpha2_source_page_38": {
+                  "basis": "BOOK_REQUIREMENT_PAGE_38",
+                  "bounds": [
+                    70.0,
+                    90.0
+                  ],
+                  "lower_margin": 71.2437580593346,
+                  "margin": -51.243758059334596,
+                  "note": "actual alpha2, no flip/abs; intermediate stage",
+                  "status": "FAIL",
+                  "upper_margin": -51.243758059334596,
+                  "value": 141.2437580593346
+                },
+                "mach_velocity_universal": {
+                  "M_c1": 0.5261429208056697,
+                  "M_w2": 0.49801575239482987,
+                  "c2": 117.15814446935326,
+                  "reason": "no universal Mach/velocity acceptance bounds supplied",
+                  "status": "NOT_CHECKED",
+                  "u1": 401.04901525438817,
+                  "u2": 402.0716090424628
+                },
+                "prompt_pi_1_8_2_4": {
+                  "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK",
+                  "bounds": [
+                    1.8,
+                    2.4
+                  ],
+                  "lower_margin": -0.3825206727295871,
+                  "margin": -0.3825206727295871,
+                  "note": "post-hoc project profile, not book fundamental",
+                  "status": "FAIL",
+                  "upper_margin": 0.982520672729587,
+                  "value": 1.417479327270413
+                },
+                "reaction_table_lD_domain": {
+                  "clip_status": "WITHIN_TABLE",
+                  "lower_margin": 0.1778590173487105,
+                  "note": "outside domain is clipped by existing np.interp; clipped_not_rejected, not physical impossibility",
+                  "source_bounds": [
+                    0.1111111111111111,
+                    0.3333333333333333
+                  ],
+                  "source_domain_margin": 0.0443632048735117,
+                  "status": "WITHIN_SOURCE_DOMAIN",
+                  "upper_margin": 0.0443632048735117,
+                  "value": 0.2889701284598216
+                },
+                "rho_065_upper": {
+                  "basis": "USER_ACCEPTED_ACCEPTANCE_CEILING_UPPER_ONLY",
+                  "limit": 0.65,
+                  "margin": 0.20323586658856757,
+                  "note": "upper-only user acceptance ceiling; no 0.2 lower bound",
+                  "status": "PASS",
+                  "value": 0.44676413341143245
+                },
+                "sigma_project_290MPa": {
+                  "basis": "DESIGN_ASSUMPTIONS_PROJECT_ASSUMPTION_NOT_BOOK_MATERIAL_VALIDATION",
+                  "limit": 290.0,
+                  "margin": -74.01669947888621,
+                  "note": "project assumption; material/creep/thermal validation absent",
+                  "status": "FAIL",
+                  "value": 364.0166994788862
+                }
+              },
+              "group": "gas_generator",
+              "last_stage": false,
+              "metrics": {
+                "D_l_m": 0.09141669150859993,
+                "M_c1": 0.5261429208056697,
+                "M_w2": 0.49801575239482987,
+                "alpha2_deg": 141.2437580593346,
+                "c2_m_s": 117.15814446935326,
+                "lD": 0.2889701284598216,
+                "l_l_m": 0.026416693088612008,
+                "pi": 1.417479327270413,
+                "rho": 0.44676413341143245,
+                "sigma_MPa": 364.0166994788862,
+                "u1_m_s": 401.04901525438817,
+                "u2_m_s": 402.0716090424628
+              },
+              "stage": 2
+            },
+            {
+              "checks": {
+                "alpha2_source_page_38": {
+                  "basis": "BOOK_REQUIREMENT_PAGE_38",
+                  "bounds": [
+                    80.0,
+                    90.0
+                  ],
+                  "lower_margin": 39.11063145864094,
+                  "margin": -29.11063145864094,
+                  "note": "actual alpha2, no flip/abs; last stage",
+                  "status": "FAIL",
+                  "upper_margin": -29.11063145864094,
+                  "value": 119.11063145864094
+                },
+                "mach_velocity_universal": {
+                  "M_c1": 0.6230518128746505,
+                  "M_w2": 0.5314265066802947,
+                  "c2": 167.10183235465792,
+                  "reason": "no universal Mach/velocity acceptance bounds supplied",
+                  "status": "NOT_CHECKED",
+                  "u1": 373.628455947346,
+                  "u2": 373.20956885658694
+                },
+                "prompt_pi_1_8_2_4": {
+                  "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK",
+                  "bounds": [
+                    1.8,
+                    2.4
+                  ],
+                  "lower_margin": -0.2533331684608182,
+                  "margin": -0.2533331684608182,
+                  "note": "post-hoc project profile, not book fundamental",
+                  "status": "FAIL",
+                  "upper_margin": 0.8533331684608181,
+                  "value": 1.5466668315391818
+                },
+                "reaction_table_lD_domain": {
+                  "clip_status": "WITHIN_TABLE",
+                  "lower_margin": 0.12287175413378496,
+                  "note": "outside domain is clipped by existing np.interp; clipped_not_rejected, not physical impossibility",
+                  "source_bounds": [
+                    0.1111111111111111,
+                    0.3333333333333333
+                  ],
+                  "source_domain_margin": 0.09935046808843725,
+                  "status": "WITHIN_SOURCE_DOMAIN",
+                  "upper_margin": 0.09935046808843725,
+                  "value": 0.23398286524489606
+                },
+                "rho_065_upper": {
+                  "basis": "USER_ACCEPTED_ACCEPTANCE_CEILING_UPPER_ONLY",
+                  "limit": 0.65,
+                  "margin": 0.2692205838211872,
+                  "note": "upper-only user acceptance ceiling; no 0.2 lower bound",
+                  "status": "PASS",
+                  "value": 0.38077941617881284
+                },
+                "sigma_project_290MPa": {
+                  "basis": "DESIGN_ASSUMPTIONS_PROJECT_ASSUMPTION_NOT_BOOK_MATERIAL_VALIDATION",
+                  "limit": 290.0,
+                  "margin": 36.04829315933435,
+                  "note": "project assumption; material/creep/thermal validation absent",
+                  "status": "PASS",
+                  "value": 253.95170684066565
+                }
+              },
+              "group": "gas_generator",
+              "last_stage": true,
+              "metrics": {
+                "D_l_m": 0.08485449670388698,
+                "M_c1": 0.6230518128746505,
+                "M_w2": 0.5314265066802947,
+                "alpha2_deg": 119.11063145864094,
+                "c2_m_s": 167.10183235465792,
+                "lD": 0.23398286524489606,
+                "l_l_m": 0.019854498267689064,
+                "pi": 1.5466668315391818,
+                "rho": 0.38077941617881284,
+                "sigma_MPa": 253.95170684066565,
+                "u1_m_s": 373.628455947346,
+                "u2_m_s": 373.20956885658694
+              },
+              "stage": 3
+            }
+          ]
+        }
+      },
+      "has_not_checked": false,
+      "known_constraint_violation": true,
+      "mass_fuel_air": {
+        "air_mass_flow_kg_s": 0.7111105239949522,
+        "fuel_air_ratio": 0.019060837201988774,
+        "fuel_mass_flow_kg_s": 0.013554361930488716,
+        "gas_mass_flow_kg_s": 0.7246648859254411,
+        "mass_balance_residual_kg_s": 1.1102230246251565e-16,
+        "pre_reducer": true,
+        "stage_flow_consistent": true,
+        "status": "PASS"
+      },
+      "numerical_closed": true,
+      "numerical_power_closed": true,
+      "overall_engineering_feasibility": null,
+      "overall_engineering_feasibility_reason": "maps_cooling_material_thermal_resource_3d_not_validated",
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "positive_residuals": {
+        "gas_generator_closure_signed_residual": 0.005447579227620736,
+        "gas_generator_power_signed_residual_W": 0.005447579227620736,
+        "mass_balance_residual_kg_s": 1.1102230246251565e-16
+      },
+      "record_status": "SUCCESS",
+      "reported_residuals": {
+        "compressor_expected_actual_minus_saved_W": 0.0,
+        "compressor_source_minus_actual_W": -7189.603909858939,
+        "continuity_flow_delta_kg_s": 0.0,
+        "continuity_pressure_delta_Pa": 0.0,
+        "continuity_temperature_delta_K": 0.0,
+        "free_power_closure_signed_residual": -0.027752862457418814,
+        "free_power_power_signed_residual_W": -0.0023960740509210154,
+        "gas_generator_closure_signed_residual": 0.005447579227620736,
+        "gas_generator_power_signed_residual_W": 0.005447579227620736,
+        "mass_balance_residual_kg_s": 1.1102230246251565e-16
+      },
+      "root_candidate_id": "cand_6089cfb3d95bc6b882d55e692909f8cfc0e1941ee8bd1c0fc8e640243ce976a6",
+      "source_domain": {
+        "min_source_domain_margin": -0.02531600196810041,
+        "outside_stages": [
+          "free_power:1"
+        ],
+        "status": "OUTSIDE_SOURCE_DOMAIN"
+      },
+      "source_domain_violation": true,
+      "state_continuity": {
+        "flow_delta_kg_s": 0.0,
+        "flow_match": true,
+        "free_power_first": {
+          "G_c_kg_s": 0.7246648859254411,
+          "T0_K": 1009.5071096769533,
+          "p0_Pa": 281425.4523885256
+        },
+        "gas_generator_last": {
+          "G_c_kg_s": 0.7246648859254411,
+          "T_total_K": 1009.5071096769533,
+          "p_total_Pa": 281425.4523885256
+        },
+        "pressure_delta_Pa": 0.0,
+        "pressure_match": true,
+        "source": "INDEPENDENT_LEGACY_STAGE_KEYS_NOT_STORED_BOOLEANS",
+        "status": "PASS",
+        "temperature_delta_K": 0.0,
+        "temperature_match": true
+      }
+    }
+  ],
+  "run": {
+    "complete": true,
+    "journal_sha256": "b01fdd1800b5b206c89e819fbdd1c3765a6679bafcdc9abac63db35e081e0fb2",
+    "record_count": 57,
+    "root_ids": [
+      "cand_9a4d79e36c2fa1d1fa07fda124247aad66e4e3c6b3c67844e5c1c00841c20bb6",
+      "cand_f9bb26b26e501428a2f623364b2c8d40765c916fd8c132d96c09dd7bbd3be2cd",
+      "cand_6089cfb3d95bc6b882d55e692909f8cfc0e1941ee8bd1c0fc8e640243ce976a6"
+    ],
+    "run_id": "run_1198dbbb2d52fe343c6a645b1dcb85ddc884828abbf18c072f7913e0520f6670",
+    "summary_sha256": "cdc696276ae228b77b4e2b9ed71a3d559ffd356f841da94d362527c4c5628db1"
+  },
+  "source_metadata": {
+    "alpha2": {
+      "angle_convention": "ACTUAL_ALPHA2_DEG_STORED_NO_ABS_OR_FLIP",
+      "last": {
+        "hi": 90.0,
+        "key": "alpha2_last",
+        "lo": 80.0,
+        "page": 38,
+        "status": "book_requirement"
+      },
+      "mid": {
+        "hi": 90.0,
+        "key": "alpha2_mid",
+        "lo": 70.0,
+        "page": 38,
+        "status": "book_requirement"
+      }
+    },
+    "file": "Turbinis-Calc/constraints.py",
+    "pi_profile": {
+      "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK",
+      "bounds": [
+        1.8,
+        2.4
+      ],
+      "profile": "PROMPT_STAGE_PI_1_8_2_4"
+    },
+    "reaction_lD_source_domain": {
+      "basis": "BOOK_RECOMMENDATION_TABLE_PAGE_58_NOT_HARD_UNIVERSAL_LIMIT",
+      "clip_note": "outside domain is clipped by existing np.interp; clipped_not_rejected, not physical impossibility",
+      "hi": 0.3333333333333333,
+      "lo": 0.1111111111111111,
+      "table": [
+        0.1111111111111111,
+        0.16666666666666666,
+        0.25,
+        0.3333333333333333
+      ]
+    },
+    "rho_profile": {
+      "basis": "USER_ACCEPTED_ACCEPTANCE_CEILING_UPPER_ONLY",
+      "limit": 0.65,
+      "lower_bound_applied": false,
+      "profile": "RHO065"
+    },
+    "sha256": "49b809716133e479c20e03f7431f8b0167d05f58236e26620cd4e16acd1c7987",
+    "sigma_limit": {
+      "basis": "DESIGN_ASSUMPTIONS_PROJECT_ASSUMPTION_NOT_BOOK_MATERIAL_VALIDATION",
+      "book_reference": {
+        "hi": 300.0,
+        "lo": 200.0,
+        "note": "book recommendation; not material validation"
+      },
+      "unit": "MPa",
+      "value": 290.0
+    }
+  }
+}

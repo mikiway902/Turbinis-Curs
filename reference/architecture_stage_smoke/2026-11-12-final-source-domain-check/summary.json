@@ -1,0 +1,180 @@
+{
+  "points": [
+    {
+      "assembly": "B_MAIN",
+      "candidate_id": "cand_6f4b90e09bd990d201837d3f47db31f6fde245b525d79d62ad08b650af0944de",
+      "failure_reason": null,
+      "power_W": 109999.95030423734,
+      "source_pressure_ratios": [
+        11.0
+      ],
+      "status": "SUCCESS"
+    },
+    {
+      "assembly": "C_COUPLED",
+      "candidate_id": "cand_7489507fa2f71db140c31fc486afc1aa784a8adfa1ba606d9b371116d6b7916c",
+      "failure_reason": null,
+      "power_W": 109999.91145170642,
+      "source_pressure_ratios": [
+        12.0
+      ],
+      "status": "SUCCESS"
+    },
+    {
+      "assembly": "A_MAIN",
+      "candidate_id": "cand_d9e762456e4153b35cc3097a8e31caf1c5e30c502f6734d82617ee4a17fdd69d",
+      "failure_reason": null,
+      "power_W": 109999.89098985202,
+      "source_pressure_ratios": [
+        3.4641016151377544,
+        3.4641016151377544
+      ],
+      "status": "SUCCESS"
+    },
+    {
+      "assembly": "A_MAIN",
+      "candidate_id": "cand_044acfb004d7a56fc7d228ab619e891a2e2bf4db00c0e051f5dbcf1964d554d7",
+      "failure_reason": "reaction_table_source_domain",
+      "power_W": 109999.99991244767,
+      "source_pressure_ratios": [
+        2.0,
+        2.0
+      ],
+      "status": "MODEL_ERROR"
+    },
+    {
+      "assembly": "B_MAIN",
+      "candidate_id": "cand_3afcd8338f7c56d4f36c7a02fac7b862b51b66e84799dff223cc23b2ac5baa82",
+      "failure_reason": null,
+      "power_W": 109999.94640904706,
+      "source_pressure_ratios": [
+        12.0
+      ],
+      "status": "SUCCESS"
+    },
+    {
+      "assembly": "C_COUPLED",
+      "candidate_id": "cand_783e0b14793d243add43ce8a11ba0de3122ca48df01f7c122c88a20e32eeb587",
+      "failure_reason": null,
+      "power_W": 109999.93885380308,
+      "source_pressure_ratios": [
+        11.0
+      ],
+      "status": "SUCCESS"
+    },
+    {
+      "assembly": "A_MAIN",
+      "candidate_id": "cand_048d392fbcadb83eb1176be2c1e00eaae37399477f6a66fccd5e1b3aec420095",
+      "failure_reason": null,
+      "power_W": 110000.00051974168,
+      "source_pressure_ratios": [
+        3.3166247903554,
+        3.3166247903554
+      ],
+      "status": "SUCCESS"
+    }
+  ],
+  "reproduce": {
+    "atol": 1e-09,
+    "checked": 7,
+    "differences": [],
+    "matches": true,
+    "rtol": 1e-12
+  },
+  "run": {
+    "complete": true,
+    "dataset_version": "raw-dataset-v1",
+    "evaluator_version": "architecture-coupled-stage-smoke-v2",
+    "evaluator_version_hash": "562c9287f9bdafcff71c6cbb283d17c2d94cc3dfbc00c812ebd52194774b21ce",
+    "format": "jsonl",
+    "journal_sha256": "15b0357483d9407a52d378016a6bea0e933e559aedcae631de61bffbb3b032af",
+    "journal_size_bytes": 126794,
+    "last_candidate_id": "cand_048d392fbcadb83eb1176be2c1e00eaae37399477f6a66fccd5e1b3aec420095",
+    "record_count": 7,
+    "repair_notes": [],
+    "run_config": {
+      "evaluator_version": "architecture-coupled-stage-smoke-v2",
+      "experiment": "strict-final-source-domain-check-v1",
+      "model_digest": "032fb32cf0af70420ffdd514753f1bc12f65dc16fb0aa4435d05ad09328e3862",
+      "model_digest_sources": [
+        "Turbinis-Calc/Main_Turbinis_Calc_Book.ipynb",
+        "Turbinis-Cycle/Turbinis-Cycle.ipynb",
+        "Turbinis-Calc/cycle_link.py",
+        "Optimizer/optimizer_core.py",
+        "Optimizer/optimize_extended.py",
+        "scripts/architecture_smoke.py",
+        "scripts/architecture_stage_smoke.py",
+        "turbine_engine/architecture.py",
+        "turbine_engine/architecture_cycle.py",
+        "turbine_engine/architecture_raw.py",
+        "turbine_engine/baseline.py",
+        "turbine_engine/compressor.py",
+        "Turbinis-Calc/constraints.py",
+        "Turbinis-Calc/sizing.py",
+        "turbine_engine/constraints.py",
+        "turbine_engine/cycle.py",
+        "turbine_engine/dataset.py",
+        "turbine_engine/diagnostics.py",
+        "turbine_engine/expansion.py",
+        "turbine_engine/gas.py",
+        "turbine_engine/geometry.py",
+        "turbine_engine/orchestration.py",
+        "turbine_engine/performance.py",
+        "turbine_engine/raw.py",
+        "turbine_engine/reaction.py",
+        "turbine_engine/shaft.py",
+        "turbine_engine/stage.py",
+        "turbine_engine/turbine.py",
+        "scripts/architecture_coupled_stage_smoke.py"
+      ],
+      "model_variant": "architecture_coupled_stage_smoke_v2",
+      "payload_plan_sha256": "b4135c6f607d44165b1be0e622529e3769108db856cc0c7ac2b0a907d807fc8d",
+      "reaction_table_policy": "require_final_source_domain",
+      "scope": "six screened roots plus one known source-domain violation; same explicit flow and controls, no outer resizing",
+      "source_candidate_ids": [
+        "cand_5aaa0df4bd0bc15c4199a986558177a1d700752a5518046c4c234750f3cc18df",
+        "cand_5ebedf4cbbfa3bef7fd821b416d369340949f43868d71b7531d96bf5d3f134bf",
+        "cand_80c961da86454427b3661b032d47ad0c9b07d93c7928e361e3f0408f97a4b610",
+        "cand_8557c187058710328e826efefbfaa3766603400f4cc23bfaa80fb980626068b5",
+        "cand_9e3f0f881f0c8f124320030f5c0ab4be5b7f262512927f32c95b3eed9610976b",
+        "cand_a36ddf2ec71c9d34740239a3f52ccd98d3064e1a39618396b02b94561a985325",
+        "cand_c46d1f94fa1f964b01df35610efc7a079501e6a6b5359fc74b09354729e03b35"
+      ],
+      "stage_constants": {
+        "R": 287.4,
+        "cycle_gas_property_basis": "textbook_true_cp",
+        "k_n": 6.8e-06,
+        "l_т_D_т": 0.250586,
+        "q_n": 0.995,
+        "reaction_table": [
+          [
+            0.1111111111111111,
+            0.16666666666666666,
+            0.25,
+            0.3333333333333333
+          ],
+          [
+            0.2,
+            0.3,
+            0.4,
+            0.5
+          ]
+        ],
+        "source": "source-built textbook namespace (oe.build_ns)",
+        "stage_gas_property_basis": "textbook_true_cp",
+        "y0": 0.54,
+        "δ_мин": 0.0002,
+        "δ_отн": 0.005,
+        "η_м": 0.99,
+        "μ": 0.9,
+        "π_ст_макс": 2.4,
+        "σ_л": 300.0,
+        "φ": 0.97,
+        "ψ": 0.96
+      }
+    },
+    "run_config_hash": "3e7d81737d8b622b74abeed417606468fa3ca46669766f407e684d1b2afc26aa",
+    "run_id": "run_eff27e97a22ec84250db958effbc775c2269e5fb51c958b1705591db9ae43434",
+    "schema_version": "raw-candidate-v1"
+  }
+}

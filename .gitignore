@@ -4,6 +4,7 @@ __pycache__/
 .pytest_cache/
 *.egg-info/
 .venv/
+.dataset.lock
 Optimizer/results/*_DONE
 Optimizer/results/*.zip
 Optimizer/results/scan2d.csv

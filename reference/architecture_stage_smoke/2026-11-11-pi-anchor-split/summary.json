@@ -1,0 +1,2045 @@
+{
+  "cases": [
+    {
+      "air_flow_bracket_kg_s": [
+        1.3414688037564637,
+        2.0867292502878323
+      ],
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "assembly": "A_MAIN",
+      "case": "A_PI3_W0.5",
+      "coupling": "AB",
+      "evaluated_states": [
+        {
+          "air_mass_flow_kg_s": 1.3414688037564637,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_9f134fc7bd5abb6314a9b61eb31eedcc434533fb01e1d5627070235945af262f",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 68120.38312881789,
+          "relative_power_residual": 0.3807237897380192,
+          "signed_power_residual_W": -41879.61687118211
+        },
+        {
+          "air_mass_flow_kg_s": 2.0867292502878323,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_ab5e0de3476dfbeae0cad9a9167271b7568eb53a58e338373386a2ec1c84c918",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 82227.43119646999,
+          "relative_power_residual": 0.2524778982139092,
+          "signed_power_residual_W": -27772.56880353001
+        }
+      ],
+      "last_evaluated": {
+        "air_mass_flow_kg_s": 2.0867292502878323,
+        "calculation_status": "SUCCESS",
+        "candidate_id": "cand_ab5e0de3476dfbeae0cad9a9167271b7568eb53a58e338373386a2ec1c84c918",
+        "failure_reason": null,
+        "failure_stage": null,
+        "net_mechanical_power_W": 82227.43119646999,
+        "relative_power_residual": 0.2524778982139092,
+        "signed_power_residual_W": -27772.56880353001
+      },
+      "numerical_power_closed": null,
+      "overall_engineering_feasibility": null,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "reason": "outer_bracket_not_bracketed",
+      "root": null,
+      "source_point_index": 2,
+      "status": "NUMERICAL_FAILURE",
+      "target_gearbox_input_power_W": 110000.0,
+      "trial_count": 2
+    },
+    {
+      "air_flow_bracket_kg_s": [
+        1.3405949675041338,
+        2.0853699494508744
+      ],
+      "architecture": "SINGLE_SHAFT_SINGLE_CC",
+      "assembly": "B_MAIN",
+      "case": "B_PI3_W0.5",
+      "coupling": "AB",
+      "evaluated_states": [
+        {
+          "air_mass_flow_kg_s": 1.3405949675041338,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_ea3ad2ae93fcbc0f26ad3b4247b10d7671bda7569b8067c3d3bf32e15f5c2687",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 68158.55530632107,
+          "relative_power_residual": 0.3803767699425357,
+          "signed_power_residual_W": -41841.44469367893
+        },
+        {
+          "air_mass_flow_kg_s": 2.0853699494508744,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_173c1028c24f2f9fc85d043c101cfa7662806173ef7c8548e86979fd96e3b440",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 82316.9333256837,
+          "relative_power_residual": 0.25166424249378455,
+          "signed_power_residual_W": -27683.066674316302
+        }
+      ],
+      "last_evaluated": {
+        "air_mass_flow_kg_s": 2.0853699494508744,
+        "calculation_status": "SUCCESS",
+        "candidate_id": "cand_173c1028c24f2f9fc85d043c101cfa7662806173ef7c8548e86979fd96e3b440",
+        "failure_reason": null,
+        "failure_stage": null,
+        "net_mechanical_power_W": 82316.9333256837,
+        "relative_power_residual": 0.25166424249378455,
+        "signed_power_residual_W": -27683.066674316302
+      },
+      "numerical_power_closed": null,
+      "overall_engineering_feasibility": null,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "reason": "outer_bracket_not_bracketed",
+      "root": null,
+      "source_point_index": 5,
+      "status": "NUMERICAL_FAILURE",
+      "target_gearbox_input_power_W": 110000.0,
+      "trial_count": 2
+    },
+    {
+      "air_flow_bracket_kg_s": [
+        1.33992363520225,
+        2.0843256547590556
+      ],
+      "architecture": "FREE_POWER_TURBINE",
+      "assembly": "C_COUPLED",
+      "case": "C_PI3_W0.5",
+      "coupling": "C",
+      "evaluated_states": [
+        {
+          "air_mass_flow_kg_s": 1.33992363520225,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_3e6d220e25105481a7e82ad1a75b0a5c46eb7b4a210a2ad4ec6766cc9443055b",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 80687.65743245205,
+          "relative_power_residual": 0.2664758415231632,
+          "signed_power_residual_W": -29312.342567547952
+        },
+        {
+          "air_mass_flow_kg_s": 2.0843256547590556,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_3f65c84dd7173308038100db31ba2e285496e4672dc5321d8e9186121674890b",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 106614.59909948125,
+          "relative_power_residual": 0.030776371822897768,
+          "signed_power_residual_W": -3385.4009005187545
+        }
+      ],
+      "last_evaluated": {
+        "air_mass_flow_kg_s": 2.0843256547590556,
+        "calculation_status": "SUCCESS",
+        "candidate_id": "cand_3f65c84dd7173308038100db31ba2e285496e4672dc5321d8e9186121674890b",
+        "failure_reason": null,
+        "failure_stage": null,
+        "net_mechanical_power_W": 106614.59909948125,
+        "relative_power_residual": 0.030776371822897768,
+        "signed_power_residual_W": -3385.4009005187545
+      },
+      "numerical_power_closed": null,
+      "overall_engineering_feasibility": null,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "reason": "outer_bracket_not_bracketed",
+      "root": null,
+      "source_point_index": 9,
+      "status": "NUMERICAL_FAILURE",
+      "target_gearbox_input_power_W": 110000.0,
+      "trial_count": 2
+    },
+    {
+      "air_flow_bracket_kg_s": [
+        0.621715016288822,
+        0.9671122475603896
+      ],
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "assembly": "A_MAIN",
+      "case": "A_PI8_W0.4",
+      "coupling": "AB",
+      "evaluated_states": [
+        {
+          "air_mass_flow_kg_s": 0.621715016288822,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_09abe0c9a64f25440899338ec7a69cda0a337629a883fe49adaeab5473662773",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 95604.3428796946,
+          "relative_power_residual": 0.1308696101845946,
+          "signed_power_residual_W": -14395.657120305405
+        },
+        {
+          "air_mass_flow_kg_s": 0.9671122475603896,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_a21a6680e8e5c2060325f6b6a30862b253111eb7fda96be86232595619da716a",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 151033.38953811192,
+          "relative_power_residual": 0.37303081398283566,
+          "signed_power_residual_W": 41033.38953811192
+        },
+        {
+          "air_mass_flow_kg_s": 0.7944136319246058,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_fc6d1ed691ffc5ace51acc690dbfa034770a11582cf4f42cf3b8dec51d739332",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 123468.29512033437,
+          "relative_power_residual": 0.12243904654849426,
+          "signed_power_residual_W": 13468.29512033437
+        },
+        {
+          "air_mass_flow_kg_s": 0.7080643241067139,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_aefd7532b4f39283c99595d44caf3c7c1c931bbb804dbb4df20ed03bb0f0c1b5",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109572.57319857235,
+          "relative_power_residual": 0.00388569819479678,
+          "signed_power_residual_W": -427.42680142764584
+        },
+        {
+          "air_mass_flow_kg_s": 0.7512389780156599,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_b30aad1a1063cdc83051ad1868d7be6c3ab7895649a2047654a9e8955b9ae5d6",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 116529.32258751243,
+          "relative_power_residual": 0.05935747806829485,
+          "signed_power_residual_W": 6529.3225875124335
+        },
+        {
+          "air_mass_flow_kg_s": 0.7296516510611869,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_2945926fffaacd4e02400e5bb6e346decf7b676e640f87d218fc0455193250c8",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 113053.11318308758,
+          "relative_power_residual": 0.02775557439170529,
+          "signed_power_residual_W": 3053.113183087582
+        },
+        {
+          "air_mass_flow_kg_s": 0.7188579875839505,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_af8b0ee3d702bbfc367391198445784644dc87b0ef5ead1507adca1c4169ad03",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 111313.17335475067,
+          "relative_power_residual": 0.011937939588642489,
+          "signed_power_residual_W": 1313.1733547506738
+        },
+        {
+          "air_mass_flow_kg_s": 0.7134611558453322,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_25f51dd6373e35a57d455965aaa0b0b3658dd6a5bef1d03dd0af99d05ac8b3f1",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110443.05137600459,
+          "relative_power_residual": 0.004027739781859881,
+          "signed_power_residual_W": 443.0513760045869
+        },
+        {
+          "air_mass_flow_kg_s": 0.710762739976023,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_e800a89c326d0017f14f41ea4c041c74fa1dbdf74b7fb87e822405118de1db9d",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110007.85639919783,
+          "relative_power_residual": 7.142181088936261e-05,
+          "signed_power_residual_W": 7.856399197829887
+        },
+        {
+          "air_mass_flow_kg_s": 0.7094135320413685,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_fd133dfe43f74cc6a2a2c62acd0e049e479f11802793964ca2df48aafb05a2cd",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109790.09779993445,
+          "relative_power_residual": 0.0019082018187777563,
+          "signed_power_residual_W": -209.9022000655532
+        },
+        {
+          "air_mass_flow_kg_s": 0.7100881360086957,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_05668f6effb03e0c0520983590ca005d087b575b675eb13918cb86101696c07e",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109899.10788762427,
+          "relative_power_residual": 0.0009172010215975619,
+          "signed_power_residual_W": -100.89211237573181
+        },
+        {
+          "air_mass_flow_kg_s": 0.7104254379923594,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_2185a1bb008b55ef668673b7c2d3bf3440f5633cbea293fbeff62f2269b00e49",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109953.35468758977,
+          "relative_power_residual": 0.00042404829463842114,
+          "signed_power_residual_W": -46.645312410226325
+        },
+        {
+          "air_mass_flow_kg_s": 0.7105940889841912,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_d705adc39a23249bedecd1cd1320cb8801d6f417635062e4489c3d16a788b48b",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109980.60570414935,
+          "relative_power_residual": 0.00017631178046047518,
+          "signed_power_residual_W": -19.39429585065227
+        },
+        {
+          "air_mass_flow_kg_s": 0.710678414480107,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_05f8cf8c347dd6e3797c2677d4278505b7b8f65742ab9decb43b3f4c08a3741a",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109994.10288654608,
+          "relative_power_residual": 5.361012230833611e-05,
+          "signed_power_residual_W": -5.8971134539169725
+        },
+        {
+          "air_mass_flow_kg_s": 0.710720577228065,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_deaa2c0da74f7095ff1ef252a33eb382c53aab6683cb0da48624af544e6d906d",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110001.10786210187,
+          "relative_power_residual": 1.0071473653343591e-05,
+          "signed_power_residual_W": 1.107862101867795
+        },
+        {
+          "air_mass_flow_kg_s": 0.710699495854086,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_a37c9162861d3c6bb8c63d8a797953977b04384085772fda8fbf2da991f9ba3b",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109997.60537394986,
+          "relative_power_residual": 2.176932772854343e-05,
+          "signed_power_residual_W": -2.3946260501397774
+        },
+        {
+          "air_mass_flow_kg_s": 0.7107100365410755,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_4f713d3e07f59c62de3b55f17e86eee8412fec1c272731758670e01fb1345f0c",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109999.35661793195,
+          "relative_power_residual": 5.8489278914004734e-06,
+          "signed_power_residual_W": -0.6433820680540521
+        },
+        {
+          "air_mass_flow_kg_s": 0.7107153068845702,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_88cddf3dfb1bd87eeae2de3b5584aa426dd57a14b3f9965663ed0144ece9b131",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110000.23223999367,
+          "relative_power_residual": 2.111272669704208e-06,
+          "signed_power_residual_W": 0.23223999366746284
+        },
+        {
+          "air_mass_flow_kg_s": 0.7107126717128228,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_a59c956a1af155e41046f7331a126a01425905fda948cecf137782faeebd4d2c",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109999.79442895713,
+          "relative_power_residual": 1.8688276624412868e-06,
+          "signed_power_residual_W": -0.20557104286854155
+        },
+        {
+          "air_mass_flow_kg_s": 0.7107139892986964,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_c8bc46e54ca2325c74932bb9c2bdfd928eb8add5e77f0892bbb1aa6dbb81d23f",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110000.01333447403,
+          "relative_power_residual": 1.212224911961874e-07,
+          "signed_power_residual_W": 0.013334474031580612
+        }
+      ],
+      "last_evaluated": {
+        "air_mass_flow_kg_s": 0.7107139892986964,
+        "calculation_status": "SUCCESS",
+        "candidate_id": "cand_c8bc46e54ca2325c74932bb9c2bdfd928eb8add5e77f0892bbb1aa6dbb81d23f",
+        "failure_reason": null,
+        "failure_stage": null,
+        "net_mechanical_power_W": 110000.01333447403,
+        "relative_power_residual": 1.212224911961874e-07,
+        "signed_power_residual_W": 0.013334474031580612
+      },
+      "numerical_power_closed": true,
+      "overall_engineering_feasibility": null,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "reason": "root_found",
+      "root": {
+        "air_mass_flow_kg_s": 0.7107139892986964,
+        "candidate_id": "cand_c8bc46e54ca2325c74932bb9c2bdfd928eb8add5e77f0892bbb1aa6dbb81d23f",
+        "fuel_mass_flow_kg_s": 0.013541881359821688,
+        "gas_mass_flow_kg_s": 0.7242558706585182,
+        "net_mechanical_power_W": 110000.01333447403,
+        "numerical_power_closed": true,
+        "numerical_power_label": "ACTUAL_BOUNDARY_LINK_POWER_CLOSED",
+        "relative_power_residual": 1.212224911961874e-07,
+        "signed_power_residual_W": 0.013334474031580612
+      },
+      "source_point_index": 2,
+      "status": "SUCCESS",
+      "target_gearbox_input_power_W": 110000.0,
+      "trial_count": 20
+    },
+    {
+      "air_flow_bracket_kg_s": [
+        0.6219358860433926,
+        0.9674558227341661
+      ],
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "assembly": "A_MAIN",
+      "case": "A_PI8_W0.5",
+      "coupling": "AB",
+      "evaluated_states": [
+        {
+          "air_mass_flow_kg_s": 0.6219358860433926,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_db59fc4863ef00a3df7bb140586f79d326ed37fb910e26e6ae179ee405290f43",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 95605.0984271502,
+          "relative_power_residual": 0.13086274157136188,
+          "signed_power_residual_W": -14394.901572849805
+        },
+        {
+          "air_mass_flow_kg_s": 0.9674558227341661,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_2da5262383a0a60ed1a444ac37a539c23e48178d94f4252a9e87fc0da7f21f08",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 151033.40981198195,
+          "relative_power_residual": 0.37303099829074504,
+          "signed_power_residual_W": 41033.409811981954
+        },
+        {
+          "air_mass_flow_kg_s": 0.7946958543887793,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_12e7fe7bcc904aa3910cb9e0ab89fd66ad7d9b097e78b4895482d53f25100628",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 123468.92959611304,
+          "relative_power_residual": 0.12244481451011856,
+          "signed_power_residual_W": 13468.929596113041
+        },
+        {
+          "air_mass_flow_kg_s": 0.7083158702160859,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_86b8a8c9af07ce42488e6fa8f431e461954ff535e51f3dcba2e0f2fe11ed0325",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109573.02854223314,
+          "relative_power_residual": 0.0038815587069714885,
+          "signed_power_residual_W": -426.97145776686375
+        },
+        {
+          "air_mass_flow_kg_s": 0.7515058623024327,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_8697f2d6aa293082c93782fbd0b47015203b45d8e279e79419680895592b4946",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 116530.00820497057,
+          "relative_power_residual": 0.05936371095427788,
+          "signed_power_residual_W": 6530.008204970567
+        },
+        {
+          "air_mass_flow_kg_s": 0.7299108662592593,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_66bef6b6a3f464d1e08f114aa97bc3847697d2706553b9c09b034eceff2a2334",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 113053.55119948101,
+          "relative_power_residual": 0.02775955635891825,
+          "signed_power_residual_W": 3053.5511994810076
+        },
+        {
+          "air_mass_flow_kg_s": 0.7191133682376726,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_0fe21bd61f09800a5ca29ab74946bcad5993c2ceeeffd42cec54f5f6c5528270",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 111313.8801966501,
+          "relative_power_residual": 0.011944365424091864,
+          "signed_power_residual_W": 1313.880196650105
+        },
+        {
+          "air_mass_flow_kg_s": 0.7137146192268793,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_d986f4db18b789a27b1e88922bd355ba40e2515006f99bde52d48970eb965334",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110443.50294330911,
+          "relative_power_residual": 0.004031844939173739,
+          "signed_power_residual_W": 443.5029433091113
+        },
+        {
+          "air_mass_flow_kg_s": 0.7110152447214826,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_ed1be479a66fb6170f176cf52f2f392d0ed77d954a950deee9a5517984e3b24d",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110008.30990610245,
+          "relative_power_residual": 7.554460093140898e-05,
+          "signed_power_residual_W": 8.309906102454988
+        },
+        {
+          "air_mass_flow_kg_s": 0.7096655574687842,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_766b703e2ed6e63919d91423e6299f56415bd81e5780291d10c5e326df82bf68",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109790.80823613144,
+          "relative_power_residual": 0.0019017433078959585,
+          "signed_power_residual_W": -209.19176386855543
+        },
+        {
+          "air_mass_flow_kg_s": 0.7103404010951334,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_5ca42296a9ddbff505d57de1627baa64d90264430627f5ceed96dc528badf915",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109899.561886093,
+          "relative_power_residual": 0.0009130737627909349,
+          "signed_power_residual_W": -100.43811390700284
+        },
+        {
+          "air_mass_flow_kg_s": 0.7106778229083079,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_6bcd5117d95519cbd9ff0e7257642544153b74dcafcd2d9d3798e4eaa2990fd3",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109953.80839554881,
+          "relative_power_residual": 0.00041992367682899134,
+          "signed_power_residual_W": -46.19160445118905
+        },
+        {
+          "air_mass_flow_kg_s": 0.7108465338148953,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_4d0a69e590c0a5041493447d821a14b8e0799870c439e0a16850c9868831df79",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109981.05931177764,
+          "relative_power_residual": 0.00017218807474868796,
+          "signed_power_residual_W": -18.940688222355675
+        },
+        {
+          "air_mass_flow_kg_s": 0.7109308892681889,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_65d9186b42715524f9dfd9ddef4c2cf38167d416a7d00c9441a099c97a7d8458",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109994.81290014592,
+          "relative_power_residual": 4.71554532189409e-05,
+          "signed_power_residual_W": -5.187099854083499
+        },
+        {
+          "air_mass_flow_kg_s": 0.7109730669948358,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_ec50af431d33c7b01d5ba18fe49afe937f83acefa5b1f96d823762bf00929748",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110001.56141700107,
+          "relative_power_residual": 1.419470000969754e-05,
+          "signed_power_residual_W": 1.5614170010667294
+        },
+        {
+          "air_mass_flow_kg_s": 0.7109519781315123,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_dc2905bff99d21bef3f8bdda21d08b0fc9072c12fcc785fa3da325a6771b0a84",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109998.0589072835,
+          "relative_power_residual": 1.7646297422735105e-05,
+          "signed_power_residual_W": -1.9410927165008616
+        },
+        {
+          "air_mass_flow_kg_s": 0.710962522563174,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_13d4068be7aa347f1ae6ce95e375d917c8e8e0df4b22a1ddc19218e3c7e893c2",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109999.81016204928,
+          "relative_power_residual": 1.7257995519850572e-06,
+          "signed_power_residual_W": -0.1898379507183563
+        },
+        {
+          "air_mass_flow_kg_s": 0.710967794779005,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_83497914a53df11c435748597ce26a370bab8640d5399877fe5091ab0fa8c91a",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110000.6857895022,
+          "relative_power_residual": 6.234450019970113e-06,
+          "signed_power_residual_W": 0.6857895021967124
+        },
+        {
+          "air_mass_flow_kg_s": 0.7109651586710894,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_3f57f256c1c45889b06769781f91530662867ac82d48f293ed7aaddf19833a14",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110000.24797577012,
+          "relative_power_residual": 2.2543251829285343e-06,
+          "signed_power_residual_W": 0.24797577012213878
+        },
+        {
+          "air_mass_flow_kg_s": 0.7109638406171317,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_5a91bd4fecbf883f73c7d7a97b4eaf88851cb404bde2372671cf90b2112a2498",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110000.02906890816,
+          "relative_power_residual": 2.642628014489839e-07,
+          "signed_power_residual_W": 0.02906890815938823
+        }
+      ],
+      "last_evaluated": {
+        "air_mass_flow_kg_s": 0.7109638406171317,
+        "calculation_status": "SUCCESS",
+        "candidate_id": "cand_5a91bd4fecbf883f73c7d7a97b4eaf88851cb404bde2372671cf90b2112a2498",
+        "failure_reason": null,
+        "failure_stage": null,
+        "net_mechanical_power_W": 110000.02906890816,
+        "relative_power_residual": 2.642628014489839e-07,
+        "signed_power_residual_W": 0.02906890815938823
+      },
+      "numerical_power_closed": true,
+      "overall_engineering_feasibility": null,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "reason": "root_found",
+      "root": {
+        "air_mass_flow_kg_s": 0.7109638406171317,
+        "candidate_id": "cand_5a91bd4fecbf883f73c7d7a97b4eaf88851cb404bde2372671cf90b2112a2498",
+        "fuel_mass_flow_kg_s": 0.013546174412849088,
+        "gas_mass_flow_kg_s": 0.7245100150299808,
+        "net_mechanical_power_W": 110000.02906890816,
+        "numerical_power_closed": true,
+        "numerical_power_label": "ACTUAL_BOUNDARY_LINK_POWER_CLOSED",
+        "relative_power_residual": 2.642628014489839e-07,
+        "signed_power_residual_W": 0.02906890815938823
+      },
+      "source_point_index": 2,
+      "status": "SUCCESS",
+      "target_gearbox_input_power_W": 110000.0,
+      "trial_count": 20
+    },
+    {
+      "air_flow_bracket_kg_s": [
+        0.6219773436081724,
+        0.9675203122793792
+      ],
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "assembly": "A_MAIN",
+      "case": "A_PI8_W0.6",
+      "coupling": "AB",
+      "evaluated_states": [
+        {
+          "air_mass_flow_kg_s": 0.6219773436081724,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_a087934caa0d3131f22783403507ab035a9af6212c6ef5bee3a2e2e5c6314514",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 95605.1847466079,
+          "relative_power_residual": 0.13086195684901905,
+          "signed_power_residual_W": -14394.815253392095
+        },
+        {
+          "air_mass_flow_kg_s": 0.9675203122793792,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_9eb9f18aa9f31a1d5618c7237d24392801bd5e959a9efea676f323695bb4991d",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 151033.39252794615,
+          "relative_power_residual": 0.3730308411631469,
+          "signed_power_residual_W": 41033.392527946155
+        },
+        {
+          "air_mass_flow_kg_s": 0.7947488279437758,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_13968ea6467b4576e600a059a87339954869da1bfad0ac43dd399f1bb40f15a7",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 123468.97762812377,
+          "relative_power_residual": 0.12244525116476156,
+          "signed_power_residual_W": 13468.977628123772
+        },
+        {
+          "air_mass_flow_kg_s": 0.7083630857759741,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_84157af148ca234a6131271db283edab6f92d521318220654cd99747e6798923",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109573.09867898378,
+          "relative_power_residual": 0.0038809211001474813,
+          "signed_power_residual_W": -426.90132101622294
+        },
+        {
+          "air_mass_flow_kg_s": 0.7515559568598749,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_966dafa873c267de81c6978b00e18bcd3ae4f56764158aa9283eb2862283b544",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 116530.06972435885,
+          "relative_power_residual": 0.0593642702214441,
+          "signed_power_residual_W": 6530.069724358851
+        },
+        {
+          "air_mass_flow_kg_s": 0.7299595213179244,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_6b24aac5fdbfcc9a0f51b157071b8736e5b3c023cfa2e18f798987a0fe67f7da",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 113053.61760626076,
+          "relative_power_residual": 0.02776016005691596,
+          "signed_power_residual_W": 3053.6176062607556
+        },
+        {
+          "air_mass_flow_kg_s": 0.7191613035469493,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_a5501cfb91a58790e7bcde1a25b2890fde7c0bf8b5f710a311b41f156284e225",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 111313.94861666084,
+          "relative_power_residual": 0.011944987424189459,
+          "signed_power_residual_W": 1313.9486166608403
+        },
+        {
+          "air_mass_flow_kg_s": 0.7137621946614616,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_2a854a144b5ab7e6dc6086ae615adfb5978fff0a06c167b067cf6caa02f063a3",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110443.57225192676,
+          "relative_power_residual": 0.004032475017515985,
+          "signed_power_residual_W": 443.5722519267583
+        },
+        {
+          "air_mass_flow_kg_s": 0.7110626402187179,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_54b67094d84a945e764e8f47b657addec3e0e7d91a35032c0432d39168d20f40",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110008.37963844664,
+          "relative_power_residual": 7.617853133309505e-05,
+          "signed_power_residual_W": 8.379638446640456
+        },
+        {
+          "air_mass_flow_kg_s": 0.7097128629973459,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_cdf8cee88fd389f9c73737cfae9c77889348777c065849d185b4afc152e471de",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109790.87818162184,
+          "relative_power_residual": 0.0019011074398014567,
+          "signed_power_residual_W": -209.12181837816024
+        },
+        {
+          "air_mass_flow_kg_s": 0.7103877516080319,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_25135382bc6d14454e003b33debddac0268e8ff85c7854e638c25286148dda62",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109899.63172561736,
+          "relative_power_residual": 0.000912438858023961,
+          "signed_power_residual_W": -100.36827438263572
+        },
+        {
+          "air_mass_flow_kg_s": 0.7107251959133749,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_59ba447735ab28fa898b26eb93379d1737b3743841dd19da027933add3121bef",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109954.13460042648,
+          "relative_power_residual": 0.0004169581779411105,
+          "signed_power_residual_W": -45.865399573522154
+        },
+        {
+          "air_mass_flow_kg_s": 0.7108939180660464,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_29e7780563c9bd298c96bcb37afa22452ced5d4a3334225a26fd13233266a19f",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109981.12906675655,
+          "relative_power_residual": 0.00017155393857683522,
+          "signed_power_residual_W": -18.870933243451873
+        },
+        {
+          "air_mass_flow_kg_s": 0.7109782791423822,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_eb3f4eef5fdf68098fec8155c0bacb8c81b3b4002c77f6431b4069cfe17ea989",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109994.88265236627,
+          "relative_power_residual": 4.652134212480054e-05,
+          "signed_power_residual_W": -5.117347633728059
+        },
+        {
+          "air_mass_flow_kg_s": 0.71102045968055,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_5f007af486d02242679b2c77f65c47340426ea5b4c7e0e6113c52cb4de042a4e",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110001.63115928628,
+          "relative_power_residual": 1.4828720784333365e-05,
+          "signed_power_residual_W": 1.6311592862766702
+        },
+        {
+          "air_mass_flow_kg_s": 0.7109993694114661,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_26c74afbc102b089ba4d662531142ae2ef6b02f29ebc791720f98677a7ef72af",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109998.12864598687,
+          "relative_power_residual": 1.7012309210258536e-05,
+          "signed_power_residual_W": -1.871354013128439
+        },
+        {
+          "air_mass_flow_kg_s": 0.711009914546008,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_9cf362359194bad6ce456c1d7c3385b51d0572a74914d4bace4ef26bd895847c",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109999.87990254367,
+          "relative_power_residual": 1.0917950575028293e-06,
+          "signed_power_residual_W": -0.12009745632531121
+        },
+        {
+          "air_mass_flow_kg_s": 0.711015187113279,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_e9c0114d492d59f1e59c7d05b108436c6c6dd080a2b47d564de1eb87c21b708f",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110000.75553089174,
+          "relative_power_residual": 6.8684626521479165e-06,
+          "signed_power_residual_W": 0.7555308917362709
+        },
+        {
+          "air_mass_flow_kg_s": 0.7110125508296435,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_e270c7013c1157af88d2114d0d99083155d9396028a2d41ebf4188763a40231f",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110000.31771671213,
+          "relative_power_residual": 2.8883337466554207e-06,
+          "signed_power_residual_W": 0.3177167121320963
+        },
+        {
+          "air_mass_flow_kg_s": 0.7110112326878257,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_581bb3145a99f29a1e1ca161bd4c9c197fdb6f8714975d234698be15f7a230e8",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110000.09880962627,
+          "relative_power_residual": 8.982693297598003e-07,
+          "signed_power_residual_W": 0.09880962627357803
+        }
+      ],
+      "last_evaluated": {
+        "air_mass_flow_kg_s": 0.7110112326878257,
+        "calculation_status": "SUCCESS",
+        "candidate_id": "cand_581bb3145a99f29a1e1ca161bd4c9c197fdb6f8714975d234698be15f7a230e8",
+        "failure_reason": null,
+        "failure_stage": null,
+        "net_mechanical_power_W": 110000.09880962627,
+        "relative_power_residual": 8.982693297598003e-07,
+        "signed_power_residual_W": 0.09880962627357803
+      },
+      "numerical_power_closed": true,
+      "overall_engineering_feasibility": null,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "reason": "root_found",
+      "root": {
+        "air_mass_flow_kg_s": 0.7110112326878257,
+        "candidate_id": "cand_581bb3145a99f29a1e1ca161bd4c9c197fdb6f8714975d234698be15f7a230e8",
+        "fuel_mass_flow_kg_s": 0.013547020480163941,
+        "gas_mass_flow_kg_s": 0.7245582531679897,
+        "net_mechanical_power_W": 110000.09880962627,
+        "numerical_power_closed": true,
+        "numerical_power_label": "ACTUAL_BOUNDARY_LINK_POWER_CLOSED",
+        "relative_power_residual": 8.982693297598003e-07,
+        "signed_power_residual_W": 0.09880962627357803
+      },
+      "source_point_index": 2,
+      "status": "SUCCESS",
+      "target_gearbox_input_power_W": 110000.0,
+      "trial_count": 20
+    },
+    {
+      "air_flow_bracket_kg_s": [
+        0.6195847368978771,
+        0.9637984796189198
+      ],
+      "architecture": "SINGLE_SHAFT_SINGLE_CC",
+      "assembly": "B_MAIN",
+      "case": "B_PI8_W0.5",
+      "coupling": "AB",
+      "evaluated_states": [
+        {
+          "air_mass_flow_kg_s": 0.6195847368978771,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_041ed7cf353cb115507c7b3aa22ec353335743494db87187b4eafb91d89ce14c",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 95598.25495473153,
+          "relative_power_residual": 0.1309249549569861,
+          "signed_power_residual_W": -14401.745045268472
+        },
+        {
+          "air_mass_flow_kg_s": 0.9637984796189198,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_e7a99cae5298c77afb923cb212ac1ec31391f38ed1dd0475acdb6906e3ea9f33",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 151034.0740757928,
+          "relative_power_residual": 0.37303703705266184,
+          "signed_power_residual_W": 41034.0740757928
+        },
+        {
+          "air_mass_flow_kg_s": 0.7916916082583985,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_2e986dd35bd3e701c59a0036dec4cfa105e72430d185b37eed05403d3e1988bb",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 123465.11055089993,
+          "relative_power_residual": 0.1224100959172721,
+          "signed_power_residual_W": 13465.110550899932
+        },
+        {
+          "air_mass_flow_kg_s": 0.7056381725781378,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_9355bd95a84a0afbe8683c0e7f36036d5d4e6726cf89eb1e8618a58d92f25cd0",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109567.57994542451,
+          "relative_power_residual": 0.0039310914052316966,
+          "signed_power_residual_W": -432.4200545754866
+        },
+        {
+          "air_mass_flow_kg_s": 0.7486648904182681,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_76f50f4ccc55b3694b63870850ce863c585c1f2d91a95174307001f67b44ea28",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 116525.22142109703,
+          "relative_power_residual": 0.0593201947372457,
+          "signed_power_residual_W": 6525.221421097027
+        },
+        {
+          "air_mass_flow_kg_s": 0.7271515314982029,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_1d181b8897b6b53e49122c406595051d297b2c2002c1d0945ed0bc55473c227e",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 113048.2657728217,
+          "relative_power_residual": 0.027711507025651835,
+          "signed_power_residual_W": 3048.265772821702
+        },
+        {
+          "air_mass_flow_kg_s": 0.7163948520381703,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_eff101d6f690f1e6754e0432bd07b50fe360d0d974f2cee0ca850711cae15e1f",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 111308.5048876672,
+          "relative_power_residual": 0.01189549897879267,
+          "signed_power_residual_W": 1308.5048876671935
+        },
+        {
+          "air_mass_flow_kg_s": 0.711016512308154,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_c065ac6be697c525c64f7ad42088812f8dbae9362c608631dbd784ef37c01525",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110438.0892508855,
+          "relative_power_residual": 0.003982629553504574,
+          "signed_power_residual_W": 438.08925088550313
+        },
+        {
+          "air_mass_flow_kg_s": 0.7083273424431459,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_1cd894521a26f5ce36886a48d29d0fc5dd4f560bb4e4a13703812a01557bde8a",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110002.87821611235,
+          "relative_power_residual": 2.6165601021387953e-05,
+          "signed_power_residual_W": 2.878216112352675
+        },
+        {
+          "air_mass_flow_kg_s": 0.7069827575106418,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_3053c237def6ce101aa1cef77741a083de49a2e2e8e3ed227809ad43c5bc7d49",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109785.11239752366,
+          "relative_power_residual": 0.0019535236588758627,
+          "signed_power_residual_W": -214.8876024763449
+        },
+        {
+          "air_mass_flow_kg_s": 0.7076550499768939,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_5f009190d53a569d73a11c0dc14ab6f496e1c750a06f5d1a567b1e2a57754e8a",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109894.12562501602,
+          "relative_power_residual": 0.0009624943180361615,
+          "signed_power_residual_W": -105.87437498397776
+        },
+        {
+          "air_mass_flow_kg_s": 0.7079911962100198,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_d12d953ca86fb69a329378b7e70ba071474a67a3f94ed64548c55419703f10d1",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109948.37489642153,
+          "relative_power_residual": 0.00046931912344060203,
+          "signed_power_residual_W": -51.625103578466224
+        },
+        {
+          "air_mass_flow_kg_s": 0.7081592693265828,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_b76003179702a0dec9b7362ae4890063d2edb43524dcfa05c9472bc4ba0f08bb",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109975.62671513169,
+          "relative_power_residual": 0.0002215753169846721,
+          "signed_power_residual_W": -24.37328486831393
+        },
+        {
+          "air_mass_flow_kg_s": 0.7082433058848643,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_d5f02b1948d3210ca958a8e02ed672d8e15c8a5f20dd55cdc174f27f13c99c18",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109989.12473961679,
+          "relative_power_residual": 9.886600348373495e-05,
+          "signed_power_residual_W": -10.875260383210843
+        },
+        {
+          "air_mass_flow_kg_s": 0.708285324164005,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_054de96e5095389a360ae3a53fba2223a116751ad05c12e311454dce9ac3d043",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109996.12925736845,
+          "relative_power_residual": 3.5188569377747955e-05,
+          "signed_power_residual_W": -3.8707426315522753
+        },
+        {
+          "air_mass_flow_kg_s": 0.7083063333035755,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_39800bac89e6f81b23473519e399aa16c02e631be2c2686da5c47b51fa3caaee",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109999.37596299627,
+          "relative_power_residual": 5.6730636702427136e-06,
+          "signed_power_residual_W": -0.6240370037266985
+        },
+        {
+          "air_mass_flow_kg_s": 0.7083168378733606,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_b0ec2cb5cd5676704edfc9a1bb8b9f5a28d16b1958892d015c2bf2be7d7eb757",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110001.12708945584,
+          "relative_power_residual": 1.0246267780365253e-05,
+          "signed_power_residual_W": 1.1270894558401778
+        },
+        {
+          "air_mass_flow_kg_s": 0.7083115855884681,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_43e2832b99b1e3ca1680d4f4b9e248f0bccc03359ec81476cb45b7a9e62319a6",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110000.25152620114,
+          "relative_power_residual": 2.2866018285805527e-06,
+          "signed_power_residual_W": 0.2515262011438608
+        },
+        {
+          "air_mass_flow_kg_s": 0.7083089594460218,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_5c9fce21aeff306fa0641a5753ba7364c30ff7ad66e6eb273a07697f731897ca",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109999.81374459277,
+          "relative_power_residual": 1.6932309748054566e-06,
+          "signed_power_residual_W": -0.18625540722860023
+        },
+        {
+          "air_mass_flow_kg_s": 0.708310272517245,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_789e6a1e606e57c65be85e9f396cdf493295cae42d23165285386e45c684f0ee",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110000.0326353958,
+          "relative_power_residual": 2.96685416304337e-07,
+          "signed_power_residual_W": 0.03263539579347707
+        }
+      ],
+      "last_evaluated": {
+        "air_mass_flow_kg_s": 0.708310272517245,
+        "calculation_status": "SUCCESS",
+        "candidate_id": "cand_789e6a1e606e57c65be85e9f396cdf493295cae42d23165285386e45c684f0ee",
+        "failure_reason": null,
+        "failure_stage": null,
+        "net_mechanical_power_W": 110000.0326353958,
+        "relative_power_residual": 2.96685416304337e-07,
+        "signed_power_residual_W": 0.03263539579347707
+      },
+      "numerical_power_closed": true,
+      "overall_engineering_feasibility": null,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "reason": "root_found",
+      "root": {
+        "air_mass_flow_kg_s": 0.708310272517245,
+        "candidate_id": "cand_789e6a1e606e57c65be85e9f396cdf493295cae42d23165285386e45c684f0ee",
+        "fuel_mass_flow_kg_s": 0.01350098679294751,
+        "gas_mass_flow_kg_s": 0.7218112593101926,
+        "net_mechanical_power_W": 110000.0326353958,
+        "numerical_power_closed": true,
+        "numerical_power_label": "ACTUAL_BOUNDARY_LINK_POWER_CLOSED",
+        "relative_power_residual": 2.96685416304337e-07,
+        "signed_power_residual_W": 0.03263539579347707
+      },
+      "source_point_index": 5,
+      "status": "SUCCESS",
+      "target_gearbox_input_power_W": 110000.0,
+      "trial_count": 20
+    },
+    {
+      "air_flow_bracket_kg_s": [
+        0.6178126208789924,
+        0.9610418547006547
+      ],
+      "architecture": "FREE_POWER_TURBINE",
+      "assembly": "C_COUPLED",
+      "case": "C_PI8_W0.5",
+      "coupling": "C",
+      "evaluated_states": [
+        {
+          "air_mass_flow_kg_s": 0.6178126208789924,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_2e23460f7fb9a8be2b49e921809130aff9846e02bc4fc9fa304590f2c8905454",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 96984.82444089188,
+          "relative_power_residual": 0.11831977781007379,
+          "signed_power_residual_W": -13015.175559108116
+        },
+        {
+          "air_mass_flow_kg_s": 0.9610418547006547,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_73b4b35e7e54f6727b861e9a493059f53a723d13def0514cccb6f6484282bd83",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 153616.14187381163,
+          "relative_power_residual": 0.39651038067101485,
+          "signed_power_residual_W": 43616.14187381163
+        },
+        {
+          "air_mass_flow_kg_s": 0.7894272377898235,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_2ffa504bd2b1f8b05fe026741e74d5601171b5e27833980c6532ee98f6f69711",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 125314.67882793065,
+          "relative_power_residual": 0.1392243529811877,
+          "signed_power_residual_W": 15314.67882793065
+        },
+        {
+          "air_mass_flow_kg_s": 0.7036199293344079,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_8f2d80a6d44c823443e989a0fad6dcea1baf7df754e24b8082f134a4d7ad5696",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 111170.32747066593,
+          "relative_power_residual": 0.010639340642417533,
+          "signed_power_residual_W": 1170.3274706659286
+        },
+        {
+          "air_mass_flow_kg_s": 0.6607162751067002,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_a1343c46dd29ce2ac2216f58f18679e05d3462a067acac38ed59d3e73f0f41e3",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 104081.80583198144,
+          "relative_power_residual": 0.05380176516380505,
+          "signed_power_residual_W": -5918.1941680185555
+        },
+        {
+          "air_mass_flow_kg_s": 0.682168102220554,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_8dffc3a053b25e320ea7c6029e925ae88237b15e22ed1df63dd076f561cc5466",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 107627.23245508545,
+          "relative_power_residual": 0.021570614044677694,
+          "signed_power_residual_W": -2372.7675449145463
+        },
+        {
+          "air_mass_flow_kg_s": 0.692894015777481,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_6c413621e1a67880de535a399e156dafb1f54f6cb8e37c34e3f501ddce8f8495",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109399.2208802809,
+          "relative_power_residual": 0.005461628361082694,
+          "signed_power_residual_W": -600.7791197190963
+        },
+        {
+          "air_mass_flow_kg_s": 0.6982569725559444,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_4895ad8c76da7e5a1d0c020eb18516f541509858523d770652dc358b90cb3037",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110284.92359571168,
+          "relative_power_residual": 0.002590214506469783,
+          "signed_power_residual_W": 284.92359571167617
+        },
+        {
+          "air_mass_flow_kg_s": 0.6955754941667127,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_d21ce16ddd837677d2fd6164b3c24ca4db4508da7ea7873707d9c3cb33139e06",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109842.02282338444,
+          "relative_power_residual": 0.0014361561510505536,
+          "signed_power_residual_W": -157.9771766155609
+        },
+        {
+          "air_mass_flow_kg_s": 0.6969162333613286,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_d4622b1cd8d3b93f0aa1e7a60e77542b0a271d25283c5a959f9516580854be6c",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110063.5754707544,
+          "relative_power_residual": 0.0005779588250399684,
+          "signed_power_residual_W": 63.57547075439652
+        },
+        {
+          "air_mass_flow_kg_s": 0.6962458637640206,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_bf367092698757cd690523e2325c2615b80a81973d11d90bf964405bc5f2fdb6",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109952.7958100139,
+          "relative_power_residual": 0.00042912899987369944,
+          "signed_power_residual_W": -47.20418998610694
+        },
+        {
+          "air_mass_flow_kg_s": 0.6965810485626747,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_591a93779957af2baa52aa980786959b52311eb347e0cafb5ea969a9a55b11a8",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110008.18480629574,
+          "relative_power_residual": 7.440732996130299e-05,
+          "signed_power_residual_W": 8.184806295743329
+        },
+        {
+          "air_mass_flow_kg_s": 0.6964134561633477,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_71d4d23dcdbdd2f286a04fe42ce296e98c5a832a1d15beb1e81523e245b21233",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109980.13803509877,
+          "relative_power_residual": 0.0001805633172838663,
+          "signed_power_residual_W": -19.861964901225292
+        },
+        {
+          "air_mass_flow_kg_s": 0.6964972523630112,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_ec1b774a35e22f04bb3392fa9703e43e37f350732781d3665681b03742d6bca8",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109994.5134552854,
+          "relative_power_residual": 4.987767922363921e-05,
+          "signed_power_residual_W": -5.4865447146003135
+        },
+        {
+          "air_mass_flow_kg_s": 0.6965391504628429,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_78306afd7e0491cd47c9b3895e5b4ac1bfcab81a96422d84f13f8bb69f1d52bb",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110000.99699164917,
+          "relative_power_residual": 9.063560446983584e-06,
+          "signed_power_residual_W": 0.9969916491681943
+        },
+        {
+          "air_mass_flow_kg_s": 0.696518201412927,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_7ecdd4241966a64de6cbc2100c43bd708a29eace6ed82cf46f7e29788bf1d8cb",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109997.87053055654,
+          "relative_power_residual": 1.9358813122380524e-05,
+          "signed_power_residual_W": -2.1294694434618577
+        },
+        {
+          "air_mass_flow_kg_s": 0.6965286759378849,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_55a9f62069ad24664fa98f06f3c149fe36b084e5fcc60c14371e9a2313340e9b",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109999.31845797467,
+          "relative_power_residual": 6.195836593873206e-06,
+          "signed_power_residual_W": -0.6815420253260527
+        },
+        {
+          "air_mass_flow_kg_s": 0.6965339132003638,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_d090a8d127e79303c8e4fcab3392efef0bc052f4b36b083a6eb861e6c959f306",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110000.1577248249,
+          "relative_power_residual": 1.4338620444918474e-06,
+          "signed_power_residual_W": 0.15772482489410322
+        },
+        {
+          "air_mass_flow_kg_s": 0.6965312945691244,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_1e890fe1220aa938f510acabae0c09d195f5d1fe3a410f5f7ed9b7dc727a3afe",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109999.7380914031,
+          "relative_power_residual": 2.3809872445946727e-06,
+          "signed_power_residual_W": -0.261908596905414
+        },
+        {
+          "air_mass_flow_kg_s": 0.6965326038847441,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_38468137e28c5bc65ca2000eee5228f6c8c0576255fcdd19708dd813ad557088",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109999.94790811487,
+          "relative_power_residual": 4.735625920478593e-07,
+          "signed_power_residual_W": -0.052091885125264525
+        }
+      ],
+      "last_evaluated": {
+        "air_mass_flow_kg_s": 0.6965326038847441,
+        "calculation_status": "SUCCESS",
+        "candidate_id": "cand_38468137e28c5bc65ca2000eee5228f6c8c0576255fcdd19708dd813ad557088",
+        "failure_reason": null,
+        "failure_stage": null,
+        "net_mechanical_power_W": 109999.94790811487,
+        "relative_power_residual": 4.735625920478593e-07,
+        "signed_power_residual_W": -0.052091885125264525
+      },
+      "numerical_power_closed": true,
+      "overall_engineering_feasibility": null,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "reason": "root_found",
+      "root": {
+        "air_mass_flow_kg_s": 0.6965326038847441,
+        "candidate_id": "cand_38468137e28c5bc65ca2000eee5228f6c8c0576255fcdd19708dd813ad557088",
+        "fuel_mass_flow_kg_s": 0.013276494568524443,
+        "gas_mass_flow_kg_s": 0.7098090984532687,
+        "net_mechanical_power_W": 109999.94790811487,
+        "numerical_power_closed": true,
+        "numerical_power_label": "ACTUAL_BOUNDARY_LINK_POWER_CLOSED",
+        "relative_power_residual": 4.735625920478593e-07,
+        "signed_power_residual_W": -0.052091885125264525
+      },
+      "source_point_index": 9,
+      "status": "SUCCESS",
+      "target_gearbox_input_power_W": 110000.0,
+      "trial_count": 20
+    },
+    {
+      "air_flow_bracket_kg_s": [
+        0.6199118705898871,
+        0.9643073542509353
+      ],
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "assembly": "A_MAIN",
+      "case": "A_PI13_W0.5",
+      "coupling": "AB",
+      "evaluated_states": [
+        {
+          "air_mass_flow_kg_s": 0.6199118705898871,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_5f38c50d9786481191a49aaeeb8da8908f715a57fba0df6ea581ee3bd4d8774c",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 91581.48505926473,
+          "relative_power_residual": 0.16744104491577522,
+          "signed_power_residual_W": -18418.514940735273
+        },
+        {
+          "air_mass_flow_kg_s": 0.9643073542509353,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_7c7e3029d46d14b2bc6fcd278c9560089a0c05b2d425254d3c6c8cd8e064565f",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 147641.85214628634,
+          "relative_power_residual": 0.3421986558753304,
+          "signed_power_residual_W": 37641.85214628634
+        },
+        {
+          "air_mass_flow_kg_s": 0.7921096124204112,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_94534d77a7e35cb12e37318f25b32553c6c1dc888810844f16ab04b7819d6352",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 119628.27228420263,
+          "relative_power_residual": 0.08752974803820569,
+          "signed_power_residual_W": 9628.272284202627
+        },
+        {
+          "air_mass_flow_kg_s": 0.7060107415051491,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_4ec57c6579a6d866e3d9c62e6bf2175f94cbd088d012ab436e70a95c98eccf6e",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 105606.16749216121,
+          "relative_power_residual": 0.03994393188944351,
+          "signed_power_residual_W": -4393.832507838786
+        },
+        {
+          "air_mass_flow_kg_s": 0.7490601769627802,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_2b09e13aeba84a54d6329843624fcf17ba2349964dd3566a95f7d783f40e4d6c",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 112616.9511967426,
+          "relative_power_residual": 0.023790465424932666,
+          "signed_power_residual_W": 2616.9511967425933
+        },
+        {
+          "air_mass_flow_kg_s": 0.7275354592339647,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_bbb0ebd0edf3b1f41120562e565be83a7c8760a411413675575d591cae179643",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109111.3352820169,
+          "relative_power_residual": 0.008078770163482775,
+          "signed_power_residual_W": -888.6647179831052
+        },
+        {
+          "air_mass_flow_kg_s": 0.7382978180983724,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_791ad718b26c886b50a53269574c013f1b71fccf1929d7b584a41a1eab735731",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110863.98190221132,
+          "relative_power_residual": 0.007854380929193841,
+          "signed_power_residual_W": 863.9819022113224
+        },
+        {
+          "air_mass_flow_kg_s": 0.7329166386661685,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_95653c8b8566a0726639cbd100150cf1d68d7468e683fc7bc7e2186fd1bec7e9",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109987.70486528508,
+          "relative_power_residual": 0.00011177395195382732,
+          "signed_power_residual_W": -12.295134714921005
+        },
+        {
+          "air_mass_flow_kg_s": 0.7356072283822704,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_a380f41d4ad4d4dc7581476a6b311c2e0bd347a309f7e04b8fc1d5f37b2c1eca",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110425.85530050338,
+          "relative_power_residual": 0.003871411822757959,
+          "signed_power_residual_W": 425.8553005033755
+        },
+        {
+          "air_mass_flow_kg_s": 0.7342619335242195,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_c34974105d5fb91dd01499e332664841b6bf5a6027d77c4a2e7f99ead2a2551e",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110206.78301863151,
+          "relative_power_residual": 0.0018798456239228307,
+          "signed_power_residual_W": 206.78301863151137
+        },
+        {
+          "air_mass_flow_kg_s": 0.733589286095194,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_33fd443f33fe24078df57d7fc19872127ef430a7fe8ee3bc477f37876dfe51bd",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110097.24467045191,
+          "relative_power_residual": 0.0008840424586537252,
+          "signed_power_residual_W": 97.24467045190977
+        },
+        {
+          "air_mass_flow_kg_s": 0.7332529623806813,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_7333947db3148333a2010abcce3d4ebe2471997b01a0004e131e2f04130b7b26",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110042.59161318274,
+          "relative_power_residual": 0.0003871964834794529,
+          "signed_power_residual_W": 42.59161318273982
+        },
+        {
+          "air_mass_flow_kg_s": 0.733084800523425,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_b6dd39ff0c2c84846bcf8d0f2298b5f9682d302a68b513e3899499a906b55ae8",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110015.03163402993,
+          "relative_power_residual": 0.0001366512184539302,
+          "signed_power_residual_W": 15.03163402993232
+        },
+        {
+          "air_mass_flow_kg_s": 0.7330007195947967,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_75d501e1f9ea495faffbc06ed928e6db794e5431f662d8cdd889d5ee3eb7832e",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110001.36826430506,
+          "relative_power_residual": 1.2438766409600661e-05,
+          "signed_power_residual_W": 1.3682643050560728
+        },
+        {
+          "air_mass_flow_kg_s": 0.7329586791304826,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_f70708f0860d59c9e810e1d7182973d454ad3cf95cafacdcc7c1bd822ec1f237",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109994.53656845569,
+          "relative_power_residual": 4.966755949373526e-05,
+          "signed_power_residual_W": -5.463431544310879
+        },
+        {
+          "air_mass_flow_kg_s": 0.7329796993626396,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_dc19fbb52657b483147511faadb58fb2c81450223298a6d579ed312d339e13f7",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109998.06903771684,
+          "relative_power_residual": 1.755420257422057e-05,
+          "signed_power_residual_W": -1.9309622831642628
+        },
+        {
+          "air_mass_flow_kg_s": 0.7329902094787182,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_d5b770d8d868650d97a87ea4fc542ce83dff39a779b15f3a302d4b3e72e6a543",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109999.6020300109,
+          "relative_power_residual": 3.6179089918732645e-06,
+          "signed_power_residual_W": -0.3979699891060591
+        },
+        {
+          "air_mass_flow_kg_s": 0.7329954645367575,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_a5102ca8c63887b5d6d82c698ad9875261396694e070b66316206344131c221c",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110000.4851470043,
+          "relative_power_residual": 4.410427311879837e-06,
+          "signed_power_residual_W": 0.48514700430678204
+        },
+        {
+          "air_mass_flow_kg_s": 0.7329928370077379,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_df59d8f4889cde93a8da9da83e7bbcca65ada3d47fb4daa15719f85e5951e68b",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110000.04358846933,
+          "relative_power_residual": 3.962588120802221e-07,
+          "signed_power_residual_W": 0.04358846932882443
+        }
+      ],
+      "last_evaluated": {
+        "air_mass_flow_kg_s": 0.7329928370077379,
+        "calculation_status": "SUCCESS",
+        "candidate_id": "cand_df59d8f4889cde93a8da9da83e7bbcca65ada3d47fb4daa15719f85e5951e68b",
+        "failure_reason": null,
+        "failure_stage": null,
+        "net_mechanical_power_W": 110000.04358846933,
+        "relative_power_residual": 3.962588120802221e-07,
+        "signed_power_residual_W": 0.04358846932882443
+      },
+      "numerical_power_closed": true,
+      "overall_engineering_feasibility": null,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "reason": "root_found",
+      "root": {
+        "air_mass_flow_kg_s": 0.7329928370077379,
+        "candidate_id": "cand_df59d8f4889cde93a8da9da83e7bbcca65ada3d47fb4daa15719f85e5951e68b",
+        "fuel_mass_flow_kg_s": 0.012094483786548028,
+        "gas_mass_flow_kg_s": 0.745087320794286,
+        "net_mechanical_power_W": 110000.04358846933,
+        "numerical_power_closed": true,
+        "numerical_power_label": "ACTUAL_BOUNDARY_LINK_POWER_CLOSED",
+        "relative_power_residual": 3.962588120802221e-07,
+        "signed_power_residual_W": 0.04358846932882443
+      },
+      "source_point_index": 2,
+      "status": "SUCCESS",
+      "target_gearbox_input_power_W": 110000.0,
+      "trial_count": 19
+    },
+    {
+      "air_flow_bracket_kg_s": [
+        0.6140222822284749,
+        0.9551457723554053
+      ],
+      "architecture": "SINGLE_SHAFT_SINGLE_CC",
+      "assembly": "B_MAIN",
+      "case": "B_PI13_W0.5",
+      "coupling": "AB",
+      "evaluated_states": [
+        {
+          "air_mass_flow_kg_s": 0.6140222822284749,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_ad1af40982ff43b2e0a52e4396eca371869faa1db72b2e423157341e0b72d2bd",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 91562.57975197502,
+          "relative_power_residual": 0.16761291134568165,
+          "signed_power_residual_W": -18437.42024802498
+        },
+        {
+          "air_mass_flow_kg_s": 0.9551457723554053,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_e42ce1199300bfb15633ee509344312cc2110082d568093f2ce8f6c1083137e8",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 147617.13658708334,
+          "relative_power_residual": 0.3419739689734849,
+          "signed_power_residual_W": 37617.13658708334
+        },
+        {
+          "air_mass_flow_kg_s": 0.7845840272919401,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_ba1667a125009cd8411f0727daa091d4499a551d3a5b662d8c931ab43d75f102",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 119604.45882747258,
+          "relative_power_residual": 0.08731326206793258,
+          "signed_power_residual_W": 9604.458827472583
+        },
+        {
+          "air_mass_flow_kg_s": 0.6993031547602075,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_bc1e7240e3e270e3885e073139b68642b5bb3f2f24c13ca8d8ad5442ddd44549",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 105585.39806389326,
+          "relative_power_residual": 0.04013274487369768,
+          "signed_power_residual_W": -4414.601936106745
+        },
+        {
+          "air_mass_flow_kg_s": 0.7419435910260739,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_894878c2a48555eff517fa1df681e3c6c5c22c8664c1f53edded3f30e6932430",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 112594.59630638699,
+          "relative_power_residual": 0.023587239148972598,
+          "signed_power_residual_W": 2594.596306386986
+        },
+        {
+          "air_mass_flow_kg_s": 0.7206233728931407,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_fc54f213d93f622ab7bdba87e943fd57973b1d14f2eb98aec07a3f21af7dbb26",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109089.72914040572,
+          "relative_power_residual": 0.008275189632675293,
+          "signed_power_residual_W": -910.2708595942822
+        },
+        {
+          "air_mass_flow_kg_s": 0.7312834819596072,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_98646f50e66067bbd7bfa7f3d6a4e478f8ac63ed3e51469dbc6839b396deec91",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110841.9911828803,
+          "relative_power_residual": 0.007654465298911832,
+          "signed_power_residual_W": 841.9911828803015
+        },
+        {
+          "air_mass_flow_kg_s": 0.7259534274263739,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_9a73a35a30de6283a8aa7f38490640f654ed3f96a5742ab219852f1ef5c8164d",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109965.78758282488,
+          "relative_power_residual": 0.0003110219743192746,
+          "signed_power_residual_W": -34.21241717512021
+        },
+        {
+          "air_mass_flow_kg_s": 0.7286184546929906,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_c85a6043d47bbc6342dc2aa64d18e68b4a8812306194f0d3a187270c6d90ea8c",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110404.01617635187,
+          "relative_power_residual": 0.003672874330471545,
+          "signed_power_residual_W": 404.01617635186994
+        },
+        {
+          "air_mass_flow_kg_s": 0.7272859410596823,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_4ea02d6d4ba73145f098b0a846f7cf1a020759f6c5ab8a30162f7b9122db2f4c",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110184.78872729314,
+          "relative_power_residual": 0.0016798975208467295,
+          "signed_power_residual_W": 184.78872729314025
+        },
+        {
+          "air_mass_flow_kg_s": 0.7266196842430281,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_01ebcb66cce47ac642042bbe6ff751a59e39c962af33242ad90838e6e3f3efc9",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110075.2888444321,
+          "relative_power_residual": 0.0006844440402918157,
+          "signed_power_residual_W": 75.28884443209972
+        },
+        {
+          "air_mass_flow_kg_s": 0.726286555834701,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_388a7a61c6fc1e846698e54c7fa4da4291b4ac6c647442a0d5b9d8bfabe4a777",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110020.65394568682,
+          "relative_power_residual": 0.00018776314260745,
+          "signed_power_residual_W": 20.653945686819497
+        },
+        {
+          "air_mass_flow_kg_s": 0.7261199916305374,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_d401d95d739fa6378b99ded41a0246df02fe0bb332031c370b3894e87dd43208",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109993.3363277776,
+          "relative_power_residual": 6.057883838551458e-05,
+          "signed_power_residual_W": -6.663672222406603
+        },
+        {
+          "air_mass_flow_kg_s": 0.7262032737326192,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_490cf61da51fdd16e86a9fdd14920f03a68acb161ebb1341eba821ebe135e1db",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110006.99515075976,
+          "relative_power_residual": 6.359227963416329e-05,
+          "signed_power_residual_W": 6.995150759757962
+        },
+        {
+          "air_mass_flow_kg_s": 0.7261616326815783,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_b002c48dfaf76d800c7a6d54826f1e222f122fbd21ef388351f1324a0ff94e6c",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109999.93466174864,
+          "relative_power_residual": 5.939841032324528e-07,
+          "signed_power_residual_W": -0.06533825135556981
+        }
+      ],
+      "last_evaluated": {
+        "air_mass_flow_kg_s": 0.7261616326815783,
+        "calculation_status": "SUCCESS",
+        "candidate_id": "cand_b002c48dfaf76d800c7a6d54826f1e222f122fbd21ef388351f1324a0ff94e6c",
+        "failure_reason": null,
+        "failure_stage": null,
+        "net_mechanical_power_W": 109999.93466174864,
+        "relative_power_residual": 5.939841032324528e-07,
+        "signed_power_residual_W": -0.06533825135556981
+      },
+      "numerical_power_closed": true,
+      "overall_engineering_feasibility": null,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "reason": "root_found",
+      "root": {
+        "air_mass_flow_kg_s": 0.7261616326815783,
+        "candidate_id": "cand_b002c48dfaf76d800c7a6d54826f1e222f122fbd21ef388351f1324a0ff94e6c",
+        "fuel_mass_flow_kg_s": 0.011996488901715553,
+        "gas_mass_flow_kg_s": 0.7381581215832937,
+        "net_mechanical_power_W": 109999.93466174864,
+        "numerical_power_closed": true,
+        "numerical_power_label": "ACTUAL_BOUNDARY_LINK_POWER_CLOSED",
+        "relative_power_residual": 5.939841032324528e-07,
+        "signed_power_residual_W": -0.06533825135556981
+      },
+      "source_point_index": 5,
+      "status": "SUCCESS",
+      "target_gearbox_input_power_W": 110000.0,
+      "trial_count": 15
+    },
+    {
+      "air_flow_bracket_kg_s": [
+        0.6108436555354742,
+        0.9502012419440709
+      ],
+      "architecture": "FREE_POWER_TURBINE",
+      "assembly": "C_COUPLED",
+      "case": "C_PI13_W0.5",
+      "coupling": "C",
+      "evaluated_states": [
+        {
+          "air_mass_flow_kg_s": 0.6108436555354742,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_9892a04361cea64f3a5af9fa983296516f3a481c9e0747209fedfc61fad6aef2",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 91117.92146354582,
+          "relative_power_residual": 0.17165525942231075,
+          "signed_power_residual_W": -18882.07853645418
+        },
+        {
+          "air_mass_flow_kg_s": 0.9502012419440709,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_284b98aeb92536c2a63883004ef75b62e7d1378d2eec5f39eacc87936b8eb9c1",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 146973.62233220984,
+          "relative_power_residual": 0.3361238393837258,
+          "signed_power_residual_W": 36973.62233220984
+        },
+        {
+          "air_mass_flow_kg_s": 0.7805224487397725,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_ef1c6218eb941d691ba68c587667966b2d5b697f436cdc25d96fa82d5161b562",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 119037.71684835822,
+          "relative_power_residual": 0.08216106225780201,
+          "signed_power_residual_W": 9037.71684835822
+        },
+        {
+          "air_mass_flow_kg_s": 0.6956830521376234,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_8bd54dc0ca4aa68bc53327b03d76ffdfabd9dff139a7e1ec61afa5ff9f4e0830",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 105069.41564294008,
+          "relative_power_residual": 0.044823494155090224,
+          "signed_power_residual_W": -4930.5843570599245
+        },
+        {
+          "air_mass_flow_kg_s": 0.7381027504386979,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_278a2c86674849be0ecc6e503fdb10b2101eec819abd81da180ece64193ad96f",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 112052.72615977094,
+          "relative_power_residual": 0.018661146907008583,
+          "signed_power_residual_W": 2052.726159770944
+        },
+        {
+          "air_mass_flow_kg_s": 0.7168929012881606,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_a9fef74734114b4667fb5f792b952caabe2f7e462e30a329ba8ccbd16c1e205d",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 108560.4360618304,
+          "relative_power_residual": 0.01308694489245086,
+          "signed_power_residual_W": -1439.5639381695946
+        },
+        {
+          "air_mass_flow_kg_s": 0.7274978258634293,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_a679b2f803c97b75d45cae8c8f1d9718774f7d7dbd96449bfd6cd1b128ec842c",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110306.55869227444,
+          "relative_power_residual": 0.002786897202494914,
+          "signed_power_residual_W": 306.55869227444055
+        },
+        {
+          "air_mass_flow_kg_s": 0.722195363575795,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_b19493677c1395be533b12857e6ef40e270068de9b8324df2fd1b3229078d8b5",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109433.67997986708,
+          "relative_power_residual": 0.005148363819390149,
+          "signed_power_residual_W": -566.3200201329164
+        },
+        {
+          "air_mass_flow_kg_s": 0.7248465947196121,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_304aebfe9d6e48cd038d4fdadf488a4e7d9b5cc9e8525e1390a7b39cd1573784",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109870.22362901943,
+          "relative_power_residual": 0.001179785190732483,
+          "signed_power_residual_W": -129.77637098057312
+        },
+        {
+          "air_mass_flow_kg_s": 0.7261722102915207,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_133dd6907224a418bc4d4bc0bff61944927fe352b08db71768798f03f908d5a2",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110088.02412341037,
+          "relative_power_residual": 0.0008002193037306742,
+          "signed_power_residual_W": 88.02412341037416
+        },
+        {
+          "air_mass_flow_kg_s": 0.7255094025055664,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_48cb1a0f49716678ff6da5977208c578c75f91a6fd80b608b6e9baa041e086c3",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109979.34359797534,
+          "relative_power_residual": 0.00018778547295144314,
+          "signed_power_residual_W": -20.656402024658746
+        },
+        {
+          "air_mass_flow_kg_s": 0.7258408063985435,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_cc823a3e59e2f531237f413c1517a3bf72f73082aef8bff8ffd1389d22ea8b05",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110033.79118573679,
+          "relative_power_residual": 0.00030719259760715595,
+          "signed_power_residual_W": 33.791185736787156
+        },
+        {
+          "air_mass_flow_kg_s": 0.725675104452055,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_a4f7099fc3bb0da1848666c113c093ea489aea559e36ad9ac2c5c4bf7f74223c",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110006.12146813935,
+          "relative_power_residual": 5.564971035769717e-05,
+          "signed_power_residual_W": 6.121468139346689
+        },
+        {
+          "air_mass_flow_kg_s": 0.7255922534788106,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_758c5f510bd0478702829b8ad2dee1d8a9e7e3220e12b0441ac4a9fabf7cfad8",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109992.50523471633,
+          "relative_power_residual": 6.813422985155326e-05,
+          "signed_power_residual_W": -7.4947652836708585
+        },
+        {
+          "air_mass_flow_kg_s": 0.7256336789654327,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_548cc2f17de3fb5cd8b964ec38d9e4011f2bfacf760a9905a48adf6e57d32c85",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 109999.64964877749,
+          "relative_power_residual": 3.1850111137662844e-06,
+          "signed_power_residual_W": -0.3503512225142913
+        },
+        {
+          "air_mass_flow_kg_s": 0.7256543917087439,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_d8f7e031e690b41fee7bf7ab100f3dd938c54f2f4c4108ab433efb6bdbac1c4b",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110003.22189199147,
+          "relative_power_residual": 2.9289927195217885e-05,
+          "signed_power_residual_W": 3.221891991473967
+        },
+        {
+          "air_mass_flow_kg_s": 0.7256440353370883,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_b6dc69e09b9656649ecaa47d210ffb502a4fa54f4ff9de6d379a0f08b22e134b",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110001.20854349746,
+          "relative_power_residual": 1.0986759067798795e-05,
+          "signed_power_residual_W": 1.2085434974578675
+        },
+        {
+          "air_mass_flow_kg_s": 0.7256388571512605,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_fe19ea853b282f7f932bf456b9c1ab76e151b86e0c3f6a554b0bb159ec65a628",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110000.42909622393,
+          "relative_power_residual": 3.900874763018113e-06,
+          "signed_power_residual_W": 0.4290962239319924
+        },
+        {
+          "air_mass_flow_kg_s": 0.7256362680583466,
+          "calculation_status": "SUCCESS",
+          "candidate_id": "cand_5fdd2fe1108de9897dea08df2ae6d116b8f48b10b9f9aa06518bbc99c408fe94",
+          "failure_reason": null,
+          "failure_stage": null,
+          "net_mechanical_power_W": 110000.03937252234,
+          "relative_power_residual": 3.5793202127520503e-07,
+          "signed_power_residual_W": 0.03937252234027255
+        }
+      ],
+      "last_evaluated": {
+        "air_mass_flow_kg_s": 0.7256362680583466,
+        "calculation_status": "SUCCESS",
+        "candidate_id": "cand_5fdd2fe1108de9897dea08df2ae6d116b8f48b10b9f9aa06518bbc99c408fe94",
+        "failure_reason": null,
+        "failure_stage": null,
+        "net_mechanical_power_W": 110000.03937252234,
+        "relative_power_residual": 3.5793202127520503e-07,
+        "signed_power_residual_W": 0.03937252234027255
+      },
+      "numerical_power_closed": true,
+      "overall_engineering_feasibility": null,
+      "overall_engineering_feasibility_status": "NOT_CHECKED",
+      "reason": "root_found",
+      "root": {
+        "air_mass_flow_kg_s": 0.7256362680583466,
+        "candidate_id": "cand_5fdd2fe1108de9897dea08df2ae6d116b8f48b10b9f9aa06518bbc99c408fe94",
+        "fuel_mass_flow_kg_s": 0.011987809662014222,
+        "gas_mass_flow_kg_s": 0.7376240777203608,
+        "net_mechanical_power_W": 110000.03937252234,
+        "numerical_power_closed": true,
+        "numerical_power_label": "ACTUAL_BOUNDARY_LINK_POWER_CLOSED",
+        "relative_power_residual": 3.5793202127520503e-07,
+        "signed_power_residual_W": 0.03937252234027255
+      },
+      "source_point_index": 9,
+      "status": "SUCCESS",
+      "target_gearbox_input_power_W": 110000.0,
+      "trial_count": 19
+    }
+  ],
+  "experiment": {
+    "case_count": 11,
+    "model_digest": "c9067135e8d5297a191aaa06f9888c051a546e7bc38858345cd0b36fbd924e87",
+    "plan_name": "three-fixed-cases-explicit-air-flow",
+    "plan_sha256": "389a2d9126b10e4f8161ff08a8571082777bd945d1e9a12e3b559bb942410403"
+  },
+  "overall_engineering_feasibility": null,
+  "overall_engineering_feasibility_status": "NOT_CHECKED",
+  "physically_validated": false,
+  "plan_name": "three-fixed-cases-explicit-air-flow",
+  "pre_reducer": true,
+  "report_version": "architecture-flow-sizing-summary-v1",
+  "reproduce": {
+    "atol": 1e-09,
+    "checked": 159,
+    "differences": [],
+    "matches": true,
+    "rtol": 1e-12
+  },
+  "run": {
+    "complete": true,
+    "elapsed_seconds": 144.750431,
+    "journal_sha256": "c022bd9962949f3b05a1f11b79be9e8843c2ff962f84a37933892615ef9f9bd0",
+    "record_count": 159,
+    "records_appended_this_invocation": 159,
+    "run_id": "run_e0ff14ad263e5c2562b35d622931334024c6470b0fff6b46d3013729d770ddb5"
+  },
+  "sizing_basis": "CYCLE_BOOK_PRINTED_P22_SPECIFIC_POWER_PRE_REDUCER",
+  "source_book": "cycle textbook printed p.22 section 3.2",
+  "validation_status": "NOT_PHYSICALLY_VALIDATED"
+}

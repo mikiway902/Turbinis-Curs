@@ -1,0 +1,1061 @@
+{
+  "kind": "EXPLICIT_AB_SINGLE_STAGE_BRACKET_DIAGNOSTIC",
+  "model_digest": "77d359601df3d9b74bea1eeed48b6037f9f6604d10f63a937a086c6d14aff34c",
+  "attempts": [
+    {
+      "payload": {
+        "schema_version": "architecture-coupled-stage-input-v1",
+        "coupling": "AB",
+        "point_index": 0,
+        "assembly": "A_MAIN",
+        "architecture": "SINGLE_SHAFT_DUAL_CC",
+        "turbine_role": "main",
+        "stage_counts": {
+          "main": 1
+        },
+        "architecture_cycle_source": {
+          "schema_version": "architecture-cycle-input-v2",
+          "architecture": "SINGLE_SHAFT_DUAL_CC",
+          "inlet_total_temperature": 288.0,
+          "inlet_total_pressure": 101300.0,
+          "compressor_pressure_ratios": [
+            3.3166247903554,
+            3.3166247903554
+          ],
+          "compressor_polytropic_efficiency": 0.85,
+          "combustor": {
+            "kind": "legacy",
+            "outlet_total_temperature": 1250.0,
+            "total_pressure_recovery": 0.96
+          },
+          "turbine_outlet_total_pressure": 150000.0,
+          "turbine_polytropic_efficiencies": [
+            0.9
+          ],
+          "turbine_mechanical_efficiencies": [
+            0.99
+          ],
+          "target_gearbox_input_power": 110000.0,
+          "gearbox_efficiency": 0.98,
+          "gas_model": {
+            "R": 287.4,
+            "l0": 14.61,
+            "q_lhv_kj": 43150.0,
+            "eta_combustion": 0.98,
+            "T_ref": 288.0,
+            "alpha_basis": "fuel_based",
+            "model_variant": "legacy_cp_polynomial_compressor_mean_turbine_inlet_constant"
+          },
+          "gas_property_basis": "textbook_true_cp"
+        },
+        "stage_controls": {
+          "speed_rpm": 84000.0,
+          "hub_diameter_m": 0.065,
+          "reference_exit_mach": 0.3379,
+          "boundary_is_static": true,
+          "speed_basis": "fixed regression anchor copied from the stage fixture; no selection",
+          "pressure_ratio_policy": "raw_unbounded",
+          "main": {
+            "alpha1_deg": [
+              11.0
+            ],
+            "kappa": [
+              1.38
+            ],
+            "pi_weights": [
+              1.0
+            ]
+          }
+        },
+        "targets": {
+          "main_total_outlet_pressure_Pa": 150000.0,
+          "main_compressor_power_W": 241446.75674201894,
+          "target_gearbox_input_power_W": 110000.0
+        },
+        "brackets": {
+          "main": [
+            60000.0,
+            120000.0
+          ],
+          "provenance": "Explicit lower-static-pressure diagnostic; no automatic bracket widening; no flow/geometry/speed adjustment"
+        }
+      },
+      "status": "SUCCESS",
+      "outputs": {
+        "schema_version": "architecture-coupled-stage-output-v1",
+        "physically_validated": false,
+        "validation_status": "NOT_PHYSICALLY_VALIDATED",
+        "coupling_label": "ACTUAL_BOUNDARY_STAGE_COUPLED",
+        "assembly": "A_MAIN",
+        "stage_counts": {
+          "main": 1
+        },
+        "stage_count_selection": "NONE",
+        "pressure_ratio_policy": "raw_unbounded",
+        "source_input_sha256": "09c50592763c6a66f9974dedd797e6b207454b9e8f8f8728ef2cf46a672b469f",
+        "source_gas_basis": "textbook_true_cp",
+        "posthoc_pi_acceptance": {
+          "main": {
+            "profile": "PROMPT_STAGE_PI_1_8_2_4",
+            "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK_FUNDAMENTAL",
+            "bounds": [
+              1.8,
+              2.4
+            ],
+            "stages": [
+              {
+                "stage": 1,
+                "actual": 14.09383484171403,
+                "min": 1.8,
+                "max": 2.4,
+                "actual_pi_stage": 14.09383484171403,
+                "min_pi_stage": 1.8,
+                "max_pi_stage": 2.4,
+                "lower_margin": 12.293834841714029,
+                "upper_margin": -11.693834841714029,
+                "status": "FAIL"
+              }
+            ],
+            "pass": false,
+            "overall_engineering_feasibility": null,
+            "overall_engineering_feasibility_status": "NOT_CHECKED",
+            "overall_engineering_feasibility_reason": "strength_verification_missing",
+            "note": "post-hoc engineering profile only; overall feasibility NOT_CHECKED"
+          }
+        },
+        "rho_065_posthoc": {
+          "status": "NOT_APPLIED"
+        },
+        "overall_engineering_feasibility": null,
+        "overall_engineering_feasibility_status": "NOT_CHECKED",
+        "overall_engineering_feasibility_reason": "strength_verification_missing",
+        "actual_boundary": {
+          "target_kind": "total_outlet_pressure",
+          "source_0d_outlet_total_pressure_Pa": 150000.0,
+          "target_outlet_total_pressure_Pa": 150000.0,
+          "actual_outlet_total_pressure_Pa": 149999.89217208038,
+          "signed_total_pressure_residual_Pa": -0.10782791962265037,
+          "relative_total_pressure_residual": 7.188527974843358e-07,
+          "source_target_differs_from_actual": true,
+          "closure": {
+            "target_kind": "total_outlet_pressure",
+            "target_value": 150000.0,
+            "actual_metric": 149999.89217208038,
+            "relative_residual": 7.188527974843358e-07,
+            "signed_residual": -0.10782791962265037,
+            "solved_static_pressure_Pa": 75900.42114257812,
+            "actual_outlet_total_pressure_Pa": 149999.89217208038,
+            "actual_stages": [
+              {
+                "T0": 1250.0,
+                "p0": 1069728.0,
+                "H0": 698631.9665369197,
+                "ρ": 0.46170549309296127,
+                "Hc": 376069.74993648595,
+                "cp": 1168.264557593026,
+                "k": 1.3262703641809863,
+                "c1": 841.2419719857535,
+                "T1": 947.1199499159129,
+                "T1_ад": 928.0953873056785,
+                "p1": 318864.0337522209,
+                "A1a": 0.0036572706067718387,
+                "v1": 0.8536625169126257,
+                "c1a": 160.51653554318506,
+                "α1": 10.999999999999998,
+                "c1u": 825.7859875583339,
+                "w1": 501.9516106123799,
+                "β1": 18.649915839202503,
+                "Hл": 329174.2579588397,
+                "u1": 350.1917684875217,
+                "u2": 409.237940777833,
+                "w2": 938.2227651856247,
+                "T2": 697.4054839294386,
+                "T2_ад": 665.3564950379896,
+                "p2": 75900.4211425756,
+                "v2": 2.640753938700993,
+                "A_лa": 0.008198223102532251,
+                "c2a": 221.51281904959535,
+                "β2": 13.656373840406356,
+                "c2u": 502.46048968547603,
+                "α2": 23.79058096078774,
+                "c2": 549.1215463795489,
+                "L_u": 494809.3514963733,
+                "η_u": 0.7082546679750658,
+                "h_c": 22225.72222124637,
+                "ξ_c": 0.03181320535820606,
+                "ξ_c_": 0.022348935649533126,
+                "h_л": 37441.69782857241,
+                "ξ_л": 0.05359287811316286,
+                "h_в": 150767.23634913354,
+                "ξ_в": 0.2158035182622382,
+                "η_u2": 0.7082546679750659,
+                "δ_л": 0.0002,
+                "h_з": 11135.697531915719,
+                "ξ_з": 0.01593929002005843,
+                "L_u3": 483673.65396445757,
+                "η_т1": 0.6923153779550073,
+                "η_л1": 0.9081188962172455,
+                "N_тв": 338.4125143861959,
+                "h_тв": 492.10270696818645,
+                "ξ_тв": 0.0007043804614431151,
+                "η_т": 0.6916109974935641,
+                "η_л": 0.9074145157558023,
+                "L_т": 483181.55125748937,
+                "T_ст": 707.3585379387467,
+                "T_ст_п": 836.4108449433854,
+                "p_ст_п": 149999.89217208038,
+                "H0_п": 559665.6953527408,
+                "η_т_п": 0.8633395887395854,
+                "T_w1": 1054.9531533452225,
+                "M_c1": 1.4000999042483204,
+                "M_w2": 1.8197170863686845,
+                "σ_р": 393.3573030379795,
+                "l_c": 0.014621071396379838,
+                "l_л": 0.028046061227192182,
+                "D_c": 0.07962107283554529,
+                "D_л": 0.09304605882220063,
+                "G_c": 0.6876867564316683,
+                "G_л": 0.6876867564316683,
+                "π_ст": 14.09383484171403
+              }
+            ],
+            "iterations": 17,
+            "iteration_count": 17,
+            "evaluations": 19,
+            "pressure_ratio_policy": "raw_unbounded",
+            "controls": {
+              "n_rpm": 84000.0,
+              "D_hub_m": 0.065,
+              "relative_tol": 1e-06,
+              "max_iter": 40,
+              "static_pressure_bracket_Pa": [
+                60000.0,
+                120000.0
+              ]
+            },
+            "source_point": {
+              "inlet_total_pressure_Pa": 1069728.0,
+              "stage_count": 1,
+              "last_stage_total_pressure_key": "p_ст_п",
+              "last_stage_total_temperature_key": "T_ст_п"
+            },
+            "physical_validation": "NOT_PERFORMED",
+            "stage_count_selection": "NONE"
+          }
+        },
+        "power": {
+          "kind": "AB_NET_STAGE_MECHANICAL_MINUS_SOURCE_COMPRESSOR_POWER",
+          "mechanical_efficiency": 0.99,
+          "stage_gas_power_W": 332277.5537518847,
+          "stage_mechanical_power_W": 328954.7782143659,
+          "compressor_power_W": 241446.75674201894,
+          "compressor_power_basis": "exactly source result.compressor.power",
+          "net_mechanical_power_W": 87508.02147234694,
+          "target_gearbox_input_power_W": 110000.0,
+          "signed_power_residual_W": -22491.97852765306,
+          "relative_power_residual": 0.20447253206957328,
+          "engine_power_closed": false,
+          "engine_power_label": "ACTUAL_BOUNDARY_LINK_NOT_POWER_CLOSED"
+        }
+      },
+      "failure_stage": null,
+      "failure_reason": null,
+      "diagnostics": {
+        "point_index": 0,
+        "coupling": "AB"
+      },
+      "last_valid_state": null
+    },
+    {
+      "payload": {
+        "schema_version": "architecture-coupled-stage-input-v1",
+        "coupling": "AB",
+        "point_index": 0,
+        "assembly": "A_MAIN",
+        "architecture": "SINGLE_SHAFT_DUAL_CC",
+        "turbine_role": "main",
+        "stage_counts": {
+          "main": 1
+        },
+        "architecture_cycle_source": {
+          "schema_version": "architecture-cycle-input-v2",
+          "architecture": "SINGLE_SHAFT_DUAL_CC",
+          "inlet_total_temperature": 288.0,
+          "inlet_total_pressure": 101300.0,
+          "compressor_pressure_ratios": [
+            3.3166247903554,
+            3.3166247903554
+          ],
+          "compressor_polytropic_efficiency": 0.85,
+          "combustor": {
+            "kind": "legacy",
+            "outlet_total_temperature": 1250.0,
+            "total_pressure_recovery": 0.96
+          },
+          "turbine_outlet_total_pressure": 150000.0,
+          "turbine_polytropic_efficiencies": [
+            0.9
+          ],
+          "turbine_mechanical_efficiencies": [
+            0.99
+          ],
+          "target_gearbox_input_power": 110000.0,
+          "gearbox_efficiency": 0.98,
+          "gas_model": {
+            "R": 287.4,
+            "l0": 14.61,
+            "q_lhv_kj": 43150.0,
+            "eta_combustion": 0.98,
+            "T_ref": 288.0,
+            "alpha_basis": "fuel_based",
+            "model_variant": "legacy_cp_polynomial_compressor_mean_turbine_inlet_constant"
+          },
+          "gas_property_basis": "textbook_true_cp"
+        },
+        "stage_controls": {
+          "speed_rpm": 84000.0,
+          "hub_diameter_m": 0.065,
+          "reference_exit_mach": 0.3379,
+          "boundary_is_static": true,
+          "speed_basis": "fixed regression anchor copied from the stage fixture; no selection",
+          "pressure_ratio_policy": "raw_unbounded",
+          "main": {
+            "alpha1_deg": [
+              11.0
+            ],
+            "kappa": [
+              1.38
+            ],
+            "pi_weights": [
+              1.0
+            ]
+          }
+        },
+        "targets": {
+          "main_total_outlet_pressure_Pa": 150000.0,
+          "main_compressor_power_W": 241446.75674201894,
+          "target_gearbox_input_power_W": 110000.0
+        },
+        "brackets": {
+          "main": [
+            30000.0,
+            120000.0
+          ],
+          "provenance": "Explicit lower-static-pressure diagnostic; no automatic bracket widening; no flow/geometry/speed adjustment"
+        }
+      },
+      "status": "SUCCESS",
+      "outputs": {
+        "schema_version": "architecture-coupled-stage-output-v1",
+        "physically_validated": false,
+        "validation_status": "NOT_PHYSICALLY_VALIDATED",
+        "coupling_label": "ACTUAL_BOUNDARY_STAGE_COUPLED",
+        "assembly": "A_MAIN",
+        "stage_counts": {
+          "main": 1
+        },
+        "stage_count_selection": "NONE",
+        "pressure_ratio_policy": "raw_unbounded",
+        "source_input_sha256": "09c50592763c6a66f9974dedd797e6b207454b9e8f8f8728ef2cf46a672b469f",
+        "source_gas_basis": "textbook_true_cp",
+        "posthoc_pi_acceptance": {
+          "main": {
+            "profile": "PROMPT_STAGE_PI_1_8_2_4",
+            "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK_FUNDAMENTAL",
+            "bounds": [
+              1.8,
+              2.4
+            ],
+            "stages": [
+              {
+                "stage": 1,
+                "actual": 14.093813591384466,
+                "min": 1.8,
+                "max": 2.4,
+                "actual_pi_stage": 14.093813591384466,
+                "min_pi_stage": 1.8,
+                "max_pi_stage": 2.4,
+                "lower_margin": 12.293813591384465,
+                "upper_margin": -11.693813591384465,
+                "status": "FAIL"
+              }
+            ],
+            "pass": false,
+            "overall_engineering_feasibility": null,
+            "overall_engineering_feasibility_status": "NOT_CHECKED",
+            "overall_engineering_feasibility_reason": "strength_verification_missing",
+            "note": "post-hoc engineering profile only; overall feasibility NOT_CHECKED"
+          }
+        },
+        "rho_065_posthoc": {
+          "status": "NOT_APPLIED"
+        },
+        "overall_engineering_feasibility": null,
+        "overall_engineering_feasibility_status": "NOT_CHECKED",
+        "overall_engineering_feasibility_reason": "strength_verification_missing",
+        "actual_boundary": {
+          "target_kind": "total_outlet_pressure",
+          "source_0d_outlet_total_pressure_Pa": 150000.0,
+          "target_outlet_total_pressure_Pa": 150000.0,
+          "actual_outlet_total_pressure_Pa": 150000.0162875755,
+          "signed_total_pressure_residual_Pa": 0.016287575504975393,
+          "relative_total_pressure_residual": 1.0858383669983596e-07,
+          "source_target_differs_from_actual": true,
+          "closure": {
+            "target_kind": "total_outlet_pressure",
+            "target_value": 150000.0,
+            "actual_metric": 150000.0162875755,
+            "relative_residual": 1.0858383669983596e-07,
+            "signed_residual": 0.016287575504975393,
+            "solved_static_pressure_Pa": 75900.5355834961,
+            "actual_outlet_total_pressure_Pa": 150000.0162875755,
+            "actual_stages": [
+              {
+                "T0": 1250.0,
+                "p0": 1069728.0,
+                "H0": 698631.6883878567,
+                "ρ": 0.46170526225097014,
+                "Hc": 376069.76148390333,
+                "cp": 1168.264582826034,
+                "k": 1.3262703548347339,
+                "c1": 841.2419849011396,
+                "T1": 947.119947157642,
+                "T1_ад": 928.0953843741545,
+                "p1": 318864.02132204594,
+                "A1a": 0.003657270682541891,
+                "v1": 0.853662547704583,
+                "c1a": 160.51653800755693,
+                "α1": 11.0,
+                "c1u": 825.786000236428,
+                "w1": 501.95162234635404,
+                "β1": 18.649915684037524,
+                "Hл": 329173.96240511595,
+                "u1": 350.1917696130894,
+                "u2": 409.2378280856057,
+                "w2": 938.2224349657635,
+                "T2": 697.4057169898186,
+                "T2_ад": 665.3567513507096,
+                "p2": 75900.53558349343,
+                "v2": 2.640750839529828,
+                "A_лa": 0.008198213355287231,
+                "c2a": 221.51282245042856,
+                "β2": 13.656378953811618,
+                "c2u": 502.460261724355,
+                "α2": 23.790590880491806,
+                "c2": 549.1213391610842,
+                "L_u": 494809.2069519098,
+                "η_u": 0.7082547430588468,
+                "h_c": 22225.722903698737,
+                "ξ_c": 0.03181321900096774,
+                "ξ_c_": 0.022348953908125677,
+                "h_л": 37441.67147237952,
+                "ξ_л": 0.05359286172486521,
+                "h_в": 150767.12256103122,
+                "ξ_в": 0.21580344130816237,
+                "η_u2": 0.7082547430588468,
+                "δ_л": 0.0002,
+                "h_з": 11135.699993379154,
+                "ξ_з": 0.015939299889295874,
+                "L_u3": 483673.50695853063,
+                "η_т1": 0.692315443169551,
+                "η_л1": 0.9081188844777133,
+                "N_тв": 338.4123536065195,
+                "h_тв": 492.1024731703492,
+                "ξ_тв": 0.0007043804072298973,
+                "η_т": 0.6916110627623211,
+                "η_л": 0.9074145040704834,
+                "L_т": 483181.4044853603,
+                "T_ст": 707.3587726909697,
+                "T_ст_п": 836.410979508988,
+                "p_ст_п": 150000.0162875755,
+                "H0_п": 559665.5147050392,
+                "η_т_п": 0.8633396051568617,
+                "T_w1": 1054.953153299463,
+                "M_c1": 1.40009993271572,
+                "M_w2": 1.8197161482488808,
+                "σ_р": 393.3568353573656,
+                "l_c": 0.014621071652299812,
+                "l_л": 0.028046035605000873,
+                "D_c": 0.07962107309145909,
+                "D_л": 0.09304603320002204,
+                "G_c": 0.6876867564316683,
+                "G_л": 0.6876867564316683,
+                "π_ст": 14.093813591384466
+              }
+            ],
+            "iterations": 18,
+            "iteration_count": 18,
+            "evaluations": 20,
+            "pressure_ratio_policy": "raw_unbounded",
+            "controls": {
+              "n_rpm": 84000.0,
+              "D_hub_m": 0.065,
+              "relative_tol": 1e-06,
+              "max_iter": 40,
+              "static_pressure_bracket_Pa": [
+                30000.0,
+                120000.0
+              ]
+            },
+            "source_point": {
+              "inlet_total_pressure_Pa": 1069728.0,
+              "stage_count": 1,
+              "last_stage_total_pressure_key": "p_ст_п",
+              "last_stage_total_temperature_key": "T_ст_п"
+            },
+            "physical_validation": "NOT_PERFORMED",
+            "stage_count_selection": "NONE"
+          }
+        },
+        "power": {
+          "kind": "AB_NET_STAGE_MECHANICAL_MINUS_SOURCE_COMPRESSOR_POWER",
+          "mechanical_efficiency": 0.99,
+          "stage_gas_power_W": 332277.4528186354,
+          "stage_mechanical_power_W": 328954.678290449,
+          "compressor_power_W": 241446.75674201894,
+          "compressor_power_basis": "exactly source result.compressor.power",
+          "net_mechanical_power_W": 87507.92154843008,
+          "target_gearbox_input_power_W": 110000.0,
+          "signed_power_residual_W": -22492.07845156992,
+          "relative_power_residual": 0.20447344046881746,
+          "engine_power_closed": false,
+          "engine_power_label": "ACTUAL_BOUNDARY_LINK_NOT_POWER_CLOSED"
+        }
+      },
+      "failure_stage": null,
+      "failure_reason": null,
+      "diagnostics": {
+        "point_index": 0,
+        "coupling": "AB"
+      },
+      "last_valid_state": null
+    },
+    {
+      "payload": {
+        "schema_version": "architecture-coupled-stage-input-v1",
+        "coupling": "AB",
+        "point_index": 3,
+        "assembly": "B_MAIN",
+        "architecture": "SINGLE_SHAFT_SINGLE_CC",
+        "turbine_role": "main",
+        "stage_counts": {
+          "main": 1
+        },
+        "architecture_cycle_source": {
+          "schema_version": "architecture-cycle-input-v2",
+          "architecture": "SINGLE_SHAFT_SINGLE_CC",
+          "inlet_total_temperature": 288.0,
+          "inlet_total_pressure": 101300.0,
+          "compressor_pressure_ratios": [
+            11.0
+          ],
+          "compressor_polytropic_efficiency": 0.85,
+          "combustor": {
+            "kind": "legacy",
+            "outlet_total_temperature": 1250.0,
+            "total_pressure_recovery": 0.96
+          },
+          "turbine_outlet_total_pressure": 150000.0,
+          "turbine_polytropic_efficiencies": [
+            0.9
+          ],
+          "turbine_mechanical_efficiencies": [
+            0.99
+          ],
+          "target_gearbox_input_power": 110000.0,
+          "gearbox_efficiency": 0.98,
+          "gas_model": {
+            "R": 287.4,
+            "l0": 14.61,
+            "q_lhv_kj": 43150.0,
+            "eta_combustion": 0.98,
+            "T_ref": 288.0,
+            "alpha_basis": "fuel_based",
+            "model_variant": "legacy_cp_polynomial_compressor_mean_turbine_inlet_constant"
+          },
+          "gas_property_basis": "textbook_true_cp"
+        },
+        "stage_controls": {
+          "speed_rpm": 84000.0,
+          "hub_diameter_m": 0.065,
+          "reference_exit_mach": 0.3379,
+          "boundary_is_static": true,
+          "speed_basis": "fixed regression anchor copied from the stage fixture; no selection",
+          "pressure_ratio_policy": "raw_unbounded",
+          "main": {
+            "alpha1_deg": [
+              11.0
+            ],
+            "kappa": [
+              1.38
+            ],
+            "pi_weights": [
+              1.0
+            ]
+          }
+        },
+        "targets": {
+          "main_total_outlet_pressure_Pa": 150000.0,
+          "main_compressor_power_W": 239031.86271114135,
+          "target_gearbox_input_power_W": 110000.0
+        },
+        "brackets": {
+          "main": [
+            60000.0,
+            120000.0
+          ],
+          "provenance": "Explicit lower-static-pressure diagnostic; no automatic bracket widening; no flow/geometry/speed adjustment"
+        }
+      },
+      "status": "SUCCESS",
+      "outputs": {
+        "schema_version": "architecture-coupled-stage-output-v1",
+        "physically_validated": false,
+        "validation_status": "NOT_PHYSICALLY_VALIDATED",
+        "coupling_label": "ACTUAL_BOUNDARY_STAGE_COUPLED",
+        "assembly": "B_MAIN",
+        "stage_counts": {
+          "main": 1
+        },
+        "stage_count_selection": "NONE",
+        "pressure_ratio_policy": "raw_unbounded",
+        "source_input_sha256": "f793c4481b540f835e6a5447a0582337cc5acc1b65c2120dd32d15a0a045765a",
+        "source_gas_basis": "textbook_true_cp",
+        "posthoc_pi_acceptance": {
+          "main": {
+            "profile": "PROMPT_STAGE_PI_1_8_2_4",
+            "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK_FUNDAMENTAL",
+            "bounds": [
+              1.8,
+              2.4
+            ],
+            "stages": [
+              {
+                "stage": 1,
+                "actual": 14.106596603826446,
+                "min": 1.8,
+                "max": 2.4,
+                "actual_pi_stage": 14.106596603826446,
+                "min_pi_stage": 1.8,
+                "max_pi_stage": 2.4,
+                "lower_margin": 12.306596603826446,
+                "upper_margin": -11.706596603826446,
+                "status": "FAIL"
+              }
+            ],
+            "pass": false,
+            "overall_engineering_feasibility": null,
+            "overall_engineering_feasibility_status": "NOT_CHECKED",
+            "overall_engineering_feasibility_reason": "strength_verification_missing",
+            "note": "post-hoc engineering profile only; overall feasibility NOT_CHECKED"
+          }
+        },
+        "rho_065_posthoc": {
+          "status": "NOT_APPLIED"
+        },
+        "overall_engineering_feasibility": null,
+        "overall_engineering_feasibility_status": "NOT_CHECKED",
+        "overall_engineering_feasibility_reason": "strength_verification_missing",
+        "actual_boundary": {
+          "target_kind": "total_outlet_pressure",
+          "source_0d_outlet_total_pressure_Pa": 150000.0,
+          "target_outlet_total_pressure_Pa": 150000.0,
+          "actual_outlet_total_pressure_Pa": 149999.99765211967,
+          "signed_total_pressure_residual_Pa": -0.0023478803341276944,
+          "relative_total_pressure_residual": 1.5652535560851297e-08,
+          "source_target_differs_from_actual": true,
+          "closure": {
+            "target_kind": "total_outlet_pressure",
+            "target_value": 150000.0,
+            "actual_metric": 149999.99765211967,
+            "relative_residual": 1.5652535560851297e-08,
+            "signed_residual": -0.0023478803341276944,
+            "solved_static_pressure_Pa": 75831.75659179688,
+            "actual_outlet_total_pressure_Pa": 149999.99765211967,
+            "actual_stages": [
+              {
+                "T0": 1250.0,
+                "p0": 1069728.0,
+                "H0": 698804.011485574,
+                "ρ": 0.4602187656058929,
+                "Hc": 377201.2919192369,
+                "cp": 1168.278765888315,
+                "k": 1.3262651015434272,
+                "c1": 842.5066119227907,
+                "T1": 946.2123202701962,
+                "T1_ад": 927.1307474441451,
+                "p1": 317514.2861564788,
+                "A1a": 0.00363859654610555,
+                "v1": 0.8564698745921467,
+                "c1a": 160.75784021908422,
+                "α1": 11.0,
+                "c1u": 827.0273924978031,
+                "w1": 503.46808007248154,
+                "β1": 18.620655054966996,
+                "Hл": 328221.7274369943,
+                "u1": 349.9141727480606,
+                "u2": 408.5134362635773,
+                "w2": 937.8403381574198,
+                "T2": 697.2900981568833,
+                "T2_ад": 665.2676202375573,
+                "p2": 75831.75659179436,
+                "v2": 2.6427077944278214,
+                "A_лa": 0.008135642763148898,
+                "c2a": 221.8458195023362,
+                "β2": 13.68298794556986,
+                "c2u": 502.7104287907573,
+                "α2": 23.811839898070527,
+                "c2": 549.4846156587555,
+                "L_u": 494752.5705967031,
+                "η_u": 0.7079990418843163,
+                "h_c": 22292.596352426954,
+                "ξ_c": 0.031901070952691804,
+                "ξ_c_": 0.02242916214583474,
+                "h_л": 37411.18098427598,
+                "ξ_л": 0.053536013487879494,
+                "h_в": 150966.67142282514,
+                "ξ_в": 0.21603578248196945,
+                "η_u2": 0.7079990418843163,
+                "δ_л": 0.0002,
+                "h_з": 11172.374433575776,
+                "ξ_з": 0.015987851028251315,
+                "L_u3": 483580.1961631273,
+                "η_т1": 0.692011190856065,
+                "η_л1": 0.9080469733380344,
+                "N_тв": 335.2921725375412,
+                "h_тв": 490.9411559438914,
+                "ξ_тв": 0.0007025448450134238,
+                "η_т": 0.6913086460110516,
+                "η_л": 0.907344428493021,
+                "L_т": 483089.25500718347,
+                "T_ст": 707.2734308425984,
+                "T_ст_п": 836.4948768114771,
+                "p_ст_п": 149999.99765211967,
+                "H0_п": 559667.0523207482,
+                "η_т_п": 0.8631725827060521,
+                "T_w1": 1054.6967484105699,
+                "M_c1": 1.4028798122663948,
+                "M_w2": 1.8191294578862813,
+                "σ_р": 390.3546482900947,
+                "l_c": 0.01455795609689549,
+                "l_л": 0.02788133475506928,
+                "D_c": 0.07955795750109317,
+                "D_л": 0.09288133242972038,
+                "G_c": 0.6829579644690881,
+                "G_л": 0.6829579644690881,
+                "π_ст": 14.106596603826446
+              }
+            ],
+            "iterations": 17,
+            "iteration_count": 17,
+            "evaluations": 19,
+            "pressure_ratio_policy": "raw_unbounded",
+            "controls": {
+              "n_rpm": 84000.0,
+              "D_hub_m": 0.065,
+              "relative_tol": 1e-06,
+              "max_iter": 40,
+              "static_pressure_bracket_Pa": [
+                60000.0,
+                120000.0
+              ]
+            },
+            "source_point": {
+              "inlet_total_pressure_Pa": 1069728.0,
+              "stage_count": 1,
+              "last_stage_total_pressure_key": "p_ст_п",
+              "last_stage_total_temperature_key": "T_ст_п"
+            },
+            "physical_validation": "NOT_PERFORMED",
+            "stage_count_selection": "NONE"
+          }
+        },
+        "power": {
+          "kind": "AB_NET_STAGE_MECHANICAL_MINUS_SOURCE_COMPRESSOR_POWER",
+          "mechanical_efficiency": 0.99,
+          "stage_gas_power_W": 329929.65425659425,
+          "stage_mechanical_power_W": 326630.35771402833,
+          "compressor_power_W": 239031.86271114135,
+          "compressor_power_basis": "exactly source result.compressor.power",
+          "net_mechanical_power_W": 87598.49500288698,
+          "target_gearbox_input_power_W": 110000.0,
+          "signed_power_residual_W": -22401.50499711302,
+          "relative_power_residual": 0.2036500454283002,
+          "engine_power_closed": false,
+          "engine_power_label": "ACTUAL_BOUNDARY_LINK_NOT_POWER_CLOSED"
+        }
+      },
+      "failure_stage": null,
+      "failure_reason": null,
+      "diagnostics": {
+        "point_index": 3,
+        "coupling": "AB"
+      },
+      "last_valid_state": null
+    },
+    {
+      "payload": {
+        "schema_version": "architecture-coupled-stage-input-v1",
+        "coupling": "AB",
+        "point_index": 3,
+        "assembly": "B_MAIN",
+        "architecture": "SINGLE_SHAFT_SINGLE_CC",
+        "turbine_role": "main",
+        "stage_counts": {
+          "main": 1
+        },
+        "architecture_cycle_source": {
+          "schema_version": "architecture-cycle-input-v2",
+          "architecture": "SINGLE_SHAFT_SINGLE_CC",
+          "inlet_total_temperature": 288.0,
+          "inlet_total_pressure": 101300.0,
+          "compressor_pressure_ratios": [
+            11.0
+          ],
+          "compressor_polytropic_efficiency": 0.85,
+          "combustor": {
+            "kind": "legacy",
+            "outlet_total_temperature": 1250.0,
+            "total_pressure_recovery": 0.96
+          },
+          "turbine_outlet_total_pressure": 150000.0,
+          "turbine_polytropic_efficiencies": [
+            0.9
+          ],
+          "turbine_mechanical_efficiencies": [
+            0.99
+          ],
+          "target_gearbox_input_power": 110000.0,
+          "gearbox_efficiency": 0.98,
+          "gas_model": {
+            "R": 287.4,
+            "l0": 14.61,
+            "q_lhv_kj": 43150.0,
+            "eta_combustion": 0.98,
+            "T_ref": 288.0,
+            "alpha_basis": "fuel_based",
+            "model_variant": "legacy_cp_polynomial_compressor_mean_turbine_inlet_constant"
+          },
+          "gas_property_basis": "textbook_true_cp"
+        },
+        "stage_controls": {
+          "speed_rpm": 84000.0,
+          "hub_diameter_m": 0.065,
+          "reference_exit_mach": 0.3379,
+          "boundary_is_static": true,
+          "speed_basis": "fixed regression anchor copied from the stage fixture; no selection",
+          "pressure_ratio_policy": "raw_unbounded",
+          "main": {
+            "alpha1_deg": [
+              11.0
+            ],
+            "kappa": [
+              1.38
+            ],
+            "pi_weights": [
+              1.0
+            ]
+          }
+        },
+        "targets": {
+          "main_total_outlet_pressure_Pa": 150000.0,
+          "main_compressor_power_W": 239031.86271114135,
+          "target_gearbox_input_power_W": 110000.0
+        },
+        "brackets": {
+          "main": [
+            30000.0,
+            120000.0
+          ],
+          "provenance": "Explicit lower-static-pressure diagnostic; no automatic bracket widening; no flow/geometry/speed adjustment"
+        }
+      },
+      "status": "SUCCESS",
+      "outputs": {
+        "schema_version": "architecture-coupled-stage-output-v1",
+        "physically_validated": false,
+        "validation_status": "NOT_PHYSICALLY_VALIDATED",
+        "coupling_label": "ACTUAL_BOUNDARY_STAGE_COUPLED",
+        "assembly": "B_MAIN",
+        "stage_counts": {
+          "main": 1
+        },
+        "stage_count_selection": "NONE",
+        "pressure_ratio_policy": "raw_unbounded",
+        "source_input_sha256": "f793c4481b540f835e6a5447a0582337cc5acc1b65c2120dd32d15a0a045765a",
+        "source_gas_basis": "textbook_true_cp",
+        "posthoc_pi_acceptance": {
+          "main": {
+            "profile": "PROMPT_STAGE_PI_1_8_2_4",
+            "basis": "USER_PROMPT_ENGINEERING_PROFILE_NOT_BOOK_FUNDAMENTAL",
+            "bounds": [
+              1.8,
+              2.4
+            ],
+            "stages": [
+              {
+                "stage": 1,
+                "actual": 14.106575314995723,
+                "min": 1.8,
+                "max": 2.4,
+                "actual_pi_stage": 14.106575314995723,
+                "min_pi_stage": 1.8,
+                "max_pi_stage": 2.4,
+                "lower_margin": 12.306575314995722,
+                "upper_margin": -11.706575314995723,
+                "status": "FAIL"
+              }
+            ],
+            "pass": false,
+            "overall_engineering_feasibility": null,
+            "overall_engineering_feasibility_status": "NOT_CHECKED",
+            "overall_engineering_feasibility_reason": "strength_verification_missing",
+            "note": "post-hoc engineering profile only; overall feasibility NOT_CHECKED"
+          }
+        },
+        "rho_065_posthoc": {
+          "status": "NOT_APPLIED"
+        },
+        "overall_engineering_feasibility": null,
+        "overall_engineering_feasibility_status": "NOT_CHECKED",
+        "overall_engineering_feasibility_reason": "strength_verification_missing",
+        "actual_boundary": {
+          "target_kind": "total_outlet_pressure",
+          "source_0d_outlet_total_pressure_Pa": 150000.0,
+          "target_outlet_total_pressure_Pa": 150000.0,
+          "actual_outlet_total_pressure_Pa": 150000.12177658695,
+          "signed_total_pressure_residual_Pa": 0.1217765869514551,
+          "relative_total_pressure_residual": 8.118439130097007e-07,
+          "source_target_differs_from_actual": true,
+          "closure": {
+            "target_kind": "total_outlet_pressure",
+            "target_value": 150000.0,
+            "actual_metric": 150000.12177658695,
+            "relative_residual": 8.118439130097007e-07,
+            "signed_residual": 0.1217765869514551,
+            "solved_static_pressure_Pa": 75831.87103271484,
+            "actual_outlet_total_pressure_Pa": 150000.12177658695,
+            "actual_stages": [
+              {
+                "T0": 1250.0,
+                "p0": 1069728.0,
+                "H0": 698803.7331473375,
+                "ρ": 0.4602185350718014,
+                "Hc": 377201.30277556385,
+                "cp": 1168.2787911422547,
+                "k": 1.3262650921897237,
+                "c1": 842.5066240469898,
+                "T1": 946.2123180935904,
+                "T1_ад": 927.130745130822,
+                "p1": 317514.27459935035,
+                "A1a": 0.003638596617814299,
+                "v1": 0.856469903796427,
+                "c1a": 160.75784253249046,
+                "α1": 11.0,
+                "c1u": 827.0274043992465,
+                "w1": 503.4680910787687,
+                "β1": 18.62065491075138,
+                "Hл": 328221.4323543654,
+                "u1": 349.9141738147254,
+                "u2": 408.5133241197902,
+                "w2": 937.8400082442624,
+                "T2": 697.2903314103111,
+                "T2_ад": 665.2678767129031,
+                "p2": 75831.8710327124,
+                "v2": 2.6427046902334,
+                "A_лa": 0.00813563308973102,
+                "c2a": 221.8458226948368,
+                "β2": 13.682993053348381,
+                "c2u": 502.7102006075126,
+                "α2": 23.811849808713486,
+                "c2": 549.4844081882529,
+                "L_u": 494752.4260516007,
+                "η_u": 0.707999117038612,
+                "h_c": 22292.59699403587,
+                "ξ_c": 0.03190108457725661,
+                "ξ_c_": 0.0224291804235961,
+                "h_л": 37411.1546632954,
+                "ξ_л": 0.05353599714586462,
+                "h_в": 150966.55742099727,
+                "ξ_в": 0.21603570539192743,
+                "η_u2": 0.7079991170386118,
+                "δ_л": 0.0002,
+                "h_з": 11172.376916490799,
+                "ξ_з": 0.01598786094941366,
+                "L_u3": 483580.04913510993,
+                "η_т1": 0.6920112560891983,
+                "η_л1": 0.9080469614811257,
+                "N_тв": 335.29201477173876,
+                "h_тв": 490.9409249402123,
+                "ξ_тв": 0.0007025447942715857,
+                "η_т": 0.6913087112949268,
+                "η_л": 0.9073444166868542,
+                "L_т": 483089.10821016977,
+                "T_ст": 707.273665807769,
+                "T_ст_п": 836.4950114023369,
+                "p_ст_п": 150000.12177658695,
+                "H0_п": 559666.8716609849,
+                "η_т_п": 0.8631725990435223,
+                "T_w1": 1054.696748632069,
+                "M_c1": 1.4028798390152841,
+                "M_w2": 1.8191285201062681,
+                "σ_р": 390.3541841517661,
+                "l_c": 0.014557956339422928,
+                "l_л": 0.027881309257573983,
+                "D_c": 0.07955795774361457,
+                "D_л": 0.09288130693223742,
+                "G_c": 0.6829579644690881,
+                "G_л": 0.6829579644690881,
+                "π_ст": 14.106575314995723
+              }
+            ],
+            "iterations": 18,
+            "iteration_count": 18,
+            "evaluations": 20,
+            "pressure_ratio_policy": "raw_unbounded",
+            "controls": {
+              "n_rpm": 84000.0,
+              "D_hub_m": 0.065,
+              "relative_tol": 1e-06,
+              "max_iter": 40,
+              "static_pressure_bracket_Pa": [
+                30000.0,
+                120000.0
+              ]
+            },
+            "source_point": {
+              "inlet_total_pressure_Pa": 1069728.0,
+              "stage_count": 1,
+              "last_stage_total_pressure_key": "p_ст_п",
+              "last_stage_total_temperature_key": "T_ст_п"
+            },
+            "physical_validation": "NOT_PERFORMED",
+            "stage_count_selection": "NONE"
+          }
+        },
+        "power": {
+          "kind": "AB_NET_STAGE_MECHANICAL_MINUS_SOURCE_COMPRESSOR_POWER",
+          "mechanical_efficiency": 0.99,
+          "stage_gas_power_W": 329929.55400040455,
+          "stage_mechanical_power_W": 326630.2584604005,
+          "compressor_power_W": 239031.86271114135,
+          "compressor_power_basis": "exactly source result.compressor.power",
+          "net_mechanical_power_W": 87598.39574925916,
+          "target_gearbox_input_power_W": 110000.0,
+          "signed_power_residual_W": -22401.604250740842,
+          "relative_power_residual": 0.20365094773400766,
+          "engine_power_closed": false,
+          "engine_power_label": "ACTUAL_BOUNDARY_LINK_NOT_POWER_CLOSED"
+        }
+      },
+      "failure_stage": null,
+      "failure_reason": null,
+      "diagnostics": {
+        "point_index": 3,
+        "coupling": "AB"
+      },
+      "last_valid_state": null
+    }
+  ],
+  "physically_validated": false
+}

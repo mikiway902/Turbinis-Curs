@@ -1,0 +1,4894 @@
+{
+  "controlled_slices": {
+    "adjacent_pi_slopes": [
+      {
+        "architecture": "SINGLE_SHAFT_SINGLE_CC",
+        "pairs": [
+          {
+            "d_fuel_mass_flow_d_pi": -0.012654064233136163,
+            "d_gas_mass_flow_d_pi": -0.5102469047044675,
+            "fuel_mass_flow_from": 0.03530164171146828,
+            "fuel_mass_flow_to": 0.02264757747833212,
+            "gas_mass_flow_from": 1.559263395130321,
+            "gas_mass_flow_to": 1.0490164904258534,
+            "pi_from": 3,
+            "pi_to": 4,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.004439264264312202,
+            "d_gas_mass_flow_d_pi": -0.16933269589199407,
+            "fuel_mass_flow_from": 0.02264757747833212,
+            "fuel_mass_flow_to": 0.018208313214019917,
+            "gas_mass_flow_from": 1.0490164904258534,
+            "gas_mass_flow_to": 0.8796837945338594,
+            "pi_from": 4,
+            "pi_to": 5,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0022536482496390738,
+            "d_gas_mass_flow_d_pi": -0.0786576289490547,
+            "fuel_mass_flow_from": 0.018208313214019917,
+            "fuel_mass_flow_to": 0.015954664964380843,
+            "gas_mass_flow_from": 0.8796837945338594,
+            "gas_mass_flow_to": 0.8010261655848047,
+            "pi_from": 5,
+            "pi_to": 6,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0013471201244153203,
+            "d_gas_mass_flow_d_pi": -0.04091700455077185,
+            "fuel_mass_flow_from": 0.015954664964380843,
+            "fuel_mass_flow_to": 0.014607544839965523,
+            "gas_mass_flow_from": 0.8010261655848047,
+            "gas_mass_flow_to": 0.7601091610340328,
+            "pi_from": 6,
+            "pi_to": 7,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0008796134595031452,
+            "d_gas_mass_flow_d_pi": -0.021257993681318754,
+            "fuel_mass_flow_from": 0.014607544839965523,
+            "fuel_mass_flow_to": 0.013727931380462377,
+            "gas_mass_flow_from": 0.7601091610340328,
+            "gas_mass_flow_to": 0.7388511673527141,
+            "pi_from": 7,
+            "pi_to": 8,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0006039795156133725,
+            "d_gas_mass_flow_d_pi": -0.00944133087341259,
+            "fuel_mass_flow_from": 0.013727931380462377,
+            "fuel_mass_flow_to": 0.013123951864849005,
+            "gas_mass_flow_from": 0.7388511673527141,
+            "gas_mass_flow_to": 0.7294098364793015,
+            "pi_from": 8,
+            "pi_to": 9,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.00042563763982583075,
+            "d_gas_mass_flow_d_pi": -0.0015532876923837202,
+            "fuel_mass_flow_from": 0.013123951864849005,
+            "fuel_mass_flow_to": 0.012698314225023174,
+            "gas_mass_flow_from": 0.7294098364793015,
+            "gas_mass_flow_to": 0.7278565487869177,
+            "pi_from": 9,
+            "pi_to": 10,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0003018472028574245,
+            "d_gas_mass_flow_d_pi": 0.00417433189688643,
+            "fuel_mass_flow_from": 0.012698314225023174,
+            "fuel_mass_flow_to": 0.01239646702216575,
+            "gas_mass_flow_from": 0.7278565487869177,
+            "gas_mass_flow_to": 0.7320308806838042,
+            "pi_from": 10,
+            "pi_to": 11,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.00021090753904666817,
+            "d_gas_mass_flow_d_pi": 0.008641113032110348,
+            "fuel_mass_flow_from": 0.01239646702216575,
+            "fuel_mass_flow_to": 0.012185559483119082,
+            "gas_mass_flow_from": 0.7320308806838042,
+            "gas_mass_flow_to": 0.7406719937159145,
+            "pi_from": 11,
+            "pi_to": 12,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.00014079386165049244,
+            "d_gas_mass_flow_d_pi": 0.012348712348057678,
+            "fuel_mass_flow_from": 0.012185559483119082,
+            "fuel_mass_flow_to": 0.012044765621468589,
+            "gas_mass_flow_from": 0.7406719937159145,
+            "gas_mass_flow_to": 0.7530207060639722,
+            "pi_from": 12,
+            "pi_to": 13,
+            "status": "computed"
+          }
+        ],
+        "split_weight": null
+      },
+      {
+        "architecture": "FREE_POWER_TURBINE",
+        "pairs": [
+          {
+            "d_fuel_mass_flow_d_pi": -0.012654064233136166,
+            "d_gas_mass_flow_d_pi": -0.5102469047044678,
+            "fuel_mass_flow_from": 0.03530164171146828,
+            "fuel_mass_flow_to": 0.022647577478332116,
+            "gas_mass_flow_from": 1.559263395130321,
+            "gas_mass_flow_to": 1.0490164904258532,
+            "pi_from": 3,
+            "pi_to": 4,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.004439264264312192,
+            "d_gas_mass_flow_d_pi": -0.1693326958919935,
+            "fuel_mass_flow_from": 0.022647577478332116,
+            "fuel_mass_flow_to": 0.018208313214019924,
+            "gas_mass_flow_from": 1.0490164904258532,
+            "gas_mass_flow_to": 0.8796837945338597,
+            "pi_from": 4,
+            "pi_to": 5,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0022536482496390876,
+            "d_gas_mass_flow_d_pi": -0.07865762894905537,
+            "fuel_mass_flow_from": 0.018208313214019924,
+            "fuel_mass_flow_to": 0.015954664964380836,
+            "gas_mass_flow_from": 0.8796837945338597,
+            "gas_mass_flow_to": 0.8010261655848043,
+            "pi_from": 5,
+            "pi_to": 6,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0013471201244152926,
+            "d_gas_mass_flow_d_pi": -0.04091700455077041,
+            "fuel_mass_flow_from": 0.015954664964380836,
+            "fuel_mass_flow_to": 0.014607544839965543,
+            "gas_mass_flow_from": 0.8010261655848043,
+            "gas_mass_flow_to": 0.7601091610340339,
+            "pi_from": 6,
+            "pi_to": 7,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0008796134595031729,
+            "d_gas_mass_flow_d_pi": -0.02125799368132031,
+            "fuel_mass_flow_from": 0.014607544839965543,
+            "fuel_mass_flow_to": 0.01372793138046237,
+            "gas_mass_flow_from": 0.7601091610340339,
+            "gas_mass_flow_to": 0.7388511673527136,
+            "pi_from": 7,
+            "pi_to": 8,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0006039795156133759,
+            "d_gas_mass_flow_d_pi": -0.009441330873412701,
+            "fuel_mass_flow_from": 0.01372793138046237,
+            "fuel_mass_flow_to": 0.013123951864848995,
+            "gas_mass_flow_from": 0.7388511673527136,
+            "gas_mass_flow_to": 0.7294098364793009,
+            "pi_from": 8,
+            "pi_to": 9,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.000425637639825829,
+            "d_gas_mass_flow_d_pi": -0.0015532876923837202,
+            "fuel_mass_flow_from": 0.013123951864848995,
+            "fuel_mass_flow_to": 0.012698314225023166,
+            "gas_mass_flow_from": 0.7294098364793009,
+            "gas_mass_flow_to": 0.7278565487869172,
+            "pi_from": 9,
+            "pi_to": 10,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.00030184720285741234,
+            "d_gas_mass_flow_d_pi": 0.004174331896887207,
+            "fuel_mass_flow_from": 0.012698314225023166,
+            "fuel_mass_flow_to": 0.012396467022165753,
+            "gas_mass_flow_from": 0.7278565487869172,
+            "gas_mass_flow_to": 0.7320308806838044,
+            "pi_from": 10,
+            "pi_to": 11,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.00021090753904666817,
+            "d_gas_mass_flow_d_pi": 0.008641113032110348,
+            "fuel_mass_flow_from": 0.012396467022165753,
+            "fuel_mass_flow_to": 0.012185559483119085,
+            "gas_mass_flow_from": 0.7320308806838044,
+            "gas_mass_flow_to": 0.7406719937159147,
+            "pi_from": 11,
+            "pi_to": 12,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.00014079386165050806,
+            "d_gas_mass_flow_d_pi": 0.012348712348056679,
+            "fuel_mass_flow_from": 0.012185559483119085,
+            "fuel_mass_flow_to": 0.012044765621468577,
+            "gas_mass_flow_from": 0.7406719937159147,
+            "gas_mass_flow_to": 0.7530207060639714,
+            "pi_from": 12,
+            "pi_to": 13,
+            "status": "computed"
+          }
+        ],
+        "split_weight": null
+      },
+      {
+        "architecture": "SINGLE_SHAFT_DUAL_CC",
+        "pairs": [
+          {
+            "d_fuel_mass_flow_d_pi": -0.012654532474969442,
+            "d_gas_mass_flow_d_pi": -0.5102233806652998,
+            "fuel_mass_flow_from": 0.03531159689339191,
+            "fuel_mass_flow_to": 0.022657064418422468,
+            "gas_mass_flow_from": 1.5597404301941913,
+            "gas_mass_flow_to": 1.0495170495288915,
+            "pi_from": 3,
+            "pi_to": 4,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.004437947957434775,
+            "d_gas_mass_flow_d_pi": -0.16921770554105564,
+            "fuel_mass_flow_from": 0.022657064418422468,
+            "fuel_mass_flow_to": 0.018219116460987693,
+            "gas_mass_flow_from": 1.0495170495288915,
+            "gas_mass_flow_to": 0.8802993439878358,
+            "pi_from": 4,
+            "pi_to": 5,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.002251759308319532,
+            "d_gas_mass_flow_d_pi": -0.0785019385532636,
+            "fuel_mass_flow_from": 0.018219116460987693,
+            "fuel_mass_flow_to": 0.01596735715266816,
+            "gas_mass_flow_from": 0.8802993439878358,
+            "gas_mass_flow_to": 0.8017974054345722,
+            "pi_from": 5,
+            "pi_to": 6,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0013448573894516338,
+            "d_gas_mass_flow_d_pi": -0.040727569013601084,
+            "fuel_mass_flow_from": 0.01596735715266816,
+            "fuel_mass_flow_to": 0.014622499763216527,
+            "gas_mass_flow_from": 0.8017974054345722,
+            "gas_mass_flow_to": 0.7610698364209711,
+            "pi_from": 6,
+            "pi_to": 7,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0008770192611100396,
+            "d_gas_mass_flow_d_pi": -0.02103462618883789,
+            "fuel_mass_flow_from": 0.014622499763216527,
+            "fuel_mass_flow_to": 0.013745480502106487,
+            "gas_mass_flow_from": 0.7610698364209711,
+            "gas_mass_flow_to": 0.7400352102321333,
+            "pi_from": 7,
+            "pi_to": 8,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0006010504046007562,
+            "d_gas_mass_flow_d_pi": -0.009181443978967585,
+            "fuel_mass_flow_from": 0.013745480502106487,
+            "fuel_mass_flow_to": 0.013144430097505731,
+            "gas_mass_flow_from": 0.7400352102321333,
+            "gas_mass_flow_to": 0.7308537662531657,
+            "pi_from": 8,
+            "pi_to": 9,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.000422350043170705,
+            "d_gas_mass_flow_d_pi": -0.0012529522067092902,
+            "fuel_mass_flow_from": 0.013144430097505731,
+            "fuel_mass_flow_to": 0.012722080054335026,
+            "gas_mass_flow_from": 0.7308537662531657,
+            "gas_mass_flow_to": 0.7296008140464564,
+            "pi_from": 9,
+            "pi_to": 10,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0002981649863053118,
+            "d_gas_mass_flow_d_pi": 0.004520130802052602,
+            "fuel_mass_flow_from": 0.012722080054335026,
+            "fuel_mass_flow_to": 0.012423915068029714,
+            "gas_mass_flow_from": 0.7296008140464564,
+            "gas_mass_flow_to": 0.734120944848509,
+            "pi_from": 10,
+            "pi_to": 11,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0002067841655048596,
+            "d_gas_mass_flow_d_pi": 0.009038476415414332,
+            "fuel_mass_flow_from": 0.012423915068029714,
+            "fuel_mass_flow_to": 0.012217130902524855,
+            "gas_mass_flow_from": 0.734120944848509,
+            "gas_mass_flow_to": 0.7431594212639233,
+            "pi_from": 11,
+            "pi_to": 12,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.00013617244258154644,
+            "d_gas_mass_flow_d_pi": 0.012804945891188857,
+            "fuel_mass_flow_from": 0.012217130902524855,
+            "fuel_mass_flow_to": 0.012080958459943308,
+            "gas_mass_flow_from": 0.7431594212639233,
+            "gas_mass_flow_to": 0.7559643671551122,
+            "pi_from": 12,
+            "pi_to": 13,
+            "status": "computed"
+          }
+        ],
+        "split_weight": 0.4
+      },
+      {
+        "architecture": "SINGLE_SHAFT_DUAL_CC",
+        "pairs": [
+          {
+            "d_fuel_mass_flow_d_pi": -0.012654527614857664,
+            "d_gas_mass_flow_d_pi": -0.510220523325601,
+            "fuel_mass_flow_from": 0.03531213374872181,
+            "fuel_mass_flow_to": 0.022657606133864146,
+            "gas_mass_flow_from": 1.559766155371871,
+            "gas_mass_flow_to": 1.04954563204627,
+            "pi_from": 3,
+            "pi_to": 4,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.00443784628999851,
+            "d_gas_mass_flow_d_pi": -0.16920962925124972,
+            "fuel_mass_flow_from": 0.022657606133864146,
+            "fuel_mass_flow_to": 0.018219759843865636,
+            "gas_mass_flow_from": 1.04954563204627,
+            "gas_mass_flow_to": 0.8803360027950202,
+            "pi_from": 4,
+            "pi_to": 5,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0022516214234347826,
+            "d_gas_mass_flow_d_pi": -0.07849112364970934,
+            "fuel_mass_flow_from": 0.018219759843865636,
+            "fuel_mass_flow_to": 0.015968138420430853,
+            "gas_mass_flow_from": 0.8803360027950202,
+            "gas_mass_flow_to": 0.8018448791453109,
+            "pi_from": 5,
+            "pi_to": 6,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0013446928338797168,
+            "d_gas_mass_flow_d_pi": -0.040714284796828704,
+            "fuel_mass_flow_from": 0.015968138420430853,
+            "fuel_mass_flow_to": 0.014623445586551136,
+            "gas_mass_flow_from": 0.8018448791453109,
+            "gas_mass_flow_to": 0.7611305943484822,
+            "pi_from": 6,
+            "pi_to": 7,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0008768294927027718,
+            "d_gas_mass_flow_d_pi": -0.021018765394382743,
+            "fuel_mass_flow_from": 0.014623445586551136,
+            "fuel_mass_flow_to": 0.013746616093848365,
+            "gas_mass_flow_from": 0.7611305943484822,
+            "gas_mass_flow_to": 0.7401118289540994,
+            "pi_from": 7,
+            "pi_to": 8,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0006008343750842186,
+            "d_gas_mass_flow_d_pi": -0.009162759070740156,
+            "fuel_mass_flow_from": 0.013746616093848365,
+            "fuel_mass_flow_to": 0.013145781718764146,
+            "gas_mass_flow_from": 0.7401118289540994,
+            "gas_mass_flow_to": 0.7309490698833593,
+            "pi_from": 8,
+            "pi_to": 9,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.00042210548449898334,
+            "d_gas_mass_flow_d_pi": -0.0012311057852679719,
+            "fuel_mass_flow_from": 0.013145781718764146,
+            "fuel_mass_flow_to": 0.012723676234265163,
+            "gas_mass_flow_from": 0.7309490698833593,
+            "gas_mass_flow_to": 0.7297179640980913,
+            "pi_from": 9,
+            "pi_to": 10,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0002978887719636489,
+            "d_gas_mass_flow_d_pi": 0.004545556875529488,
+            "fuel_mass_flow_from": 0.012723676234265163,
+            "fuel_mass_flow_to": 0.012425787462301514,
+            "gas_mass_flow_from": 0.7297179640980913,
+            "gas_mass_flow_to": 0.7342635209736208,
+            "pi_from": 10,
+            "pi_to": 11,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.00020647238718506968,
+            "d_gas_mass_flow_d_pi": 0.009067986004021922,
+            "fuel_mass_flow_from": 0.012425787462301514,
+            "fuel_mass_flow_to": 0.012219315075116444,
+            "gas_mass_flow_from": 0.7342635209736208,
+            "gas_mass_flow_to": 0.7433315069776427,
+            "pi_from": 11,
+            "pi_to": 12,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0001358203683935709,
+            "d_gas_mass_flow_d_pi": 0.01283914080486237,
+            "fuel_mass_flow_from": 0.012219315075116444,
+            "fuel_mass_flow_to": 0.012083494706722873,
+            "gas_mass_flow_from": 0.7433315069776427,
+            "gas_mass_flow_to": 0.7561706477825051,
+            "pi_from": 12,
+            "pi_to": 13,
+            "status": "computed"
+          }
+        ],
+        "split_weight": 0.5
+      },
+      {
+        "architecture": "SINGLE_SHAFT_DUAL_CC",
+        "pairs": [
+          {
+            "d_fuel_mass_flow_d_pi": -0.01265448501227285,
+            "d_gas_mass_flow_d_pi": -0.5102197342132697,
+            "fuel_mass_flow_from": 0.035311832650638614,
+            "fuel_mass_flow_to": 0.022657347638365764,
+            "gas_mass_flow_from": 1.559751727269626,
+            "gas_mass_flow_to": 1.0495319930563562,
+            "pi_from": 3,
+            "pi_to": 4,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.00443785708240543,
+            "d_gas_mass_flow_d_pi": -0.1692113338050254,
+            "fuel_mass_flow_from": 0.022657347638365764,
+            "fuel_mass_flow_to": 0.018219490555960335,
+            "gas_mass_flow_from": 1.0495319930563562,
+            "gas_mass_flow_to": 0.8803206592513309,
+            "pi_from": 4,
+            "pi_to": 5,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0022516444959170337,
+            "d_gas_mass_flow_d_pi": -0.07849354537563047,
+            "fuel_mass_flow_from": 0.018219490555960335,
+            "fuel_mass_flow_to": 0.0159678460600433,
+            "gas_mass_flow_from": 0.8803206592513309,
+            "gas_mass_flow_to": 0.8018271138757004,
+            "pi_from": 5,
+            "pi_to": 6,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0013447210955116248,
+            "d_gas_mass_flow_d_pi": -0.04071711568943426,
+            "fuel_mass_flow_from": 0.0159678460600433,
+            "fuel_mass_flow_to": 0.014623124964531676,
+            "gas_mass_flow_from": 0.8018271138757004,
+            "gas_mass_flow_to": 0.7611099981862661,
+            "pi_from": 6,
+            "pi_to": 7,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0008768609222919287,
+            "d_gas_mass_flow_d_pi": -0.02102192226448052,
+            "fuel_mass_flow_from": 0.014623124964531676,
+            "fuel_mass_flow_to": 0.013746264042239748,
+            "gas_mass_flow_from": 0.7611099981862661,
+            "gas_mass_flow_to": 0.7400880759217856,
+            "pi_from": 7,
+            "pi_to": 8,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.000600868307825457,
+            "d_gas_mass_flow_d_pi": -0.009166222032138571,
+            "fuel_mass_flow_from": 0.013746264042239748,
+            "fuel_mass_flow_to": 0.01314539573441429,
+            "gas_mass_flow_from": 0.7400880759217856,
+            "gas_mass_flow_to": 0.730921853889647,
+            "pi_from": 8,
+            "pi_to": 9,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.0004221417473386762,
+            "d_gas_mass_flow_d_pi": -0.0012348802119245272,
+            "fuel_mass_flow_from": 0.01314539573441429,
+            "fuel_mass_flow_to": 0.012723253987075614,
+            "gas_mass_flow_from": 0.730921853889647,
+            "gas_mass_flow_to": 0.7296869736777225,
+            "pi_from": 9,
+            "pi_to": 10,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.000297927414092505,
+            "d_gas_mass_flow_d_pi": 0.0045414522166447036,
+            "fuel_mass_flow_from": 0.012723253987075614,
+            "fuel_mass_flow_to": 0.01242532657298311,
+            "gas_mass_flow_from": 0.7296869736777225,
+            "gas_mass_flow_to": 0.7342284258943672,
+            "pi_from": 10,
+            "pi_to": 11,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.00020651358124698996,
+            "d_gas_mass_flow_d_pi": 0.009063523137400664,
+            "fuel_mass_flow_from": 0.01242532657298311,
+            "fuel_mass_flow_to": 0.01221881299173612,
+            "gas_mass_flow_from": 0.7342284258943672,
+            "gas_mass_flow_to": 0.7432919490317679,
+            "pi_from": 11,
+            "pi_to": 12,
+            "status": "computed"
+          },
+          {
+            "d_fuel_mass_flow_d_pi": -0.00013586437181057655,
+            "d_gas_mass_flow_d_pi": 0.012834283856434703,
+            "fuel_mass_flow_from": 0.01221881299173612,
+            "fuel_mass_flow_to": 0.012082948619925543,
+            "gas_mass_flow_from": 0.7432919490317679,
+            "gas_mass_flow_to": 0.7561262328882026,
+            "pi_from": 12,
+            "pi_to": 13,
+            "status": "computed"
+          }
+        ],
+        "split_weight": 0.6
+      }
+    ],
+    "dual_split_ranges": [
+      {
+        "fuel_mass_flow_spread": {
+          "count": 3,
+          "max": 0.03531213374872181,
+          "min": 0.03531159689339191,
+          "range": 5.368553298995549e-07
+        },
+        "gas_mass_flow_spread": {
+          "count": 3,
+          "max": 1.559766155371871,
+          "min": 1.5597404301941913,
+          "range": 2.5725177679625233e-05
+        },
+        "pi": 3,
+        "splits": [
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.03531159689339191,
+            "gas_mass_flow": 1.5597404301941913,
+            "split_weight": 0.4
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.03531213374872181,
+            "gas_mass_flow": 1.559766155371871,
+            "split_weight": 0.5
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.035311832650638614,
+            "gas_mass_flow": 1.559751727269626,
+            "split_weight": 0.6
+          }
+        ]
+      },
+      {
+        "fuel_mass_flow_spread": {
+          "count": 3,
+          "max": 0.022657606133864146,
+          "min": 0.022657064418422468,
+          "range": 5.417154416778591e-07
+        },
+        "gas_mass_flow_spread": {
+          "count": 3,
+          "max": 1.04954563204627,
+          "min": 1.0495170495288915,
+          "range": 2.8582517378472616e-05
+        },
+        "pi": 4,
+        "splits": [
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.022657064418422468,
+            "gas_mass_flow": 1.0495170495288915,
+            "split_weight": 0.4
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.022657606133864146,
+            "gas_mass_flow": 1.04954563204627,
+            "split_weight": 0.5
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.022657347638365764,
+            "gas_mass_flow": 1.0495319930563562,
+            "split_weight": 0.6
+          }
+        ]
+      },
+      {
+        "fuel_mass_flow_spread": {
+          "count": 3,
+          "max": 0.018219759843865636,
+          "min": 0.018219116460987693,
+          "range": 6.433828779427164e-07
+        },
+        "gas_mass_flow_spread": {
+          "count": 3,
+          "max": 0.8803360027950202,
+          "min": 0.8802993439878358,
+          "range": 3.6658807184397624e-05
+        },
+        "pi": 5,
+        "splits": [
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.018219116460987693,
+            "gas_mass_flow": 0.8802993439878358,
+            "split_weight": 0.4
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.018219759843865636,
+            "gas_mass_flow": 0.8803360027950202,
+            "split_weight": 0.5
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.018219490555960335,
+            "gas_mass_flow": 0.8803206592513309,
+            "split_weight": 0.6
+          }
+        ]
+      },
+      {
+        "fuel_mass_flow_spread": {
+          "count": 3,
+          "max": 0.015968138420430853,
+          "min": 0.01596735715266816,
+          "range": 7.812677626922726e-07
+        },
+        "gas_mass_flow_spread": {
+          "count": 3,
+          "max": 0.8018448791453109,
+          "min": 0.8017974054345722,
+          "range": 4.7473710738654695e-05
+        },
+        "pi": 6,
+        "splits": [
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.01596735715266816,
+            "gas_mass_flow": 0.8017974054345722,
+            "split_weight": 0.4
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.015968138420430853,
+            "gas_mass_flow": 0.8018448791453109,
+            "split_weight": 0.5
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.0159678460600433,
+            "gas_mass_flow": 0.8018271138757004,
+            "split_weight": 0.6
+          }
+        ]
+      },
+      {
+        "fuel_mass_flow_spread": {
+          "count": 3,
+          "max": 0.014623445586551136,
+          "min": 0.014622499763216527,
+          "range": 9.458233346092831e-07
+        },
+        "gas_mass_flow_spread": {
+          "count": 3,
+          "max": 0.7611305943484822,
+          "min": 0.7610698364209711,
+          "range": 6.0757927511034815e-05
+        },
+        "pi": 7,
+        "splits": [
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.014622499763216527,
+            "gas_mass_flow": 0.7610698364209711,
+            "split_weight": 0.4
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.014623445586551136,
+            "gas_mass_flow": 0.7611305943484822,
+            "split_weight": 0.5
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.014623124964531676,
+            "gas_mass_flow": 0.7611099981862661,
+            "split_weight": 0.6
+          }
+        ]
+      },
+      {
+        "fuel_mass_flow_spread": {
+          "count": 3,
+          "max": 0.013746616093848365,
+          "min": 0.013745480502106487,
+          "range": 1.1355917418770511e-06
+        },
+        "gas_mass_flow_spread": {
+          "count": 3,
+          "max": 0.7401118289540994,
+          "min": 0.7400352102321333,
+          "range": 7.66187219661818e-05
+        },
+        "pi": 8,
+        "splits": [
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.013745480502106487,
+            "gas_mass_flow": 0.7400352102321333,
+            "split_weight": 0.4
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.013746616093848365,
+            "gas_mass_flow": 0.7401118289540994,
+            "split_weight": 0.5
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.013746264042239748,
+            "gas_mass_flow": 0.7400880759217856,
+            "split_weight": 0.6
+          }
+        ]
+      },
+      {
+        "fuel_mass_flow_spread": {
+          "count": 3,
+          "max": 0.013145781718764146,
+          "min": 0.013144430097505731,
+          "range": 1.3516212584146342e-06
+        },
+        "gas_mass_flow_spread": {
+          "count": 3,
+          "max": 0.7309490698833593,
+          "min": 0.7308537662531657,
+          "range": 9.530363019361054e-05
+        },
+        "pi": 9,
+        "splits": [
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.013144430097505731,
+            "gas_mass_flow": 0.7308537662531657,
+            "split_weight": 0.4
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.013145781718764146,
+            "gas_mass_flow": 0.7309490698833593,
+            "split_weight": 0.5
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.01314539573441429,
+            "gas_mass_flow": 0.730921853889647,
+            "split_weight": 0.6
+          }
+        ]
+      },
+      {
+        "fuel_mass_flow_spread": {
+          "count": 3,
+          "max": 0.012723676234265163,
+          "min": 0.012722080054335026,
+          "range": 1.5961799301363044e-06
+        },
+        "gas_mass_flow_spread": {
+          "count": 3,
+          "max": 0.7297179640980913,
+          "min": 0.7296008140464564,
+          "range": 0.00011715005163492886
+        },
+        "pi": 10,
+        "splits": [
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.012722080054335026,
+            "gas_mass_flow": 0.7296008140464564,
+            "split_weight": 0.4
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.012723676234265163,
+            "gas_mass_flow": 0.7297179640980913,
+            "split_weight": 0.5
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.012723253987075614,
+            "gas_mass_flow": 0.7296869736777225,
+            "split_weight": 0.6
+          }
+        ]
+      },
+      {
+        "fuel_mass_flow_spread": {
+          "count": 3,
+          "max": 0.012425787462301514,
+          "min": 0.012423915068029714,
+          "range": 1.8723942717992215e-06
+        },
+        "gas_mass_flow_spread": {
+          "count": 3,
+          "max": 0.7342635209736208,
+          "min": 0.734120944848509,
+          "range": 0.00014257612511181517
+        },
+        "pi": 11,
+        "splits": [
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.012423915068029714,
+            "gas_mass_flow": 0.734120944848509,
+            "split_weight": 0.4
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.012425787462301514,
+            "gas_mass_flow": 0.7342635209736208,
+            "split_weight": 0.5
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.01242532657298311,
+            "gas_mass_flow": 0.7342284258943672,
+            "split_weight": 0.6
+          }
+        ]
+      },
+      {
+        "fuel_mass_flow_spread": {
+          "count": 3,
+          "max": 0.012219315075116444,
+          "min": 0.012217130902524855,
+          "range": 2.1841725915891508e-06
+        },
+        "gas_mass_flow_spread": {
+          "count": 3,
+          "max": 0.7433315069776427,
+          "min": 0.7431594212639233,
+          "range": 0.0001720857137194054
+        },
+        "pi": 12,
+        "splits": [
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.012217130902524855,
+            "gas_mass_flow": 0.7431594212639233,
+            "split_weight": 0.4
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.012219315075116444,
+            "gas_mass_flow": 0.7433315069776427,
+            "split_weight": 0.5
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.01221881299173612,
+            "gas_mass_flow": 0.7432919490317679,
+            "split_weight": 0.6
+          }
+        ]
+      },
+      {
+        "fuel_mass_flow_spread": {
+          "count": 3,
+          "max": 0.012083494706722873,
+          "min": 0.012080958459943308,
+          "range": 2.5362467795646965e-06
+        },
+        "gas_mass_flow_spread": {
+          "count": 3,
+          "max": 0.7561706477825051,
+          "min": 0.7559643671551122,
+          "range": 0.00020628062739291853
+        },
+        "pi": 13,
+        "splits": [
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.012080958459943308,
+            "gas_mass_flow": 0.7559643671551122,
+            "split_weight": 0.4
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.012083494706722873,
+            "gas_mass_flow": 0.7561706477825051,
+            "split_weight": 0.5
+          },
+          {
+            "calculation_status": "SUCCESS",
+            "fuel_mass_flow": 0.012082948619925543,
+            "gas_mass_flow": 0.7561262328882026,
+            "split_weight": 0.6
+          }
+        ]
+      }
+    ],
+    "method": "descriptive adjacent-pi finite differences of stored gas and fuel mass flows; no fit, correlation, ranking, interpolation, or physics recalculation",
+    "symbols": {
+      "G": "gas_mass_flow",
+      "fuel": "fuel_mass_flow",
+      "pi": "requested integer compressor pressure-ratio product"
+    }
+  },
+  "experiment": {
+    "assumptions": {
+      "combustor": {
+        "kind": "legacy",
+        "outlet_total_temperature_K": 1250.0,
+        "total_pressure_recovery": 0.96
+      },
+      "compressor_polytropic_efficiency": 0.85,
+      "compressor_viability_gate": "NOT_APPLIED",
+      "gas_model": {
+        "R": 287.4,
+        "T_ref": 288.0,
+        "alpha_basis": "fuel_based",
+        "eta_combustion": 0.98,
+        "l0": 14.61,
+        "model_variant": "legacy_cp_polynomial_compressor_mean_turbine_inlet_constant",
+        "q_lhv_kj": 43150.0
+      },
+      "gearbox_efficiency": 0.98,
+      "illustrative_only": true,
+      "inlet_total_pressure_Pa": 101300.0,
+      "inlet_total_temperature_K": 288.0,
+      "physically_validated": false,
+      "pressure_ratio": {
+        "dual_split_definition": "unit ratios are pi**w and pi**(1-w); the second is formed as pi / first so the floating product is preserved",
+        "dual_split_weights": [
+          0.4,
+          0.5,
+          0.6
+        ],
+        "pi_values": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13
+        ]
+      },
+      "stage_reaction_ratio": {
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "target_gearbox_input_power_W": 110000.0,
+      "turbine_mechanical_efficiency": 0.99,
+      "turbine_outlet_total_pressure_Pa": 150000.0,
+      "turbine_polytropic_efficiency": {
+        "free_power_turbine": [
+          0.9,
+          0.9
+        ],
+        "single_shaft": 0.9
+      }
+    },
+    "backend": "reference_python_float64",
+    "compressor_viability_gate": "NOT_APPLIED",
+    "config_version": "architecture-coarse-config-v1",
+    "experiment_version": "architecture-coarse-v1",
+    "limitations": [
+      "NOT_PHYSICALLY_VALIDATED",
+      "UNCOOLED_NO_BLEED_0D_IDEAL_MIXING",
+      "MISSING_COMPRESSOR_PHYSICS: no map, blading, corrected flow, speed, diameter, surge or diffusion model",
+      "MISSING_TURBINE_STAGE_PHYSICS: no stage count, velocity triangles, cooling or map",
+      "MISSING_GEARBOX_PROPELLER: no ratio, speed, propeller load or control law",
+      "MISSING_COOLING_BLEED: no cooling, leak, bleed or return flow in this variant",
+      "MISSING_THERMOCHEMISTRY_VALIDATION: calc_g_m and the selected alpha polynomial are retained project assumptions, not independently validated",
+      "GAS_PROPERTY_BASIS: compressor mean-temperature variable k; turbine constant cp/k at the turbine inlet total temperature",
+      "TOTAL_STATES_ONLY: prescribed turbine outlet is a total pressure"
+    ],
+    "model_variants": {
+      "architecture_cycle_0d": "uncooled_no_bleed_0d_ideal_mixing",
+      "architecture_raw": "architecture_cycle_0d_raw_v1",
+      "backend": "reference_python_float64",
+      "combustor_closure": "legacy",
+      "gas_properties": "legacy_cp_polynomial_compressor_mean_turbine_inlet_constant"
+    },
+    "payload_plan_count": 55,
+    "payload_plan_sha256": "3ba93083a370b6d91d666cbdfde56fe7776e8fddadf7f7fd4b57f2afd901273a",
+    "plan_name": "coarse-pi3-13-legacy",
+    "plan_order": "ascending pi for SINGLE_SHAFT_SINGLE_CC (11 points), then ascending pi for FREE_POWER_TURBINE (11 points), then ascending pi with split weights 0.4, 0.5, 0.6 for SINGLE_SHAFT_DUAL_CC (33 points)",
+    "plan_point_count": 55
+  },
+  "generated_at_utc": "2026-11-11T11:02:27+00:00",
+  "illustrative_only": true,
+  "physically_validated": false,
+  "points": [
+    {
+      "architecture": "SINGLE_SHAFT_SINGLE_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_d23379dda408938791883f8b2d408377240614ac20ad79b2a220eb1440bf6771",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 0,
+      "physically_validated": false,
+      "pi": 3,
+      "requested_pressure_ratio_product": 3.0,
+      "requested_pressure_ratios": [
+        3.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 109999.99999999997,
+        "air_mass_flow": 1.5239617534188528,
+        "compressor_power": 197349.15575925112,
+        "compressor_pressure_ratios": [
+          3.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.023164388234988606,
+        "fuel_mass_flow": 0.03530164171146828,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 1.559263395130321,
+        "gearbox_output_power": 107799.99999999997,
+        "main_net_power": 109999.99999999997,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 72180.28913995133,
+        "pressure_ratio_product": 3.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": -2.9103830456733704e-11
+        },
+        "target_power_residual": -2.9103830456733704e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          307349.1557592511
+        ],
+        "turbine_powers": [
+          310453.69268611225
+        ],
+        "turbine_pressure_ratios": [
+          1.94496
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_SINGLE_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_fd3ab32d96c4365c9596d3574a8177ff53d7190c761800fe099c2e06d3872510",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 1,
+      "physically_validated": false,
+      "pi": 4,
+      "requested_pressure_ratio_product": 4.0,
+      "requested_pressure_ratios": [
+        4.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000003,
+        "air_mass_flow": 1.0263689129475213,
+        "compressor_power": 176603.9336429919,
+        "compressor_pressure_ratios": [
+          4.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.02206572821198658,
+        "fuel_mass_flow": 0.02264757747833212,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 1.0490164904258534,
+        "gearbox_output_power": 107800.00000000003,
+        "main_net_power": 110000.00000000003,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 107173.93971345306,
+        "pressure_ratio_product": 4.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 2.9103830456733704e-11
+        },
+        "target_power_residual": 2.9103830456733704e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          286603.93364299193
+        ],
+        "turbine_powers": [
+          289498.92287170904
+        ],
+        "turbine_pressure_ratios": [
+          2.59328
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_SINGLE_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_6cfb4a66dc0254e17be53bb64e65f17c1d5317c885ef9bd1821dd5cebc003605",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 2,
+      "physically_validated": false,
+      "pi": 5,
+      "requested_pressure_ratio_product": 5.0,
+      "requested_pressure_ratios": [
+        5.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 0.8614754813198394,
+        "compressor_power": 179200.8112908544,
+        "compressor_pressure_ratios": [
+          5.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.02113619436518789,
+        "fuel_mass_flow": 0.018208313214019917,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.8796837945338594,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": 110000.0,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 127687.90567489219,
+        "pressure_ratio_product": 5.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 0.0
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          289200.8112908544
+        ],
+        "turbine_powers": [
+          292122.0316069237
+        ],
+        "turbine_pressure_ratios": [
+          3.2416
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_SINGLE_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_5e4e20e0ec2950eb7e40ab223a0f5e8a7b6d7e1ecb511ec644ac10cdd14af07d",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 3,
+      "physically_validated": false,
+      "pi": 6,
+      "requested_pressure_ratio_product": 6.0,
+      "requested_pressure_ratios": [
+        6.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 109999.99999999997,
+        "air_mass_flow": 0.7850715006204239,
+        "compressor_power": 187972.31352342523,
+        "compressor_pressure_ratios": [
+          6.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.020322562915316936,
+        "fuel_mass_flow": 0.015954664964380843,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.8010261655848047,
+        "gearbox_output_power": 107799.99999999997,
+        "main_net_power": 109999.99999999997,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 140114.62639144275,
+        "pressure_ratio_product": 6.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": -2.9103830456733704e-11
+        },
+        "target_power_residual": -2.9103830456733704e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          297972.3135234252
+        ],
+        "turbine_powers": [
+          300982.13487214665
+        ],
+        "turbine_pressure_ratios": [
+          3.88992
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_SINGLE_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_f632e17ad51aa686eb6d704c5efb16563452b52b8410c311195117e121ed9d9b",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 4,
+      "physically_validated": false,
+      "pi": 7,
+      "requested_pressure_ratio_product": 7.0,
+      "requested_pressure_ratios": [
+        7.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 0.7455016161940673,
+        "compressor_power": 199434.45761855302,
+        "compressor_pressure_ratios": [
+          7.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.019594249727505512,
+        "fuel_mass_flow": 0.014607544839965523,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7601091610340328,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": 110000.0,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 147551.6586557809,
+        "pressure_ratio_product": 7.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 0.0
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          309434.457618553
+        ],
+        "turbine_powers": [
+          312560.0582005586
+        ],
+        "turbine_pressure_ratios": [
+          4.53824
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_SINGLE_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_75178fabbe91a634e86926d857eb419893fb429cd5c6f887a1800f6575a74858",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 5,
+      "physically_validated": false,
+      "pi": 8,
+      "requested_pressure_ratio_product": 8.0,
+      "requested_pressure_ratios": [
+        8.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 109999.99999999994,
+        "air_mass_flow": 0.7251232359722517,
+        "compressor_power": 212480.80804113776,
+        "compressor_pressure_ratios": [
+          8.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.01893185971630856,
+        "fuel_mass_flow": 0.013727931380462377,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7388511673527141,
+        "gearbox_output_power": 107799.99999999994,
+        "main_net_power": 109999.99999999994,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 151698.35214632313,
+        "pressure_ratio_product": 8.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": -5.820766091346741e-11
+        },
+        "target_power_residual": -5.820766091346741e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          322480.8080411377
+        ],
+        "turbine_powers": [
+          325738.18994054315
+        ],
+        "turbine_pressure_ratios": [
+          5.18656
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_SINGLE_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_022f788d12261b67c6fbc6064832eec177fa9fb3259cbf52ddb0501f559c3609",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 6,
+      "physically_validated": false,
+      "pi": 9,
+      "requested_pressure_ratio_product": 9.0,
+      "requested_pressure_ratios": [
+        9.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 0.7162858846144524,
+        "compressor_power": 226689.3832722467,
+        "compressor_pressure_ratios": [
+          9.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.01832222600884156,
+        "fuel_mass_flow": 0.013123951864849005,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7294098364793015,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": 110000.0,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 153569.9674707516,
+        "pressure_ratio_product": 9.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 0.0
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          336689.3832722467
+        ],
+        "turbine_powers": [
+          340090.28613358253
+        ],
+        "turbine_pressure_ratios": [
+          5.83488
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_SINGLE_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_59641b3d6bd12b1e1258a174e8b8655ca477bb2ca1c2f9716356a70e8f7aaa95",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 7,
+      "physically_validated": false,
+      "pi": 10,
+      "requested_pressure_ratio_product": 10.0,
+      "requested_pressure_ratios": [
+        10.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000006,
+        "air_mass_flow": 0.7151582345618945,
+        "compressor_power": 241895.20749816851,
+        "compressor_pressure_ratios": [
+          10.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.017755950517443393,
+        "fuel_mass_flow": 0.012698314225023174,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7278565487869177,
+        "gearbox_output_power": 107800.00000000006,
+        "main_net_power": 110000.00000000006,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 153812.1141363714,
+        "pressure_ratio_product": 10.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 5.820766091346741e-11
+        },
+        "target_power_residual": 5.820766091346741e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          351895.2074981686
+        ],
+        "turbine_powers": [
+          355449.70454360463
+        ],
+        "turbine_pressure_ratios": [
+          6.4832
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_SINGLE_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_5bb7c959e23054af286576c26021f1afb3a73b18b6c32701a17ad8d63a3b7d72",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 8,
+      "physically_validated": false,
+      "pi": 11,
+      "requested_pressure_ratio_product": 11.0,
+      "requested_pressure_ratios": [
+        11.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000009,
+        "air_mass_flow": 0.7196344136616384,
+        "compressor_power": 258048.96057984515,
+        "compressor_pressure_ratios": [
+          11.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.01722606199318643,
+        "fuel_mass_flow": 0.01239646702216575,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7320308806838042,
+        "gearbox_output_power": 107800.00000000009,
+        "main_net_power": 110000.00000000009,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 152855.39144841465,
+        "pressure_ratio_product": 11.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 8.731149137020111e-11
+        },
+        "target_power_residual": 8.731149137020111e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          368048.96057984524
+        ],
+        "turbine_powers": [
+          371766.6268483285
+        ],
+        "turbine_pressure_ratios": [
+          7.13152
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_SINGLE_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_ccf5706816efbe4fc272c8a16fd8d5c2411f9f2ae2b48bd4f9d150e80d1a45ca",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 9,
+      "physically_validated": false,
+      "pi": 12,
+      "requested_pressure_ratio_product": 12.0,
+      "requested_pressure_ratios": [
+        12.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 109999.99999999994,
+        "air_mass_flow": 0.7284864342327955,
+        "compressor_power": 275161.8509170558,
+        "compressor_pressure_ratios": [
+          12.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.01672722910201106,
+        "fuel_mass_flow": 0.012185559483119082,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7406719937159145,
+        "gearbox_output_power": 107799.99999999994,
+        "main_net_power": 109999.99999999994,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 150998.00741773093,
+        "pressure_ratio_product": 12.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": -5.820766091346741e-11
+        },
+        "target_power_residual": -5.820766091346741e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          385161.85091705574
+        ],
+        "turbine_powers": [
+          389052.37466369267
+        ],
+        "turbine_pressure_ratios": [
+          7.77984
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_SINGLE_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_6f5c7a6bdf91c8f88011c59d9105f24ee305e6e49f6e17c7963758e62ecf49b8",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 10,
+      "physically_validated": false,
+      "pi": 13,
+      "requested_pressure_ratio_product": 13.0,
+      "requested_pressure_ratios": [
+        13.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 0.7409759404425036,
+        "compressor_power": 293281.8298165007,
+        "compressor_pressure_ratios": [
+          13.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.016255272221491528,
+        "fuel_mass_flow": 0.012044765621468589,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7530207060639722,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": 110000.0,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 148452.863306613,
+        "pressure_ratio_product": 13.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 0.0
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          403281.8298165007
+        ],
+        "turbine_powers": [
+          407355.383653031
+        ],
+        "turbine_pressure_ratios": [
+          8.42816
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "FREE_POWER_TURBINE",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_d15357dbd3d44a31eab53c9f19cfb6c7dc9cd8a8c01b81d124ed9fcb8f69c1db",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 11,
+      "physically_validated": false,
+      "pi": 3,
+      "requested_pressure_ratio_product": 3.0,
+      "requested_pressure_ratios": [
+        3.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000003,
+        "air_mass_flow": 1.5239617534188528,
+        "compressor_power": 197349.15575925112,
+        "compressor_pressure_ratios": [
+          3.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": 110000.00000000003,
+        "fuel_air_ratio": 0.023164388234988606,
+        "fuel_mass_flow": 0.03530164171146828,
+        "gas_generator_net_power": -2.9103830456733704e-11,
+        "gas_mass_flow": 1.559263395130321,
+        "gearbox_output_power": 107800.00000000003,
+        "main_net_power": null,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 72180.28913995133,
+        "pressure_ratio_product": 3.0,
+        "shaft_residuals": {
+          "free_power_turbine": 2.9103830456733704e-11,
+          "gas_generator": -2.9103830456733704e-11,
+          "main": null
+        },
+        "target_power_residual": 2.9103830456733704e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          197349.1557592511,
+          110000.00000000003
+        ],
+        "turbine_powers": [
+          199342.5815750011,
+          111111.11111111114
+        ],
+        "turbine_pressure_ratios": [
+          1.51440314785734,
+          1.2843079484824336
+        ],
+        "turbine_pressure_residuals": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "FREE_POWER_TURBINE",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_25f32123dd28f20fc14c1e9aeeb927bb86c29a588854c9c83cfe0e90589d4287",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 12,
+      "physically_validated": false,
+      "pi": 4,
+      "requested_pressure_ratio_product": 4.0,
+      "requested_pressure_ratios": [
+        4.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000001,
+        "air_mass_flow": 1.026368912947521,
+        "compressor_power": 176603.93364299185,
+        "compressor_pressure_ratios": [
+          4.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": 110000.00000000001,
+        "fuel_air_ratio": 0.02206572821198658,
+        "fuel_mass_flow": 0.022647577478332116,
+        "gas_generator_net_power": -1.1641532182693481e-10,
+        "gas_mass_flow": 1.0490164904258532,
+        "gearbox_output_power": 107800.00000000001,
+        "main_net_power": null,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 107173.93971345307,
+        "pressure_ratio_product": 4.0,
+        "shaft_residuals": {
+          "free_power_turbine": 1.4551915228366852e-11,
+          "gas_generator": -1.1641532182693481e-10,
+          "main": null
+        },
+        "target_power_residual": 1.4551915228366852e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          176603.93364299173,
+          110000.00000000001
+        ],
+        "turbine_powers": [
+          178387.81176059772,
+          111111.11111111112
+        ],
+        "turbine_pressure_ratios": [
+          1.7532986041640686,
+          1.4790863312392897
+        ],
+        "turbine_pressure_residuals": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "FREE_POWER_TURBINE",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_7cc2ba230fac44d13d2a09f754b3056d90b018a8d8a258df27f332c30b3833eb",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 13,
+      "physically_validated": false,
+      "pi": 5,
+      "requested_pressure_ratio_product": 5.0,
+      "requested_pressure_ratios": [
+        5.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 109999.99999999999,
+        "air_mass_flow": 0.8614754813198398,
+        "compressor_power": 179200.81129085447,
+        "compressor_pressure_ratios": [
+          5.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": 109999.99999999999,
+        "fuel_air_ratio": 0.02113619436518789,
+        "fuel_mass_flow": 0.018208313214019924,
+        "gas_generator_net_power": -5.820766091346741e-11,
+        "gas_mass_flow": 0.8796837945338597,
+        "gearbox_output_power": 107799.99999999999,
+        "main_net_power": null,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 127687.90567489213,
+        "pressure_ratio_product": 5.0,
+        "shaft_residuals": {
+          "free_power_turbine": -1.4551915228366852e-11,
+          "gas_generator": -5.820766091346741e-11,
+          "main": null
+        },
+        "target_power_residual": -1.4551915228366852e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          179200.8112908544,
+          109999.99999999999
+        ],
+        "turbine_powers": [
+          181010.92049581255,
+          111111.1111111111
+        ],
+        "turbine_pressure_ratios": [
+          1.9928377608223566,
+          1.6266251391494781
+        ],
+        "turbine_pressure_residuals": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "FREE_POWER_TURBINE",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_634ada010bb0498575359efc78c1ddfbaa6cee7959869bb699d6b9c38aa588eb",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 14,
+      "physically_validated": false,
+      "pi": 6,
+      "requested_pressure_ratio_product": 6.0,
+      "requested_pressure_ratios": [
+        6.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 0.7850715006204235,
+        "compressor_power": 187972.31352342517,
+        "compressor_pressure_ratios": [
+          6.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": 110000.0,
+        "fuel_air_ratio": 0.020322562915316936,
+        "fuel_mass_flow": 0.015954664964380836,
+        "gas_generator_net_power": 0.0,
+        "gas_mass_flow": 0.8010261655848043,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": null,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 140114.6263914428,
+        "pressure_ratio_product": 6.0,
+        "shaft_residuals": {
+          "free_power_turbine": 0.0,
+          "gas_generator": 0.0,
+          "main": null
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          187972.31352342517,
+          110000.0
+        ],
+        "turbine_powers": [
+          189871.02376103553,
+          111111.11111111111
+        ],
+        "turbine_pressure_ratios": [
+          2.236633844176015,
+          1.7391849855661385
+        ],
+        "turbine_pressure_residuals": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "FREE_POWER_TURBINE",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_c57539ea8a2bb9e09d7ab64a131ae6ec06ebf1eca256ddfad8982ad974df9436",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 15,
+      "physically_validated": false,
+      "pi": 7,
+      "requested_pressure_ratio_product": 7.0,
+      "requested_pressure_ratios": [
+        7.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000001,
+        "air_mass_flow": 0.7455016161940684,
+        "compressor_power": 199434.4576185533,
+        "compressor_pressure_ratios": [
+          7.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": 110000.00000000001,
+        "fuel_air_ratio": 0.019594249727505512,
+        "fuel_mass_flow": 0.014607544839965543,
+        "gas_generator_net_power": 1.1641532182693481e-10,
+        "gas_mass_flow": 0.7601091610340339,
+        "gearbox_output_power": 107800.00000000001,
+        "main_net_power": null,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 147551.6586557807,
+        "pressure_ratio_product": 7.0,
+        "shaft_residuals": {
+          "free_power_turbine": 1.4551915228366852e-11,
+          "gas_generator": 1.1641532182693481e-10,
+          "main": null
+        },
+        "target_power_residual": 1.4551915228366852e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          199434.45761855342,
+          110000.00000000001
+        ],
+        "turbine_powers": [
+          201448.9470894479,
+          111111.11111111112
+        ],
+        "turbine_pressure_ratios": [
+          2.486981700303964,
+          1.8247983085059802
+        ],
+        "turbine_pressure_residuals": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "FREE_POWER_TURBINE",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_84ba8a9ed59ff4dddfa64bb4dc236bb3a4055615c24fb66d51eebb7239edd1a7",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 16,
+      "physically_validated": false,
+      "pi": 8,
+      "requested_pressure_ratio_product": 8.0,
+      "requested_pressure_ratios": [
+        8.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 109999.99999999999,
+        "air_mass_flow": 0.7251232359722513,
+        "compressor_power": 212480.8080411376,
+        "compressor_pressure_ratios": [
+          8.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": 109999.99999999999,
+        "fuel_air_ratio": 0.01893185971630856,
+        "fuel_mass_flow": 0.01372793138046237,
+        "gas_generator_net_power": 2.9103830456733704e-11,
+        "gas_mass_flow": 0.7388511673527136,
+        "gearbox_output_power": 107799.99999999999,
+        "main_net_power": null,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 151698.35214632322,
+        "pressure_ratio_product": 8.0,
+        "shaft_residuals": {
+          "free_power_turbine": -1.4551915228366852e-11,
+          "gas_generator": 2.9103830456733704e-11,
+          "main": null
+        },
+        "target_power_residual": -1.4551915228366852e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          212480.80804113764,
+          109999.99999999999
+        ],
+        "turbine_powers": [
+          214627.07882943196,
+          111111.1111111111
+        ],
+        "turbine_pressure_ratios": [
+          2.7455397742194187,
+          1.8890857268584225
+        ],
+        "turbine_pressure_residuals": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "FREE_POWER_TURBINE",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_b01b96f081ff65f7169fd806ac9048281682faffedffe583a382ecb801b534dd",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 17,
+      "physically_validated": false,
+      "pi": 9,
+      "requested_pressure_ratio_product": 9.0,
+      "requested_pressure_ratios": [
+        9.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 0.7162858846144519,
+        "compressor_power": 226689.38327224652,
+        "compressor_pressure_ratios": [
+          9.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": 110000.0,
+        "fuel_air_ratio": 0.01832222600884156,
+        "fuel_mass_flow": 0.013123951864848995,
+        "gas_generator_net_power": -8.731149137020111e-11,
+        "gas_mass_flow": 0.7294098364793009,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": null,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 153569.96747075173,
+        "pressure_ratio_product": 9.0,
+        "shaft_residuals": {
+          "free_power_turbine": 0.0,
+          "gas_generator": -8.731149137020111e-11,
+          "main": null
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          226689.38327224643,
+          110000.0
+        ],
+        "turbine_powers": [
+          228979.17502247114,
+          111111.11111111111
+        ],
+        "turbine_pressure_ratios": [
+          3.0136270549869373,
+          1.9361652565284961
+        ],
+        "turbine_pressure_residuals": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "FREE_POWER_TURBINE",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_be4fcdd12be7a42924afa903ee4a3263a857a43c4290973d4e68849c6e6ddd82",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 18,
+      "physically_validated": false,
+      "pi": 10,
+      "requested_pressure_ratio_product": 10.0,
+      "requested_pressure_ratios": [
+        10.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000003,
+        "air_mass_flow": 0.715158234561894,
+        "compressor_power": 241895.2074981683,
+        "compressor_pressure_ratios": [
+          10.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": 110000.00000000003,
+        "fuel_air_ratio": 0.017755950517443393,
+        "fuel_mass_flow": 0.012698314225023166,
+        "gas_generator_net_power": 5.820766091346741e-11,
+        "gas_mass_flow": 0.7278565487869172,
+        "gearbox_output_power": 107800.00000000003,
+        "main_net_power": null,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 153812.11413637153,
+        "pressure_ratio_product": 10.0,
+        "shaft_residuals": {
+          "free_power_turbine": 2.9103830456733704e-11,
+          "gas_generator": 5.820766091346741e-11,
+          "main": null
+        },
+        "target_power_residual": 2.9103830456733704e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          241895.20749816837,
+          110000.00000000003
+        ],
+        "turbine_powers": [
+          244338.5934324933,
+          111111.11111111114
+        ],
+        "turbine_pressure_ratios": [
+          3.29237111538201,
+          1.969158327780968
+        ],
+        "turbine_pressure_residuals": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "FREE_POWER_TURBINE",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_02853ef42719fdbf27984007daef4d80f745423364dd9f601d9546db9aa6375e",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 19,
+      "physically_validated": false,
+      "pi": 11,
+      "requested_pressure_ratio_product": 11.0,
+      "requested_pressure_ratios": [
+        11.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000003,
+        "air_mass_flow": 0.7196344136616386,
+        "compressor_power": 258048.96057984524,
+        "compressor_pressure_ratios": [
+          11.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": 110000.00000000003,
+        "fuel_air_ratio": 0.01722606199318643,
+        "fuel_mass_flow": 0.012396467022165753,
+        "gas_generator_net_power": 2.9103830456733704e-11,
+        "gas_mass_flow": 0.7320308806838044,
+        "gearbox_output_power": 107800.00000000003,
+        "main_net_power": null,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 152855.3914484145,
+        "pressure_ratio_product": 11.0,
+        "shaft_residuals": {
+          "free_power_turbine": 2.9103830456733704e-11,
+          "gas_generator": 2.9103830456733704e-11,
+          "main": null
+        },
+        "target_power_residual": 2.9103830456733704e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          258048.96057984527,
+          110000.00000000003
+        ],
+        "turbine_powers": [
+          260655.51573721744,
+          111111.11111111114
+        ],
+        "turbine_pressure_ratios": [
+          3.582789577139925,
+          1.9904936771902082
+        ],
+        "turbine_pressure_residuals": [
+          -4.440892098500626e-16,
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "FREE_POWER_TURBINE",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_3442810c7a5017c3851d18d857288b9cd8801c28048b81d75224230bfba7b9da",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 20,
+      "physically_validated": false,
+      "pi": 12,
+      "requested_pressure_ratio_product": 12.0,
+      "requested_pressure_ratios": [
+        12.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 0.7284864342327957,
+        "compressor_power": 275161.85091705585,
+        "compressor_pressure_ratios": [
+          12.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": 110000.0,
+        "fuel_air_ratio": 0.01672722910201106,
+        "fuel_mass_flow": 0.012185559483119085,
+        "gas_generator_net_power": 5.820766091346741e-11,
+        "gas_mass_flow": 0.7406719937159147,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": null,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 150998.00741773087,
+        "pressure_ratio_product": 12.0,
+        "shaft_residuals": {
+          "free_power_turbine": 0.0,
+          "gas_generator": 5.820766091346741e-11,
+          "main": null
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          275161.8509170559,
+          110000.0
+        ],
+        "turbine_powers": [
+          277941.2635525817,
+          111111.11111111111
+        ],
+        "turbine_pressure_ratios": [
+          3.885838561852669,
+          2.0021006730374227
+        ],
+        "turbine_pressure_residuals": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "FREE_POWER_TURBINE",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_c5a062667a7f39f27fef872e154b72a8b3d95fb74d55c7d94c30fbfee2979334",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 21,
+      "physically_validated": false,
+      "pi": 13,
+      "requested_pressure_ratio_product": 13.0,
+      "requested_pressure_ratios": [
+        13.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": null,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 109999.99999999999,
+        "air_mass_flow": 0.7409759404425028,
+        "compressor_power": 293281.82981650037,
+        "compressor_pressure_ratios": [
+          13.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": 109999.99999999999,
+        "fuel_air_ratio": 0.016255272221491528,
+        "fuel_mass_flow": 0.012044765621468577,
+        "gas_generator_net_power": -1.1641532182693481e-10,
+        "gas_mass_flow": 0.7530207060639714,
+        "gearbox_output_power": 107799.99999999999,
+        "main_net_power": null,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 148452.86330661314,
+        "pressure_ratio_product": 13.0,
+        "shaft_residuals": {
+          "free_power_turbine": -1.4551915228366852e-11,
+          "gas_generator": -1.1641532182693481e-10,
+          "main": null
+        },
+        "target_power_residual": -1.4551915228366852e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          293281.82981650025,
+          109999.99999999999
+        ],
+        "turbine_powers": [
+          296244.27254191943,
+          111111.1111111111
+        ],
+        "turbine_pressure_ratios": [
+          4.202443446651878,
+          2.0055379940245923
+        ],
+        "turbine_pressure_residuals": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_da4fd0fbfa81166dcf8fb072e9489f85cbe1b2df04586cc75479f1c00ec608ce",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 22,
+      "physically_validated": false,
+      "pi": 3,
+      "requested_pressure_ratio_product": 3.0,
+      "requested_pressure_ratios": [
+        1.5518455739153598,
+        1.9331820449317625
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.4,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000006,
+        "air_mass_flow": 1.5244288333007994,
+        "compressor_power": 197443.1692726646,
+        "compressor_pressure_ratios": [
+          1.5518455739153598,
+          1.9331820449317625
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.023163821178147612,
+        "fuel_mass_flow": 0.03531159689339191,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 1.5597404301941913,
+        "gearbox_output_power": 107800.00000000006,
+        "main_net_power": 110000.00000000006,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 72158.17334143461,
+        "pressure_ratio_product": 3.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 5.820766091346741e-11
+        },
+        "target_power_residual": 5.820766091346741e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          307443.16927266464
+        ],
+        "turbine_powers": [
+          310548.6558309744
+        ],
+        "turbine_pressure_ratios": [
+          1.94496
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_98f50cfae397de3cba60d5d11a0c5561e91e44fc6eb1d3fcfc21ba64233f31fa",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 23,
+      "physically_validated": false,
+      "pi": 3,
+      "requested_pressure_ratio_product": 3.0,
+      "requested_pressure_ratios": [
+        1.7320508075688772,
+        1.7320508075688774
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.5,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 1.524454021623149,
+        "compressor_power": 197448.23916064567,
+        "compressor_pressure_ratios": [
+          1.7320508075688772,
+          1.7320508075688774
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.0231637906082097,
+        "fuel_mass_flow": 0.03531213374872181,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 1.559766155371871,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": 110000.0,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 72156.9810828919,
+        "pressure_ratio_product": 3.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 0.0
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          307448.23916064564
+        ],
+        "turbine_powers": [
+          310553.7769299451
+        ],
+        "turbine_pressure_ratios": [
+          1.94496
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_6e4526fce9447102b754080cf800b6a8878d94e41772648b6e095f5a1b6828ad",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 24,
+      "physically_validated": false,
+      "pi": 3,
+      "requested_pressure_ratio_product": 3.0,
+      "requested_pressure_ratios": [
+        1.9331820449317627,
+        1.5518455739153596
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.6,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 1.5244398946189874,
+        "compressor_power": 197445.3956871024,
+        "compressor_pressure_ratios": [
+          1.9331820449317627,
+          1.5518455739153596
+        ],
+        "compressor_pressure_residual": -4.440892098500626e-16,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.0231638077534466,
+        "fuel_mass_flow": 0.035311832650638614,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 1.559751727269626,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": 110000.0,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 72157.64976256606,
+        "pressure_ratio_product": 3.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 0.0
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          307445.3956871024
+        ],
+        "turbine_powers": [
+          310550.90473444684
+        ],
+        "turbine_pressure_ratios": [
+          1.9449599999999996
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_6aed5ca769a756750bbd4ed3762ae17d64cd12b65a103908b9cd6814193064c7",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 25,
+      "physically_validated": false,
+      "pi": 4,
+      "requested_pressure_ratio_product": 4.0,
+      "requested_pressure_ratios": [
+        1.7411011265922482,
+        2.29739670999407
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.4,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000006,
+        "air_mass_flow": 1.026859985110469,
+        "compressor_power": 176740.64423756822,
+        "compressor_pressure_ratios": [
+          1.7411011265922482,
+          2.29739670999407
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.022064414571559176,
+        "fuel_mass_flow": 0.022657064418422468,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 1.0495170495288915,
+        "gearbox_output_power": 107800.00000000006,
+        "main_net_power": 110000.00000000006,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 107122.68624253216,
+        "pressure_ratio_product": 4.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 5.820766091346741e-11
+        },
+        "target_power_residual": 5.820766091346741e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          286740.64423756825
+        ],
+        "turbine_powers": [
+          289637.0143813821
+        ],
+        "turbine_pressure_ratios": [
+          2.59328
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_78ea36fea3b1a83408a822fc43b01ab25cc31502ddfb628639120561b25f0c5f",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 26,
+      "physically_validated": false,
+      "pi": 4,
+      "requested_pressure_ratio_product": 4.0,
+      "requested_pressure_ratios": [
+        2.0,
+        2.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.5,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 109999.99999999997,
+        "air_mass_flow": 1.0268880259124058,
+        "compressor_power": 176748.45057436262,
+        "compressor_pressure_ratios": [
+          2.0,
+          2.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.022064339598986477,
+        "fuel_mass_flow": 0.022657606133864146,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 1.04954563204627,
+        "gearbox_output_power": 107799.99999999997,
+        "main_net_power": 109999.99999999997,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 107119.7610881316,
+        "pressure_ratio_product": 4.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": -2.9103830456733704e-11
+        },
+        "target_power_residual": -2.9103830456733704e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          286748.4505743626
+        ],
+        "turbine_powers": [
+          289644.8995700632
+        ],
+        "turbine_pressure_ratios": [
+          2.59328
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_e9515ce22eea3a24b1abac7dfdf88c2f655c12166e3bad9d1245adb2fe89f29b",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 27,
+      "physically_validated": false,
+      "pi": 4,
+      "requested_pressure_ratio_product": 4.0,
+      "requested_pressure_ratios": [
+        2.2973967099940698,
+        1.7411011265922485
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.6,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 1.0268746454179905,
+        "compressor_power": 176744.72555086613,
+        "compressor_pressure_ratios": [
+          2.2973967099940698,
+          1.7411011265922485
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.022064375373824784,
+        "fuel_mass_flow": 0.022657347638365764,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 1.0495319930563562,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": 110000.0,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 107121.1568917688,
+        "pressure_ratio_product": 4.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 0.0
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          286744.7255508661
+        ],
+        "turbine_powers": [
+          289641.1369200668
+        ],
+        "turbine_pressure_ratios": [
+          2.59328
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_2471d17254beb7c29d53a6dfab858a345719601a52dcb9fcdb9da4b5997ae8d5",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 28,
+      "physically_validated": false,
+      "pi": 5,
+      "requested_pressure_ratio_product": 5.0,
+      "requested_pressure_ratios": [
+        1.9036539387158786,
+        2.626527804403767
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.4,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 109999.99999999997,
+        "air_mass_flow": 0.8620802275268481,
+        "compressor_power": 179403.07237394815,
+        "compressor_pressure_ratios": [
+          1.9036539387158786,
+          2.626527804403767
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.02113389900294435,
+        "fuel_mass_flow": 0.018219116460987693,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.8802993439878358,
+        "gearbox_output_power": 107799.99999999997,
+        "main_net_power": 109999.99999999997,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 127598.33306416278,
+        "pressure_ratio_product": 5.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": -2.9103830456733704e-11
+        },
+        "target_power_residual": -2.9103830456733704e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          289403.0723739481
+        ],
+        "turbine_powers": [
+          292326.3357312607
+        ],
+        "turbine_pressure_ratios": [
+          3.2416
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_b43f2930eb38f76677d718f77e61d6f118b83674913b81a1dc79fce7ee49483f",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 29,
+      "physically_validated": false,
+      "pi": 5,
+      "requested_pressure_ratio_product": 5.000000000000001,
+      "requested_pressure_ratios": [
+        2.23606797749979,
+        2.23606797749979
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.5,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 0.8621162429511546,
+        "compressor_power": 179415.11795369533,
+        "compressor_pressure_ratios": [
+          2.23606797749979,
+          2.23606797749979
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.021133762404819838,
+        "fuel_mass_flow": 0.018219759843865636,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.8803360027950202,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": 110000.0,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 127593.00256709388,
+        "pressure_ratio_product": 5.000000000000001,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 0.0
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          289415.1179536953
+        ],
+        "turbine_powers": [
+          292338.50298353063
+        ],
+        "turbine_pressure_ratios": [
+          3.2416000000000005
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_93bfcf9a91caaa9c25a4dc2d251a04f90c8c7e35c8e9347fd024462ad880f7b3",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 30,
+      "physically_validated": false,
+      "pi": 5,
+      "requested_pressure_ratio_product": 5.0,
+      "requested_pressure_ratios": [
+        2.626527804403767,
+        1.9036539387158786
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.6,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 0.8621011686953706,
+        "compressor_power": 179410.07627631095,
+        "compressor_pressure_ratios": [
+          2.626527804403767,
+          1.9036539387158786
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.021133819576572593,
+        "fuel_mass_flow": 0.018219490555960335,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.8803206592513309,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": 110000.0,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 127595.2335924384,
+        "pressure_ratio_product": 5.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 0.0
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          289410.07627631095
+        ],
+        "turbine_powers": [
+          292333.41038011207
+        ],
+        "turbine_pressure_ratios": [
+          3.2416
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_e38df1240379e3c652af6aa5d21a3f0cc519103f1ee17084278f7d2cd53a03aa",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 31,
+      "physically_validated": false,
+      "pi": 6,
+      "requested_pressure_ratio_product": 6.0,
+      "requested_pressure_ratios": [
+        2.0476725110792193,
+        2.9301560515835217
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.4,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000006,
+        "air_mass_flow": 0.7858300482819041,
+        "compressor_power": 188259.019569556,
+        "compressor_pressure_ratios": [
+          2.0476725110792193,
+          2.9301560515835217
+        ],
+        "compressor_pressure_residual": 8.881784197001252e-16,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.020319097224111394,
+        "fuel_mass_flow": 0.01596735715266816,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.8017974054345722,
+        "gearbox_output_power": 107800.00000000006,
+        "main_net_power": 110000.00000000006,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 139979.37625380704,
+        "pressure_ratio_product": 6.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 5.820766091346741e-11
+        },
+        "target_power_residual": 5.820766091346741e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          298259.01956955605
+        ],
+        "turbine_powers": [
+          301271.7369389455
+        ],
+        "turbine_pressure_ratios": [
+          3.889920000000001
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_a46494affffbd0e340a5de2b4c3b008937c2021e82ba48f69af4370288e9f21a",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 32,
+      "physically_validated": false,
+      "pi": 6,
+      "requested_pressure_ratio_product": 6.0,
+      "requested_pressure_ratios": [
+        2.449489742783178,
+        2.4494897427831783
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.5,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 109999.99999999994,
+        "air_mass_flow": 0.78587674072488,
+        "compressor_power": 188276.66777571588,
+        "compressor_pressure_ratios": [
+          2.449489742783178,
+          2.4494897427831783
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.020318884111142035,
+        "fuel_mass_flow": 0.015968138420430853,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.8018448791453109,
+        "gearbox_output_power": 107799.99999999994,
+        "main_net_power": 109999.99999999994,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 139971.05945461342,
+        "pressure_ratio_product": 6.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": -5.820766091346741e-11
+        },
+        "target_power_residual": -5.820766091346741e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          298276.6677757158
+        ],
+        "turbine_powers": [
+          301289.56340981397
+        ],
+        "turbine_pressure_ratios": [
+          3.88992
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_0ff22ba3638acb122d8607e311bbe4ecbd907fffad4720bdc0865ab48ffe5032",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 33,
+      "physically_validated": false,
+      "pi": 6,
+      "requested_pressure_ratio_product": 5.999999999999999,
+      "requested_pressure_ratios": [
+        2.930156051583521,
+        2.0476725110792193
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.6,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 0.7858592678156571,
+        "compressor_power": 188270.06359130127,
+        "compressor_pressure_ratios": [
+          2.930156051583521,
+          2.0476725110792193
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.020318963857774288,
+        "fuel_mass_flow": 0.0159678460600433,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.8018271138757004,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": 110000.0,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 139974.17159150084,
+        "pressure_ratio_product": 5.999999999999999,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 0.0
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          298270.06359130127
+        ],
+        "turbine_powers": [
+          301282.8925164659
+        ],
+        "turbine_pressure_ratios": [
+          3.889919999999999
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_e40f8ab7a889d91425a29358b023141de82d83679a82dc1b8d94d417ec5810a5",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 34,
+      "physically_validated": false,
+      "pi": 7,
+      "requested_pressure_ratio_product": 7.0,
+      "requested_pressure_ratios": [
+        2.17790642448278,
+        3.2140958497160383
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.4,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000006,
+        "air_mass_flow": 0.7464473366577546,
+        "compressor_power": 199825.24486405935,
+        "compressor_pressure_ratios": [
+          2.17790642448278,
+          3.2140958497160383
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.019589459356488974,
+        "fuel_mass_flow": 0.014622499763216527,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7610698364209711,
+        "gearbox_output_power": 107800.00000000006,
+        "main_net_power": 110000.00000000006,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 147364.71630072262,
+        "pressure_ratio_product": 7.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 5.820766091346741e-11
+        },
+        "target_power_residual": 5.820766091346741e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          309825.2448640594
+        ],
+        "turbine_powers": [
+          312954.79279197915
+        ],
+        "turbine_pressure_ratios": [
+          4.53824
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_c56e5eafa15ed961d117c53345cbb1d78a95f5b273ba345c99905c9a032042c2",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 35,
+      "physically_validated": false,
+      "pi": 7,
+      "requested_pressure_ratio_product": 6.999999999999999,
+      "requested_pressure_ratios": [
+        2.6457513110645907,
+        2.6457513110645903
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.5,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000003,
+        "air_mass_flow": 0.746507148761931,
+        "compressor_power": 199849.96020846342,
+        "compressor_pressure_ratios": [
+          2.6457513110645907,
+          2.6457513110645903
+        ],
+        "compressor_pressure_residual": 8.881784197001252e-16,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.019589156796159104,
+        "fuel_mass_flow": 0.014623445586551136,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7611305943484822,
+        "gearbox_output_power": 107800.00000000003,
+        "main_net_power": 110000.00000000003,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 147352.90905443177,
+        "pressure_ratio_product": 6.999999999999999,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 2.9103830456733704e-11
+        },
+        "target_power_residual": 2.9103830456733704e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          309849.9602084634
+        ],
+        "turbine_powers": [
+          312979.7577863267
+        ],
+        "turbine_pressure_ratios": [
+          4.53824
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_9c206777ef139a386348da32703b62a5b4f5d59253e58438228ca6e08873416c",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 36,
+      "physically_validated": false,
+      "pi": 7,
+      "requested_pressure_ratio_product": 7.0,
+      "requested_pressure_ratios": [
+        3.2140958497160383,
+        2.17790642448278
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.6,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000006,
+        "air_mass_flow": 0.7464868732217345,
+        "compressor_power": 199841.58202205537,
+        "compressor_pressure_ratios": [
+          3.2140958497160383,
+          2.17790642448278
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.01958925935485012,
+        "fuel_mass_flow": 0.014623124964531676,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7611099981862661,
+        "gearbox_output_power": 107800.00000000006,
+        "main_net_power": 110000.00000000006,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 147356.9113482936,
+        "pressure_ratio_product": 7.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 5.820766091346741e-11
+        },
+        "target_power_residual": 5.820766091346741e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          309841.58202205546
+        ],
+        "turbine_powers": [
+          312971.29497177317
+        ],
+        "turbine_pressure_ratios": [
+          4.53824
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_e71a1ddcec4b1571ae4860e18e75ffd80cbc8d3c0ddbc82cf8aaef0535db1bd7",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 37,
+      "physically_validated": false,
+      "pi": 8,
+      "requested_pressure_ratio_product": 8.0,
+      "requested_pressure_ratios": [
+        2.29739670999407,
+        3.4822022531844965
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.4,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 0.7262897297300268,
+        "compressor_power": 212997.1621641162,
+        "compressor_pressure_ratios": [
+          2.29739670999407,
+          3.4822022531844965
+        ],
+        "compressor_pressure_residual": 1.7763568394002505e-15,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.018925615962125605,
+        "fuel_mass_flow": 0.013745480502106487,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7400352102321333,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": 110000.0,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 151454.7094599406,
+        "pressure_ratio_product": 8.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 0.0
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          322997.16216411616
+        ],
+        "turbine_powers": [
+          326259.7597617335
+        ],
+        "turbine_pressure_ratios": [
+          5.186560000000001
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_a9947687182d9647577ab4d29e6664221a09b05ca4ddae007ee59889ebf98a48",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 38,
+      "physically_validated": false,
+      "pi": 8,
+      "requested_pressure_ratio_product": 8.0,
+      "requested_pressure_ratios": [
+        2.8284271247461903,
+        2.82842712474619
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.5,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000009,
+        "air_mass_flow": 0.726365212860251,
+        "compressor_power": 213030.57513713228,
+        "compressor_pressure_ratios": [
+          2.8284271247461903,
+          2.82842712474619
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.01892521262095896,
+        "fuel_mass_flow": 0.013746616093848365,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7401118289540994,
+        "gearbox_output_power": 107800.00000000009,
+        "main_net_power": 110000.00000000009,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 151438.97044139355,
+        "pressure_ratio_product": 8.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 8.731149137020111e-11
+        },
+        "target_power_residual": 8.731149137020111e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          323030.5751371324
+        ],
+        "turbine_powers": [
+          326293.5102395277
+        ],
+        "turbine_pressure_ratios": [
+          5.18656
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_5fb5a22bb2c15dd187349416a08d23787ab993313cfdab1efb0d3d49bf00ca38",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 39,
+      "physically_validated": false,
+      "pi": 8,
+      "requested_pressure_ratio_product": 8.0,
+      "requested_pressure_ratios": [
+        3.4822022531844965,
+        2.29739670999407
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.6,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 0.7263418118795458,
+        "compressor_power": 213020.21657975786,
+        "compressor_pressure_ratios": [
+          3.4822022531844965,
+          2.29739670999407
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.018925337654276998,
+        "fuel_mass_flow": 0.013746264042239748,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7400880759217856,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": 110000.0,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 151443.84943963826,
+        "pressure_ratio_product": 8.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 0.0
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          323020.21657975786
+        ],
+        "turbine_powers": [
+          326283.0470502605
+        ],
+        "turbine_pressure_ratios": [
+          5.18656
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_4d3677eb9106a7ac66e2fb12e5529b9b54e099a076f52d8357c90640136238c9",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 40,
+      "physically_validated": false,
+      "pi": 9,
+      "requested_pressure_ratio_product": 9.0,
+      "requested_pressure_ratios": [
+        2.4082246852806923,
+        3.7371928188465517
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.4,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 109999.99999999997,
+        "air_mass_flow": 0.7177093361556599,
+        "compressor_power": 227355.28084409668,
+        "compressor_pressure_ratios": [
+          2.4082246852806923,
+          3.7371928188465517
+        ],
+        "compressor_pressure_residual": 1.7763568394002505e-15,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.0183144198289416,
+        "fuel_mass_flow": 0.013144430097505731,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7308537662531657,
+        "gearbox_output_power": 107799.99999999997,
+        "main_net_power": 109999.99999999997,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 153265.38817121187,
+        "pressure_ratio_product": 9.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": -2.9103830456733704e-11
+        },
+        "target_power_residual": -2.9103830456733704e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          337355.2808440967
+        ],
+        "turbine_powers": [
+          340762.909943532
+        ],
+        "turbine_pressure_ratios": [
+          5.834880000000001
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_11ad5888a93e95dda0b66640853cc5550fd0bd1733f717ed165dd2ac570b2f35",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 41,
+      "physically_validated": false,
+      "pi": 9,
+      "requested_pressure_ratio_product": 9.0,
+      "requested_pressure_ratios": [
+        3.0,
+        3.0
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.5,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 0.7178032881645952,
+        "compressor_power": 227399.23205048326,
+        "compressor_pressure_ratios": [
+          3.0,
+          3.0
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.01831390568351613,
+        "fuel_mass_flow": 0.013145781718764146,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7309490698833593,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": 110000.0,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 153245.32753432659,
+        "pressure_ratio_product": 9.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 0.0
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          337399.23205048323
+        ],
+        "turbine_powers": [
+          340807.3051014982
+        ],
+        "turbine_pressure_ratios": [
+          5.83488
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_a3b9ea7f921e52278bd0522ed4755013781e70747060208d1fee2f015633d365",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 42,
+      "physically_validated": false,
+      "pi": 9,
+      "requested_pressure_ratio_product": 9.0,
+      "requested_pressure_ratios": [
+        3.7371928188465517,
+        2.4082246852806923
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.6,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 0.7177764581552327,
+        "compressor_power": 227386.6808417458,
+        "compressor_pressure_ratios": [
+          3.7371928188465517,
+          2.4082246852806923
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.018314052495117288,
+        "fuel_mass_flow": 0.01314539573441429,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.730921853889647,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": 110000.0,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 153251.05574333342,
+        "pressure_ratio_product": 9.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 0.0
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          337386.6808417458
+        ],
+        "turbine_powers": [
+          340794.6271128746
+        ],
+        "turbine_pressure_ratios": [
+          5.83488
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_394f55b643c8304c92e68550d77e3e717a063f0f28a51acd11c4dd4387a9d9da",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 43,
+      "physically_validated": false,
+      "pi": 10,
+      "requested_pressure_ratio_product": 10.0,
+      "requested_pressure_ratios": [
+        2.51188643150958,
+        3.9810717055349727
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.4,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 0.7168787339921213,
+        "compressor_power": 242737.6893396759,
+        "compressor_pressure_ratios": [
+          2.51188643150958,
+          3.9810717055349727
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.017746488284690623,
+        "fuel_mass_flow": 0.012722080054335026,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7296008140464564,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": 110000.0,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 153442.96710747306,
+        "pressure_ratio_product": 10.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 0.0
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          352737.6893396759
+        ],
+        "turbine_powers": [
+          356300.69630270294
+        ],
+        "turbine_pressure_ratios": [
+          6.4832
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_db7f96266961a1477b898d92c3de380130e49655303792dbb7f2bf11b154a90a",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 44,
+      "physically_validated": false,
+      "pi": 10,
+      "requested_pressure_ratio_product": 10.0,
+      "requested_pressure_ratios": [
+        3.1622776601683795,
+        3.162277660168379
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.5,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000006,
+        "air_mass_flow": 0.7169942878638261,
+        "compressor_power": 242794.2729297065,
+        "compressor_pressure_ratios": [
+          3.1622776601683795,
+          3.162277660168379
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.01774585439470291,
+        "fuel_mass_flow": 0.012723676234265163,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7297179640980913,
+        "gearbox_output_power": 107800.00000000006,
+        "main_net_power": 110000.00000000006,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 153418.23758140113,
+        "pressure_ratio_product": 10.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 5.820766091346741e-11
+        },
+        "target_power_residual": 5.820766091346741e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          352794.2729297065
+        ],
+        "turbine_powers": [
+          356357.851444148
+        ],
+        "turbine_pressure_ratios": [
+          6.4832
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_430f9c031d78135044caa1b5bd1cfdc04d1b1804b02bb3175b84977a97a0c9e4",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 45,
+      "physically_validated": false,
+      "pi": 10,
+      "requested_pressure_ratio_product": 10.0,
+      "requested_pressure_ratios": [
+        3.9810717055349722,
+        2.51188643150958
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.6,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 0.7169637196906469,
+        "compressor_power": 242779.3045262301,
+        "compressor_pressure_ratios": [
+          3.9810717055349722,
+          2.51188643150958
+        ],
+        "compressor_pressure_residual": -1.7763568394002505e-15,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.017746022061709624,
+        "fuel_mass_flow": 0.012723253987075614,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7296869736777225,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": 110000.0,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 153424.77865890122,
+        "pressure_ratio_product": 10.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 0.0
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          352779.3045262301
+        ],
+        "turbine_powers": [
+          356342.73184467683
+        ],
+        "turbine_pressure_ratios": [
+          6.483199999999999
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_97f980611a102ad9e888242297586313c56e2be97c4614376eb7929b3d728613",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 46,
+      "physically_validated": false,
+      "pi": 11,
+      "requested_pressure_ratio_product": 11.0,
+      "requested_pressure_ratios": [
+        2.6094986352788734,
+        4.2153691330919
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.4,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 0.7216970297804792,
+        "compressor_power": 259098.74178314445,
+        "compressor_pressure_ratios": [
+          2.6094986352788734,
+          4.2153691330919
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.017214862408133694,
+        "fuel_mass_flow": 0.012423915068029714,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.734120944848509,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": 110000.0,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 152418.52946721856,
+        "pressure_ratio_product": 11.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 0.0
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          369098.7417831445
+        ],
+        "turbine_powers": [
+          372827.0119021661
+        ],
+        "turbine_pressure_ratios": [
+          7.13152
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_5b0db4a2d0c7d3f08308a49c54311a1d8aeaa5c48c8285a7d1c9527fb0db98dd",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 47,
+      "physically_validated": false,
+      "pi": 11,
+      "requested_pressure_ratio_product": 11.0,
+      "requested_pressure_ratios": [
+        3.3166247903554,
+        3.3166247903554
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.5,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 109999.99999999994,
+        "air_mass_flow": 0.7218377335113193,
+        "compressor_power": 259170.3538116547,
+        "compressor_pressure_ratios": [
+          3.3166247903554,
+          3.3166247903554
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.017214100739590475,
+        "fuel_mass_flow": 0.012425787462301514,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7342635209736208,
+        "gearbox_output_power": 107799.99999999994,
+        "main_net_power": 109999.99999999994,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 152388.81938869308,
+        "pressure_ratio_product": 11.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": -5.820766091346741e-11
+        },
+        "target_power_residual": -5.820766091346741e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          369170.35381165467
+        ],
+        "turbine_powers": [
+          372899.3472844997
+        ],
+        "turbine_pressure_ratios": [
+          7.13152
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_540c8c213402a861183f3d4931e8ae26e1738a5c2b43e6ebea9d828f2657f9aa",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 48,
+      "physically_validated": false,
+      "pi": 11,
+      "requested_pressure_ratio_product": 11.0,
+      "requested_pressure_ratios": [
+        4.2153691330919,
+        2.6094986352788734
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.6,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000006,
+        "air_mass_flow": 0.7218030993213841,
+        "compressor_power": 259152.72652789706,
+        "compressor_pressure_ratios": [
+          4.2153691330919,
+          2.6094986352788734
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.017214288196691036,
+        "fuel_mass_flow": 0.01242532657298311,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7342284258943672,
+        "gearbox_output_power": 107800.00000000006,
+        "main_net_power": 110000.00000000006,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 152396.13144279714,
+        "pressure_ratio_product": 11.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 5.820766091346741e-11
+        },
+        "target_power_residual": 5.820766091346741e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          369152.7265278971
+        ],
+        "turbine_powers": [
+          372881.5419473708
+        ],
+        "turbine_pressure_ratios": [
+          7.13152
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_be6c00583f0a87504c99aa357dcee2c05ce2a144eaac664db0be982d49189b46",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 49,
+      "physically_validated": false,
+      "pi": 12,
+      "requested_pressure_ratio_product": 12.0,
+      "requested_pressure_ratios": [
+        2.701920077041227,
+        4.44128606984584
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.4,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 0.7309422903613985,
+        "compressor_power": 276454.0161210427,
+        "compressor_pressure_ratios": [
+          2.701920077041227,
+          4.44128606984584
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.01671422089490042,
+        "fuel_mass_flow": 0.012217130902524855,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7431594212639233,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": 110000.0,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 150490.67682978488,
+        "pressure_ratio_product": 12.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 0.0
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          386454.0161210427
+        ],
+        "turbine_powers": [
+          390357.5920414573
+        ],
+        "turbine_pressure_ratios": [
+          7.77984
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_eeb061815673cfc22cca2133030964be26aea096e02cdc28a5e42b9ce8ab14f1",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 50,
+      "physically_validated": false,
+      "pi": 12,
+      "requested_pressure_ratio_product": 12.0,
+      "requested_pressure_ratios": [
+        3.4641016151377544,
+        3.464101615137755
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.5,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.0,
+        "air_mass_flow": 0.7311121919025263,
+        "compressor_power": 276543.4109533598,
+        "compressor_pressure_ratios": [
+          3.4641016151377544,
+          3.464101615137755
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.01671332417986206,
+        "fuel_mass_flow": 0.012219315075116444,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7433315069776427,
+        "gearbox_output_power": 107800.0,
+        "main_net_power": 110000.0,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 150455.70463509037,
+        "pressure_ratio_product": 12.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 0.0
+        },
+        "target_power_residual": 0.0,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          386543.4109533598
+        ],
+        "turbine_powers": [
+          390447.8898518786
+        ],
+        "turbine_pressure_ratios": [
+          7.77984
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_d1a4eb152307f77d60dae483ce13da6e629b3b21654ea90d17a1f172a1b7d436",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 51,
+      "physically_validated": false,
+      "pi": 12,
+      "requested_pressure_ratio_product": 12.0,
+      "requested_pressure_ratios": [
+        4.44128606984584,
+        2.701920077041227
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.6,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000006,
+        "air_mass_flow": 0.7310731360400318,
+        "compressor_power": 276522.86145008495,
+        "compressor_pressure_ratios": [
+          4.44128606984584,
+          2.701920077041227
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.01671353027403136,
+        "fuel_mass_flow": 0.01221881299173612,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7432919490317679,
+        "gearbox_output_power": 107800.00000000006,
+        "main_net_power": 110000.00000000006,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 150463.74237717397,
+        "pressure_ratio_product": 12.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 5.820766091346741e-11
+        },
+        "target_power_residual": 5.820766091346741e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          386522.861450085
+        ],
+        "turbine_powers": [
+          390427.13277786365
+        ],
+        "turbine_pressure_ratios": [
+          7.77984
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_c7a103f85c9f489e8a998a5e8cf3ae79f6f45d4f8824fb62218f030a3cdef182",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 52,
+      "physically_validated": false,
+      "pi": 13,
+      "requested_pressure_ratio_product": 13.000000000000002,
+      "requested_pressure_ratios": [
+        2.789827435889086,
+        4.659786420036066
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.4,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000006,
+        "air_mass_flow": 0.7438834086951689,
+        "compressor_power": 294856.6506471188,
+        "compressor_pressure_ratios": [
+          2.789827435889086,
+          4.659786420036066
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.016240392403877212,
+        "fuel_mass_flow": 0.012080958459943308,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7559643671551122,
+        "gearbox_output_power": 107800.00000000006,
+        "main_net_power": 110000.00000000006,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 147872.6353004012,
+        "pressure_ratio_product": 13.000000000000002,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 5.820766091346741e-11
+        },
+        "target_power_residual": 5.820766091346741e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          404856.65064711886
+        ],
+        "turbine_powers": [
+          408946.1117647665
+        ],
+        "turbine_pressure_ratios": [
+          8.428160000000002
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_318911dfd9074e2bc189ee8d7a777c897fdda3add16e200db455f8c943e12399",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 53,
+      "physically_validated": false,
+      "pi": 13,
+      "requested_pressure_ratio_product": 13.0,
+      "requested_pressure_ratios": [
+        3.605551275463989,
+        3.6055512754639896
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.5,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 110000.00000000006,
+        "air_mass_flow": 0.7440871530757822,
+        "compressor_power": 294967.00812855974,
+        "compressor_pressure_ratios": [
+          3.605551275463989,
+          3.6055512754639896
+        ],
+        "compressor_pressure_residual": 1.7763568394002505e-15,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.016239354028320684,
+        "fuel_mass_flow": 0.012083494706722873,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7561706477825051,
+        "gearbox_output_power": 107800.00000000006,
+        "main_net_power": 110000.00000000006,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 147832.1451261462,
+        "pressure_ratio_product": 13.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": 5.820766091346741e-11
+        },
+        "target_power_residual": 5.820766091346741e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          404967.00812855974
+        ],
+        "turbine_powers": [
+          409057.58396824216
+        ],
+        "turbine_pressure_ratios": [
+          8.428160000000002
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    },
+    {
+      "architecture": "SINGLE_SHAFT_DUAL_CC",
+      "calculation_status": "SUCCESS",
+      "candidate_id": "cand_2a8cea01dac268a1e9d814ea84576055bc788cddb77012cf401e16284b6f8029",
+      "compressor_viability_gate": "NOT_APPLIED",
+      "failure_reason": null,
+      "failure_stage": null,
+      "illustrative_only": true,
+      "index": 54,
+      "physically_validated": false,
+      "pi": 13,
+      "requested_pressure_ratio_product": 13.0,
+      "requested_pressure_ratios": [
+        4.659786420036066,
+        2.7898274358890855
+      ],
+      "rho": {
+        "feasible": null,
+        "path": "outputs.rho",
+        "profile": "RHO_LE_0_65_OPT_IN",
+        "reason": "MISSING_STAGE_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "split_weight": 0.6,
+      "stage_strength": {
+        "reason": "MISSING_STAGE_STRENGTH_MODEL",
+        "status": "NOT_CHECKED"
+      },
+      "values": {
+        "actual_gearbox_input_power": 109999.99999999994,
+        "air_mass_flow": 0.744043284268277,
+        "compressor_power": 294943.246731599,
+        "compressor_pressure_ratios": [
+          4.659786420036066,
+          2.7898274358890855
+        ],
+        "compressor_pressure_residual": 0.0,
+        "free_power_turbine_mechanical_power": null,
+        "fuel_air_ratio": 0.01623957755604019,
+        "fuel_mass_flow": 0.012082948619925543,
+        "gas_generator_net_power": null,
+        "gas_mass_flow": 0.7561262328882026,
+        "gearbox_output_power": 107799.99999999994,
+        "main_net_power": 109999.99999999994,
+        "mass_balance_residual": 0.0,
+        "net_specific_power_per_air": 147840.8613124955,
+        "pressure_ratio_product": 13.0,
+        "shaft_residuals": {
+          "free_power_turbine": null,
+          "gas_generator": null,
+          "main": -5.820766091346741e-11
+        },
+        "target_power_residual": -5.820766091346741e-11,
+        "target_power_status": "met",
+        "turbine_mechanical_powers": [
+          404943.2467315989
+        ],
+        "turbine_powers": [
+          409033.58255717065
+        ],
+        "turbine_pressure_ratios": [
+          8.42816
+        ],
+        "turbine_pressure_residuals": [
+          0.0
+        ]
+      }
+    }
+  ],
+  "posthoc_stage_rho": {
+    "note": "read-only annotation; no physics recalculation",
+    "profile": "RHO_LE_0_65_OPT_IN",
+    "reason": "MISSING_STAGE_MODEL",
+    "status": "NOT_CHECKED"
+  },
+  "posthoc_stage_strength": {
+    "reason": "MISSING_STAGE_STRENGTH_MODEL",
+    "status": "NOT_CHECKED"
+  },
+  "provenance": {
+    "git": {
+      "commit": "0952832bf1bc3fe1dde6086ec73252acc5b5c4df",
+      "dirty": true,
+      "source": "git"
+    },
+    "runtime": {
+      "backend": "reference_python_float64",
+      "cpu_count": 12,
+      "float_mant_dig": 53,
+      "machine": "AMD64",
+      "platform": "Windows-10-10.0.19045-SP0",
+      "pointer_bytes": 8,
+      "processor": "AMD64 Family 26 Model 68 Stepping 0, AuthenticAMD",
+      "python_implementation": "CPython",
+      "python_version": "3.12.10",
+      "system": "Windows"
+    }
+  },
+  "provenance_scope": "summary_only_not_manifest_run_config",
+  "report_version": "architecture-coarse-summary-v1",
+  "reproduce": {
+    "atol": 1e-09,
+    "checked": 55,
+    "differences": [],
+    "matches": true,
+    "rtol": 1e-12
+  },
+  "run": {
+    "complete": true,
+    "destination": "C:\\Users\\mikiway-PC\\Desktop\\Git-Repos\\Turbinis-Curs\\reference\\architecture_coarse\\2026-11-11-pi3-13",
+    "elapsed_seconds": 0.099437,
+    "evaluator_version": "architecture-cycle-raw-coarse-v1",
+    "journal_sha256": "12239e6ed2d1ea0021c55333b2a45e51c57c0c19d63fb93454b0f19f42049e9d",
+    "journal_size_bytes": 704366,
+    "model_variant": "architecture_cycle_0d_raw_v1",
+    "points_attempted": 55,
+    "record_count": 55,
+    "records_appended_this_invocation": 0,
+    "run_config_hash": "3e69462b5bf5ba0909d1275baef6ec17a743dc9b3eea787d29c04a8a6c242609",
+    "run_id": "run_eda56fbba92ab9dab265a4878a169f8c932a9f75cfb09ab614d64a74e72f2570"
+  },
+  "status_by_architecture": {
+    "FREE_POWER_TURBINE": {
+      "MODEL_ERROR": 0,
+      "NON_PHYSICAL_STATE": 0,
+      "NUMERICAL_FAILURE": 0,
+      "SUCCESS": 11,
+      "total": 11
+    },
+    "SINGLE_SHAFT_DUAL_CC": {
+      "MODEL_ERROR": 0,
+      "NON_PHYSICAL_STATE": 0,
+      "NUMERICAL_FAILURE": 0,
+      "SUCCESS": 33,
+      "total": 33
+    },
+    "SINGLE_SHAFT_SINGLE_CC": {
+      "MODEL_ERROR": 0,
+      "NON_PHYSICAL_STATE": 0,
+      "NUMERICAL_FAILURE": 0,
+      "SUCCESS": 11,
+      "total": 11
+    }
+  },
+  "status_counts": {
+    "SUCCESS": 55
+  },
+  "validation_status": "NOT_PHYSICALLY_VALIDATED"
+}

@@ -1,0 +1,283 @@
+{
+  "backends": {
+    "jax_cpu": {
+      "comparison": {
+        "allclose": true,
+        "cp": {
+          "allclose": true,
+          "atol": 1e-12,
+          "element_count": 40,
+          "max_abs_error": 6.821210263296962e-11,
+          "max_rel_error": 5.71003407023304e-14,
+          "rtol": 1e-12
+        },
+        "k": {
+          "allclose": true,
+          "atol": 1e-12,
+          "element_count": 40,
+          "max_abs_error": 2.375877272697835e-14,
+          "max_rel_error": 1.8042827879289795e-14,
+          "rtol": 1e-12
+        }
+      },
+      "device": {
+        "backend": "cpu",
+        "id": 0,
+        "kind": "cpu",
+        "platform": "cpu"
+      },
+      "dtype": "float64",
+      "requested": true,
+      "selection": "jax.devices('cpu')",
+      "status": "ok"
+    },
+    "jax_gpu": {
+      "comparison": {
+        "allclose": true,
+        "cp": {
+          "allclose": true,
+          "atol": 1e-12,
+          "element_count": 40,
+          "max_abs_error": 0.0,
+          "max_rel_error": 0.0,
+          "rtol": 1e-12
+        },
+        "k": {
+          "allclose": true,
+          "atol": 1e-12,
+          "element_count": 40,
+          "max_abs_error": 0.0,
+          "max_rel_error": 0.0,
+          "rtol": 1e-12
+        }
+      },
+      "device": {
+        "backend": "gpu",
+        "id": 0,
+        "kind": "NVIDIA GeForce RTX 4060",
+        "platform": "gpu"
+      },
+      "devices": [
+        {
+          "backend": "gpu",
+          "id": 0,
+          "kind": "NVIDIA GeForce RTX 4060",
+          "platform": "gpu"
+        }
+      ],
+      "dtype": "float64",
+      "requested": true,
+      "selection": "jax.devices('gpu')",
+      "status": "ok"
+    },
+    "numpy": {
+      "comparison": {
+        "allclose": true,
+        "cp": {
+          "allclose": true,
+          "atol": 1e-12,
+          "element_count": 40,
+          "max_abs_error": 0.0,
+          "max_rel_error": 0.0,
+          "rtol": 1e-12
+        },
+        "k": {
+          "allclose": true,
+          "atol": 1e-12,
+          "element_count": 40,
+          "max_abs_error": 0.0,
+          "max_rel_error": 0.0,
+          "rtol": 1e-12
+        }
+      },
+      "dtype": "float64",
+      "status": "ok"
+    },
+    "reference": {
+      "device": "host CPU (Python scalar)",
+      "status": "ok"
+    }
+  },
+  "benchmark": {
+    "batch_size": 65536,
+    "comparison": {
+      "definition": "steady_time_ratio = JAX median seconds / NumPy median seconds; values > 1 mean the JAX kernel was slower on this host and batch",
+      "interpretation": "Measured single-kernel throughput only. No full-cycle or engine speedup is claimed; a GPU result on another batch or host may differ.",
+      "jax_cpu_steady_time_ratio": 0.4854599667229491,
+      "jax_gpu_steady_time_ratio": 1.895941271852704
+    },
+    "jax_cpu": {
+      "device": {
+        "backend": "cpu",
+        "id": 0,
+        "kind": "cpu",
+        "platform": "cpu"
+      },
+      "dtype": "float64",
+      "elements_per_call": 65536,
+      "first_call_includes_jax_compilation": true,
+      "first_call_seconds": 0.03906038800000289,
+      "median_seconds": 0.0003204980000006685,
+      "min_seconds": 0.00028689700000228413,
+      "sample_seconds": [
+        0.00040869600000092987,
+        0.00032119800000174337,
+        0.00030899699999764607,
+        0.0003197979999995937,
+        0.00028689700000228413,
+        0.0002988980000040442,
+        0.0003037970000008272,
+        0.00033609799999823053,
+        0.0003415970000020252,
+        0.00034679699999884406
+      ],
+      "samples": 10,
+      "throughput_elements_per_second": 204481775.23686045,
+      "warmup_seconds": [
+        0.0007080939999966063,
+        0.0004450959999999782,
+        0.00042669700000175226
+      ]
+    },
+    "jax_gpu": {
+      "device": {
+        "backend": "gpu",
+        "id": 0,
+        "kind": "NVIDIA GeForce RTX 4060",
+        "platform": "gpu"
+      },
+      "dtype": "float64",
+      "elements_per_call": 65536,
+      "first_call_includes_jax_compilation": true,
+      "first_call_seconds": 0.06442598499999974,
+      "median_seconds": 0.0012516900000001385,
+      "min_seconds": 0.0012404900000007046,
+      "sample_seconds": [
+        0.0012500899999992043,
+        0.001249489999999298,
+        0.0012763900000010153,
+        0.001264290000001722,
+        0.0012517899999977544,
+        0.0012599900000012099,
+        0.0012511899999978482,
+        0.0012404900000007046,
+        0.0012553900000042972,
+        0.0012515900000025226
+      ],
+      "samples": 10,
+      "throughput_elements_per_second": 52358011.967813715,
+      "warmup_seconds": [
+        0.001308488999995916,
+        0.0012726900000004093,
+        0.0013044899999954396
+      ]
+    },
+    "numpy": {
+      "elements_per_call": 65536,
+      "first_call_includes_jax_compilation": false,
+      "first_call_seconds": 0.002704778000001795,
+      "median_seconds": 0.0006601944999999887,
+      "min_seconds": 0.0005935959999945339,
+      "sample_seconds": [
+        0.0006233949999980837,
+        0.000655694000002427,
+        0.0006415950000047133,
+        0.0005935959999945339,
+        0.0006698939999978393,
+        0.0006646949999975504,
+        0.0006347950000034075,
+        0.0007316939999952865,
+        0.0007521940000003724,
+        0.000786793999999702
+      ],
+      "samples": 10,
+      "throughput_elements_per_second": 99267715.80193582,
+      "warmup_seconds": [
+        0.000656595000002369,
+        0.0005898949999973979,
+        0.000668095000001756
+      ]
+    },
+    "samples": 10,
+    "scope": "kernel throughput only; not a full-cycle, stage, or engine speedup measurement",
+    "warmup_calls": 3
+  },
+  "cli": {
+    "atol": 1e-12,
+    "batch_size": 65536,
+    "default_command": "python scripts/validate_backends.py",
+    "devices": [
+      "cpu",
+      "gpu"
+    ],
+    "rtol": 1e-12,
+    "samples": 10,
+    "warmup": 3
+  },
+  "generated_at_utc": "2026-11-10T21:57:16+00:00",
+  "host": {
+    "jax": {
+      "installed": true,
+      "jax": "0.12.0.1",
+      "jax_enable_x64": true,
+      "jaxlib": "0.12.0.1"
+    },
+    "machine": "x86_64",
+    "numpy": "2.5.4",
+    "platform": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+    "python": "3.14.4",
+    "system": "Linux",
+    "xla_python_client_preallocate": "false",
+    "xla_setting_scope": "this process only"
+  },
+  "kernel": {
+    "branch_temperature_k": 700.0,
+    "calorie_to_joule": 4187.0,
+    "celsius_offset_k": 273.15,
+    "dtype": "float64",
+    "equation": "cp(T<700)=((1.2+2.25/alpha)/1e5*(T-70)+0.236)*4187; cp(T>=700)=((2.2+1.25/alpha)/1e5*(T+450)+0.218)*4187; dcp/dT=(cp(T+1)-cp(T-1))/2; cp_gas=cp(T)+(T-273.15)*dcp/dT; k=cp_gas/(cp_gas-R)",
+    "finite_difference_step_k": 1.0,
+    "formula_source": "turbine_engine.cycle.calc_cp_kerosene",
+    "name": "gas_cp_k",
+    "reference": "turbine_engine.gas.calc_gas_cp_k"
+  },
+  "result": {
+    "gpu_benchmark_ok": true,
+    "gpu_ready": true,
+    "jax_cpu_ready": true,
+    "note": "GPU unavailability/error is recorded, not labelled as a GPU pass; CPU validation still runs.",
+    "numeric_ok": true,
+    "status": "PASS"
+  },
+  "schema": "turbinis.backend-validation.v1",
+  "scope": {
+    "engine_design_sweep": false,
+    "full_cycle": false,
+    "kernel_only": true,
+    "physical_validation": false,
+    "purpose": "bounded optional JAX CPU/GPU numerical validation",
+    "speedup_claim": "none"
+  },
+  "validation_inputs": {
+    "alphas": [
+      1.0,
+      1.8,
+      3.0,
+      3.973413639490531,
+      "inf"
+    ],
+    "boundary_note": "Includes T=699.999, 700.0 and 700.001 K; exactly 700 K uses the T >= 700 source branch.",
+    "gas_constant_j_per_kg_k": 287.4,
+    "point_count": 40,
+    "temperatures_k": [
+      288.0,
+      650.0,
+      699.999,
+      700.0,
+      700.001,
+      850.0,
+      1100.0,
+      1250.0
+    ]
+  }
+}

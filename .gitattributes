@@ -1,0 +1,2 @@
+# RAW journal hashes cover exact bytes; never convert their line endings.
+reference/**/dataset.jsonl -text
