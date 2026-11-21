@@ -31,7 +31,7 @@ averaged. Only the user promotes an equation from `EXPERIMENTAL` to `ACCEPTED`.
 |---|---|
 | `turbine_engine/` | new extracted calculation package: stateless single-point cycle (`cycle.py`), gas properties (`gas.py`), scalar meanline stage (`stage.py`), root reaction relation (`reaction.py`), constant-hub three-stage orchestration (`orchestration.py`), turbine expansion iteration and preliminary sizing (`expansion.py`), meridional flowpath geometry (`geometry.py`), turbine aggregate performance (`performance.py`), the conventional multi-stage patched cell-16 baseline (`baseline.py`), and opt-in explicit 0D reference cycles for the three selected architectures (`architecture_cycle.py`); the architecture cycles are not physical validation and the package is not a 3D model |
 | `turbine/` | retained experimental radial-equilibrium package with unit, physics-invariant, regression, and optimization software checks; distinct from `turbine_engine/` |
-| `1-Turbinis-Curs-Last/` | separate two-stage v8 course calculation, saved profile/strength outputs, and supplied reference materials |
+| `1-Turbinis-Curs-Last/` | separate two-stage course calculations: `TVD_1CBK_2st_v8.ipynb` checks the previous layout at 2000 h; `TVD_1CBK_2st_2000h.ipynb` and `TVD_1CBK_2st_10000h.ipynb` reproduce redesigned candidates with preliminary Larson–Miller normal-stress checks; not qualified engine-life assessments |
 | `turbine_engine/README.md` | package scope, provenance, and current limitations |
 | `Turbinis-Cycle/Turbinis-Cycle.ipynb` | cycle boundary conditions: flow, pressure ratio, temperatures, power |
 | `Turbinis-Calc/Main_Turbinis_Calc_Book.ipynb` | legacy `book_approx` meanline, reproducible until each equation is migrated |
