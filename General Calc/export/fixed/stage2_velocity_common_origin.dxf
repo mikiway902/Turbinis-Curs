@@ -489,7 +489,7 @@ $SKPOLY
   9
 $TDCREATE
  40
-2461373.3945949073
+2461373.439398148
   9
 $TDUCREATE
  40
@@ -497,7 +497,7 @@ $TDUCREATE
   9
 $TDUPDATE
  40
-2461373.3945949073
+2461373.439398148
   9
 $TDUUPDATE
  40
@@ -549,7 +549,7 @@ $SPLINESEGS
   9
 $HANDSEED
   5
-92
+99
   9
 $SURFTAB1
  70
@@ -929,11 +929,11 @@ $PSTYLEMODE
   9
 $FINGERPRINTGUID
   2
-{4CA12924-F97D-4FE8-BCA0-8ECF4222683B}
+{5591A094-A07B-4F2A-9FC9-0CA3BB701009}
   9
 $VERSIONGUID
   2
-{20618500-995C-4861-866A-E807AA01AEA6}
+{EEC5DB77-13C7-409D-9810-00DB4547CA50}
   9
 $EXTNAMES
 290
@@ -1373,7 +1373,7 @@ AcDbSymbolTable
   0
 VPORT
   5
-8E
+95
 330
 8
 100
@@ -1489,7 +1489,7 @@ LTYPE
 100
 AcDbSymbolTable
  70
-3
+4
   0
 LTYPE
   5
@@ -1557,6 +1557,36 @@ Continuous
  40
 0.0
   0
+LTYPE
+  5
+3E
+330
+2
+100
+AcDbSymbolTableRecord
+100
+AcDbLinetypeTableRecord
+  2
+CAMBER_DASH
+ 70
+0
+  3
+Blade mean camber line
+ 72
+65
+ 73
+2
+ 40
+4.4
+ 49
+3.2
+ 74
+0
+ 49
+-1.2
+ 74
+0
+  0
 ENDTAB
   0
 TABLE
@@ -1569,7 +1599,7 @@ LAYER
 100
 AcDbSymbolTable
  70
-16
+22
   0
 LAYER
   5
@@ -1751,6 +1781,30 @@ AcDbSymbolTableRecord
 100
 AcDbLayerTableRecord
   2
+CHORD
+ 70
+0
+ 62
+8
+  6
+Continuous
+370
+13
+390
+13
+347
+21
+  0
+LAYER
+  5
+35
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
 CIRCLES
  70
 0
@@ -1767,7 +1821,7 @@ Continuous
   0
 LAYER
   5
-35
+36
 330
 1
 100
@@ -1791,7 +1845,7 @@ Continuous
   0
 LAYER
   5
-36
+37
 330
 1
 100
@@ -1815,7 +1869,7 @@ Continuous
   0
 LAYER
   5
-37
+38
 330
 1
 100
@@ -1839,7 +1893,7 @@ Continuous
   0
 LAYER
   5
-38
+39
 330
 1
 100
@@ -1863,7 +1917,7 @@ Continuous
   0
 LAYER
   5
-39
+3A
 330
 1
 100
@@ -1887,7 +1941,7 @@ Continuous
   0
 LAYER
   5
-3A
+3B
 330
 1
 100
@@ -1911,7 +1965,7 @@ Continuous
   0
 LAYER
   5
-3B
+3C
 330
 1
 100
@@ -1935,7 +1989,7 @@ Continuous
   0
 LAYER
   5
-3C
+3D
 330
 1
 100
@@ -1952,6 +2006,126 @@ U
 Continuous
 370
 25
+390
+13
+347
+21
+  0
+LAYER
+  5
+3F
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+CAMBER
+ 70
+0
+ 62
+6
+  6
+CAMBER_DASH
+370
+18
+390
+13
+347
+21
+  0
+LAYER
+  5
+40
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+SUCTION
+ 70
+0
+ 62
+7
+  6
+Continuous
+370
+50
+390
+13
+347
+21
+  0
+LAYER
+  5
+41
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+NEIGHBOR_SUCTION
+ 70
+0
+ 62
+8
+  6
+Continuous
+370
+35
+390
+13
+347
+21
+  0
+LAYER
+  5
+42
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+PRESSURE
+ 70
+0
+ 62
+7
+  6
+Continuous
+370
+50
+390
+13
+347
+21
+  0
+LAYER
+  5
+43
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+NEIGHBOR_PRESSURE
+ 70
+0
+ 62
+8
+  6
+Continuous
+370
+35
 390
 13
 347
@@ -2057,7 +2231,7 @@ ACAD
   0
 APPID
   5
-8F
+96
 330
 3
 100
@@ -2071,7 +2245,7 @@ HATCHBACKGROUNDCOLOR
   0
 APPID
   5
-90
+97
 330
 3
 100
@@ -2381,7 +2555,7 @@ ENTITIES
   0
 TEXT
   5
-3D
+44
 330
 17
 100
@@ -2413,7 +2587,7 @@ AcDbText
   0
 TEXT
   5
-3E
+45
 330
 17
 100
@@ -2445,7 +2619,7 @@ AcDbText
   0
 LINE
   5
-3F
+46
 330
 17
 100
@@ -2469,7 +2643,7 @@ AcDbLine
   0
 LINE
   5
-40
+47
 330
 17
 100
@@ -2493,7 +2667,7 @@ AcDbLine
   0
 LINE
   5
-41
+48
 330
 17
 100
@@ -2517,7 +2691,7 @@ AcDbLine
   0
 LINE
   5
-42
+49
 330
 17
 100
@@ -2541,7 +2715,7 @@ AcDbLine
   0
 TEXT
   5
-43
+4A
 330
 17
 100
@@ -2573,7 +2747,7 @@ AcDbText
   0
 LINE
   5
-44
+4B
 330
 17
 100
@@ -2597,7 +2771,7 @@ AcDbLine
   0
 LINE
   5
-45
+4C
 330
 17
 100
@@ -2621,7 +2795,7 @@ AcDbLine
   0
 LINE
   5
-46
+4D
 330
 17
 100
@@ -2645,7 +2819,7 @@ AcDbLine
   0
 TEXT
   5
-47
+4E
 330
 17
 100
@@ -2677,7 +2851,7 @@ AcDbText
   0
 LINE
   5
-48
+4F
 330
 17
 100
@@ -2701,7 +2875,7 @@ AcDbLine
   0
 LINE
   5
-49
+50
 330
 17
 100
@@ -2725,7 +2899,7 @@ AcDbLine
   0
 LINE
   5
-4A
+51
 330
 17
 100
@@ -2749,7 +2923,7 @@ AcDbLine
   0
 TEXT
   5
-4B
+52
 330
 17
 100
@@ -2781,7 +2955,7 @@ AcDbText
   0
 LINE
   5
-4C
+53
 330
 17
 100
@@ -2805,7 +2979,7 @@ AcDbLine
   0
 LINE
   5
-4D
+54
 330
 17
 100
@@ -2829,7 +3003,7 @@ AcDbLine
   0
 LINE
   5
-4E
+55
 330
 17
 100
@@ -2853,7 +3027,7 @@ AcDbLine
   0
 TEXT
   5
-4F
+56
 330
 17
 100
@@ -2885,7 +3059,7 @@ AcDbText
   0
 LINE
   5
-50
+57
 330
 17
 100
@@ -2909,7 +3083,7 @@ AcDbLine
   0
 LINE
   5
-51
+58
 330
 17
 100
@@ -2933,7 +3107,7 @@ AcDbLine
   0
 LINE
   5
-52
+59
 330
 17
 100
@@ -2957,7 +3131,7 @@ AcDbLine
   0
 TEXT
   5
-53
+5A
 330
 17
 100
@@ -2989,7 +3163,7 @@ AcDbText
   0
 LINE
   5
-54
+5B
 330
 17
 100
@@ -3013,7 +3187,7 @@ AcDbLine
   0
 LINE
   5
-55
+5C
 330
 17
 100
@@ -3037,7 +3211,7 @@ AcDbLine
   0
 LINE
   5
-56
+5D
 330
 17
 100
@@ -3061,7 +3235,7 @@ AcDbLine
   0
 TEXT
   5
-57
+5E
 330
 17
 100
@@ -3093,7 +3267,7 @@ AcDbText
   0
 TEXT
   5
-58
+5F
 330
 17
 100
@@ -3125,7 +3299,7 @@ AcDbText
   0
 TEXT
   5
-59
+60
 330
 17
 100
@@ -3157,7 +3331,7 @@ AcDbText
   0
 LINE
   5
-5A
+61
 330
 17
 100
@@ -3181,7 +3355,7 @@ AcDbLine
   0
 LINE
   5
-5B
+62
 330
 17
 100
@@ -3205,7 +3379,7 @@ AcDbLine
   0
 LINE
   5
-5C
+63
 330
 17
 100
@@ -3229,7 +3403,7 @@ AcDbLine
   0
 LINE
   5
-5D
+64
 330
 17
 100
@@ -3253,7 +3427,7 @@ AcDbLine
   0
 TEXT
   5
-5E
+65
 330
 17
 100
@@ -3285,7 +3459,7 @@ AcDbText
   0
 LINE
   5
-5F
+66
 330
 17
 100
@@ -3309,7 +3483,7 @@ AcDbLine
   0
 LINE
   5
-60
+67
 330
 17
 100
@@ -3333,7 +3507,7 @@ AcDbLine
   0
 LINE
   5
-61
+68
 330
 17
 100
@@ -3357,7 +3531,7 @@ AcDbLine
   0
 TEXT
   5
-62
+69
 330
 17
 100
@@ -3389,7 +3563,7 @@ AcDbText
   0
 LINE
   5
-63
+6A
 330
 17
 100
@@ -3413,7 +3587,7 @@ AcDbLine
   0
 LINE
   5
-64
+6B
 330
 17
 100
@@ -3437,7 +3611,7 @@ AcDbLine
   0
 LINE
   5
-65
+6C
 330
 17
 100
@@ -3461,7 +3635,7 @@ AcDbLine
   0
 TEXT
   5
-66
+6D
 330
 17
 100
@@ -3493,7 +3667,7 @@ AcDbText
   0
 LINE
   5
-67
+6E
 330
 17
 100
@@ -3517,7 +3691,7 @@ AcDbLine
   0
 LINE
   5
-68
+6F
 330
 17
 100
@@ -3541,7 +3715,7 @@ AcDbLine
   0
 LINE
   5
-69
+70
 330
 17
 100
@@ -3565,7 +3739,7 @@ AcDbLine
   0
 TEXT
   5
-6A
+71
 330
 17
 100
@@ -3597,7 +3771,7 @@ AcDbText
   0
 LINE
   5
-6B
+72
 330
 17
 100
@@ -3621,7 +3795,7 @@ AcDbLine
   0
 LINE
   5
-6C
+73
 330
 17
 100
@@ -3645,7 +3819,7 @@ AcDbLine
   0
 LINE
   5
-6D
+74
 330
 17
 100
@@ -3669,7 +3843,7 @@ AcDbLine
   0
 TEXT
   5
-6E
+75
 330
 17
 100
@@ -3701,7 +3875,7 @@ AcDbText
   0
 LINE
   5
-6F
+76
 330
 17
 100
@@ -3725,7 +3899,7 @@ AcDbLine
   0
 LINE
   5
-70
+77
 330
 17
 100
@@ -3749,7 +3923,7 @@ AcDbLine
   0
 LINE
   5
-71
+78
 330
 17
 100
@@ -3773,7 +3947,7 @@ AcDbLine
   0
 TEXT
   5
-72
+79
 330
 17
 100
@@ -3805,7 +3979,7 @@ AcDbText
   0
 TEXT
   5
-73
+7A
 330
 17
 100
@@ -3837,7 +4011,7 @@ AcDbText
   0
 TEXT
   5
-74
+7B
 330
 17
 100
@@ -3869,7 +4043,7 @@ AcDbText
   0
 LINE
   5
-75
+7C
 330
 17
 100
@@ -3893,7 +4067,7 @@ AcDbLine
   0
 LINE
   5
-76
+7D
 330
 17
 100
@@ -3917,7 +4091,7 @@ AcDbLine
   0
 LINE
   5
-77
+7E
 330
 17
 100
@@ -3941,7 +4115,7 @@ AcDbLine
   0
 LINE
   5
-78
+7F
 330
 17
 100
@@ -3965,7 +4139,7 @@ AcDbLine
   0
 TEXT
   5
-79
+80
 330
 17
 100
@@ -3997,7 +4171,7 @@ AcDbText
   0
 LINE
   5
-7A
+81
 330
 17
 100
@@ -4021,7 +4195,7 @@ AcDbLine
   0
 LINE
   5
-7B
+82
 330
 17
 100
@@ -4045,7 +4219,7 @@ AcDbLine
   0
 LINE
   5
-7C
+83
 330
 17
 100
@@ -4069,7 +4243,7 @@ AcDbLine
   0
 TEXT
   5
-7D
+84
 330
 17
 100
@@ -4101,7 +4275,7 @@ AcDbText
   0
 LINE
   5
-7E
+85
 330
 17
 100
@@ -4125,7 +4299,7 @@ AcDbLine
   0
 LINE
   5
-7F
+86
 330
 17
 100
@@ -4149,7 +4323,7 @@ AcDbLine
   0
 LINE
   5
-80
+87
 330
 17
 100
@@ -4173,7 +4347,7 @@ AcDbLine
   0
 TEXT
   5
-81
+88
 330
 17
 100
@@ -4205,7 +4379,7 @@ AcDbText
   0
 LINE
   5
-82
+89
 330
 17
 100
@@ -4229,7 +4403,7 @@ AcDbLine
   0
 LINE
   5
-83
+8A
 330
 17
 100
@@ -4253,7 +4427,7 @@ AcDbLine
   0
 LINE
   5
-84
+8B
 330
 17
 100
@@ -4277,7 +4451,7 @@ AcDbLine
   0
 TEXT
   5
-85
+8C
 330
 17
 100
@@ -4309,7 +4483,7 @@ AcDbText
   0
 LINE
   5
-86
+8D
 330
 17
 100
@@ -4333,7 +4507,7 @@ AcDbLine
   0
 LINE
   5
-87
+8E
 330
 17
 100
@@ -4357,7 +4531,7 @@ AcDbLine
   0
 LINE
   5
-88
+8F
 330
 17
 100
@@ -4381,7 +4555,7 @@ AcDbLine
   0
 TEXT
   5
-89
+90
 330
 17
 100
@@ -4413,7 +4587,7 @@ AcDbText
   0
 LINE
   5
-8A
+91
 330
 17
 100
@@ -4437,7 +4611,7 @@ AcDbLine
   0
 LINE
   5
-8B
+92
 330
 17
 100
@@ -4461,7 +4635,7 @@ AcDbLine
   0
 LINE
   5
-8C
+93
 330
 17
 100
@@ -4485,7 +4659,7 @@ AcDbLine
   0
 TEXT
   5
-8D
+94
 330
 17
 100
@@ -5505,7 +5679,7 @@ CREATED_BY_EZDXF
   3
 WRITTEN_BY_EZDXF
 350
-91
+98
   0
 DICTIONARYVAR
   5
@@ -5517,11 +5691,11 @@ DictionaryVariables
 280
 0
   1
-1.4.5 @ 2026-11-28T09:28:13.798617+00:00
+1.4.5 @ 2026-11-28T10:32:44.897702+00:00
   0
 DICTIONARYVAR
   5
-91
+98
 330
 2D
 100
@@ -5529,7 +5703,7 @@ DictionaryVariables
 280
 0
   1
-1.4.5 @ 2026-11-28T09:28:13.803451+00:00
+1.4.5 @ 2026-11-28T10:32:44.901951+00:00
   0
 ENDSEC
   0
