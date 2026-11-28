@@ -1,0 +1,471 @@
+{
+  "source_notebook": "TVD_1CBK_2st_10000h.ipynb",
+  "resource_hours": 10000.0,
+  "stage_count": 2,
+  "speed_rpm": 30700.0,
+  "converged": false,
+  "passed": false,
+  "status": "FAILED",
+  "reason": "coupled coefficient tolerance not reached",
+  "gas_iterations": [
+    {
+      "iteration": 0,
+      "source_notebook": "TVD_1CBK_2st_10000h.ipynb",
+      "resource_hours": 10000,
+      "stage_count": 2,
+      "power_after_gearbox_W": 110000.00000000068,
+      "speed_rpm": 30700.0,
+      "air_mass_flow_kg_s": 0.8224354768686652,
+      "gas_mass_flows_kg_s": [
+        0.8336628797375195,
+        0.8336628797375195
+      ],
+      "prescribed": {
+        "phi": [
+          0.9032649959972079,
+          0.9291930613656086
+        ],
+        "psi": [
+          0.9088647959401261,
+          0.9386671320039705
+        ]
+      },
+      "measured": {
+        "phi": [
+          0.8644053628467261,
+          0.8765817524141262
+        ],
+        "psi": [
+          0.934742566484549,
+          0.9359134954599664
+        ]
+      },
+      "coefficient_error": 0.05261130895148247,
+      "passed": false,
+      "report_path": "exports/vinogradov/trials/feedback_10000h/iterations/000/report.json"
+    },
+    {
+      "iteration": 1,
+      "source_notebook": "TVD_1CBK_2st_10000h.ipynb",
+      "resource_hours": 10000,
+      "stage_count": 2,
+      "power_after_gearbox_W": 109999.99999794646,
+      "speed_rpm": 30700.0,
+      "air_mass_flow_kg_s": 0.8810736856224782,
+      "gas_mass_flows_kg_s": [
+        0.8931015826476566,
+        0.8931015826476566
+      ],
+      "prescribed": {
+        "phi": [
+          0.8818921977644429,
+          0.9002568414422932
+        ],
+        "psi": [
+          0.9230975697395587,
+          0.9371526319047682
+        ]
+      },
+      "measured": {
+        "phi": [
+          0.8800935752116139,
+          0.8606020875456697
+        ],
+        "psi": [
+          0.7925068190637468,
+          0.9320985858229975
+        ]
+      },
+      "coefficient_error": 0.13059075067581194,
+      "passed": false,
+      "report_path": "exports/vinogradov/trials/feedback_10000h/iterations/001/report.json"
+    }
+  ],
+  "source_controls": {
+    "comparisons": [
+      {
+        "table": "2.1",
+        "page": 21,
+        "quantity": "chord",
+        "actual": 168.79486590084352,
+        "printed": 168.795,
+        "absolute_error": -0.00013409915646889203,
+        "absolute_error_magnitude": 0.00013409915646889203,
+        "relative_error": -7.944498146798901e-07,
+        "units": "mm",
+        "tolerance": 0.0006,
+        "within_printed_tolerance": true,
+        "note": ""
+      },
+      {
+        "table": "2.1",
+        "page": 28,
+        "quantity": "pressure_radius",
+        "actual": 233.02531838336995,
+        "printed": 233.025,
+        "absolute_error": 0.000318383369943831,
+        "absolute_error_magnitude": 0.000318383369943831,
+        "relative_error": 1.366305632201828e-06,
+        "units": "mm",
+        "tolerance": 0.0006,
+        "within_printed_tolerance": true,
+        "note": ""
+      },
+      {
+        "table": "2.1",
+        "page": 28,
+        "quantity": "B.x",
+        "actual": 67.62339536991358,
+        "printed": 67.623,
+        "absolute_error": 0.00039536991357636,
+        "absolute_error_magnitude": 0.00039536991357636,
+        "relative_error": 5.846678106211791e-06,
+        "units": "mm",
+        "tolerance": 0.0006,
+        "within_printed_tolerance": true,
+        "note": ""
+      },
+      {
+        "table": "2.1",
+        "page": 28,
+        "quantity": "B.y",
+        "actual": 140.18070400272546,
+        "printed": 140.181,
+        "absolute_error": -0.0002959972745486539,
+        "absolute_error_magnitude": 0.0002959972745486539,
+        "relative_error": -2.111536331946939e-06,
+        "units": "mm",
+        "tolerance": 0.0006,
+        "within_printed_tolerance": true,
+        "note": ""
+      },
+      {
+        "table": "3.1",
+        "page": 43,
+        "quantity": "P.x",
+        "actual": 66.92822959659352,
+        "printed": 66.932,
+        "absolute_error": -0.003770403406477385,
+        "absolute_error_magnitude": 0.003770403406477385,
+        "relative_error": -5.6331850332836086e-05,
+        "units": "mm",
+        "tolerance": 0.006,
+        "within_printed_tolerance": true,
+        "note": "exact quadratic vs sparse spline"
+      },
+      {
+        "table": "3.1",
+        "page": 43,
+        "quantity": "back_angle",
+        "actual": 13.327052500292659,
+        "printed": 13.325,
+        "absolute_error": 0.002052500292659687,
+        "absolute_error_magnitude": 0.002052500292659687,
+        "relative_error": 0.00015403379307014537,
+        "units": "deg",
+        "tolerance": 0.005,
+        "within_printed_tolerance": true,
+        "note": "exact quadratic vs sparse spline"
+      },
+      {
+        "table": "3.1",
+        "page": 43,
+        "quantity": "throat_circle_radius",
+        "actual": 35.92083945924928,
+        "printed": 36.825,
+        "absolute_error": -0.9041605407507234,
+        "absolute_error_magnitude": 0.9041605407507234,
+        "relative_error": -0.024552899952497577,
+        "units": "mm",
+        "tolerance": 0.0006,
+        "within_printed_tolerance": false,
+        "note": "SOURCE INCONSISTENCY: printed Euclidean-distance result contradicts printed points"
+      },
+      {
+        "table": "3.2",
+        "page": 46,
+        "quantity": "maximum_thickness",
+        "actual": 15.998135531927153,
+        "printed": 16.003,
+        "absolute_error": -0.004864468072847572,
+        "absolute_error_magnitude": 0.004864468072847572,
+        "relative_error": -0.0003039722597542693,
+        "units": "mm",
+        "tolerance": 0.006,
+        "within_printed_tolerance": true,
+        "note": "source linear zero interpolation vs exact normals"
+      },
+      {
+        "table": "3.3",
+        "page": 48,
+        "quantity": "area",
+        "actual": 2658.031597359077,
+        "printed": 2659,
+        "absolute_error": -0.9684026409231592,
+        "absolute_error_magnitude": 0.9684026409231592,
+        "relative_error": -0.0003641980597680178,
+        "units": "mm2",
+        "tolerance": 26.59,
+        "within_printed_tolerance": true,
+        "note": ""
+      },
+      {
+        "table": "3.3",
+        "page": 48,
+        "quantity": "centroid_x",
+        "actual": 51.455280405905626,
+        "printed": 51.457,
+        "absolute_error": -0.0017195940943750543,
+        "absolute_error_magnitude": 0.0017195940943750543,
+        "relative_error": -3.3418079063588126e-05,
+        "units": "mm",
+        "tolerance": 0.5,
+        "within_printed_tolerance": true,
+        "note": ""
+      },
+      {
+        "table": "3.3",
+        "page": 48,
+        "quantity": "centroid_y",
+        "actual": 66.00777717202838,
+        "printed": 66.011,
+        "absolute_error": -0.003222827971612219,
+        "absolute_error_magnitude": 0.003222827971612219,
+        "relative_error": -4.882258974431866e-05,
+        "units": "mm",
+        "tolerance": 0.5,
+        "within_printed_tolerance": true,
+        "note": ""
+      },
+      {
+        "table": "3.3",
+        "page": 48,
+        "quantity": "principal_min",
+        "actual": 184087.87320237228,
+        "printed": 184100,
+        "absolute_error": -12.12679762771586,
+        "absolute_error_magnitude": 12.12679762771586,
+        "relative_error": -6.587070954761466e-05,
+        "units": "mm4",
+        "tolerance": 5523.0,
+        "within_printed_tolerance": true,
+        "note": ""
+      },
+      {
+        "table": "3.3",
+        "page": 48,
+        "quantity": "principal_max",
+        "actual": 3322396.4262980362,
+        "printed": 3323000,
+        "absolute_error": -603.57370196376,
+        "absolute_error_magnitude": 603.57370196376,
+        "relative_error": -0.0001816351796460307,
+        "units": "mm4",
+        "tolerance": 66460.0,
+        "within_printed_tolerance": true,
+        "note": ""
+      },
+      {
+        "table": "3.4",
+        "page": 54,
+        "quantity": "K_prescribed",
+        "actual": 0.4528805813311708,
+        "printed": 0.453,
+        "absolute_error": -0.0001194186688291965,
+        "absolute_error_magnitude": 0.0001194186688291965,
+        "relative_error": -0.00026361737048387747,
+        "units": "1",
+        "tolerance": 0.0005,
+        "within_printed_tolerance": true,
+        "note": "prescribed throat, NOT measured geometry; measured throat separately in report"
+      },
+      {
+        "table": "3.4",
+        "page": 54,
+        "quantity": "achieved_vs_prescribed_throat",
+        "actual": 34.996752113274404,
+        "printed": 29.890118367857276,
+        "absolute_error": 5.106633745417128,
+        "absolute_error_magnitude": 5.106633745417128,
+        "relative_error": 0.17084688934884285,
+        "units": "mm",
+        "tolerance": 0.001,
+        "within_printed_tolerance": false,
+        "note": "SOURCE DESIGN DOES NOT CLOSE: actual inscribed throat differs from prescribed t*sin(beta)/m"
+      },
+      {
+        "table": "3.5",
+        "page": 57,
+        "quantity": "c1_axial",
+        "actual": 58.47434094454735,
+        "printed": 58.47434094,
+        "absolute_error": 4.547352716599562e-09,
+        "absolute_error_magnitude": 4.547352716599562e-09,
+        "relative_error": 7.77666347922683e-11,
+        "units": "m/s",
+        "tolerance": 1e-08,
+        "within_printed_tolerance": true,
+        "note": ""
+      },
+      {
+        "table": "3.5",
+        "page": 57,
+        "quantity": "w2_theta",
+        "actual": -122.87280664334877,
+        "printed": -122.87280664,
+        "absolute_error": -3.348773702782637e-09,
+        "absolute_error_magnitude": 3.348773702782637e-09,
+        "relative_error": 2.7253985599873793e-11,
+        "units": "m/s",
+        "tolerance": 1e-08,
+        "within_printed_tolerance": true,
+        "note": ""
+      },
+      {
+        "table": "3.6",
+        "page": 60,
+        "quantity": "inlet_triangle_origin_x",
+        "actual": 100.0,
+        "printed": 100,
+        "absolute_error": 0.0,
+        "absolute_error_magnitude": 0.0,
+        "relative_error": 0.0,
+        "units": "mm",
+        "tolerance": 1e-10,
+        "within_printed_tolerance": true,
+        "note": "sequential assignment interpretation: alpha1=17,Kt=.69,width=100,VA=100 retained"
+      },
+      {
+        "table": "4.1",
+        "page": 70,
+        "quantity": "thickness_center_y",
+        "actual": 88.11000670201666,
+        "printed": 88.11,
+        "absolute_error": 6.702016662529786e-06,
+        "absolute_error_magnitude": 6.702016662529786e-06,
+        "relative_error": 7.606420000601278e-08,
+        "units": "mm",
+        "tolerance": 0.0006,
+        "within_printed_tolerance": true,
+        "note": ""
+      },
+      {
+        "table": "4.1",
+        "page": 70,
+        "quantity": "suction_contact_x",
+        "actual": 29.132778707119446,
+        "printed": 29.133,
+        "absolute_error": -0.00022129288055339202,
+        "absolute_error_magnitude": 0.00022129288055339202,
+        "relative_error": -7.595952375429651e-06,
+        "units": "mm",
+        "tolerance": 0.0006,
+        "within_printed_tolerance": true,
+        "note": ""
+      },
+      {
+        "table": "4.1",
+        "page": 69,
+        "quantity": "pressure_contact_x",
+        "actual": 19.867221292880544,
+        "printed": 20.527,
+        "absolute_error": -0.6597787071194574,
+        "absolute_error_magnitude": 0.6597787071194574,
+        "relative_error": -0.03214199381884627,
+        "units": "mm",
+        "tolerance": 0.0006,
+        "within_printed_tolerance": false,
+        "note": "SOURCE INCONSISTENCY: printed root leaves +.685813mm equation residual"
+      },
+      {
+        "table": "5.1",
+        "page": 75,
+        "quantity": "suction_inlet_x",
+        "actual": 1.9799399232163115,
+        "printed": 1.98,
+        "absolute_error": -6.007678368846747e-05,
+        "absolute_error_magnitude": 6.007678368846747e-05,
+        "relative_error": -3.034180994367044e-05,
+        "units": "mm",
+        "tolerance": 0.0006,
+        "within_printed_tolerance": true,
+        "note": ""
+      },
+      {
+        "table": "6.1",
+        "page": 79,
+        "quantity": "pressure_radius",
+        "actual": 60.87736849547715,
+        "printed": 60.877,
+        "absolute_error": 0.00036849547714723485,
+        "absolute_error_magnitude": 0.00036849547714723485,
+        "relative_error": 6.053114922667589e-06,
+        "units": "mm",
+        "tolerance": 0.0006,
+        "within_printed_tolerance": true,
+        "note": ""
+      },
+      {
+        "table": "6.1",
+        "page": 79,
+        "quantity": "pressure_center_x",
+        "actual": 43.62644848416867,
+        "printed": 43.626,
+        "absolute_error": 0.0004484841686718255,
+        "absolute_error_magnitude": 0.0004484841686718255,
+        "relative_error": 1.0280203747119275e-05,
+        "units": "mm",
+        "tolerance": 0.0006,
+        "within_printed_tolerance": true,
+        "note": ""
+      }
+    ],
+    "source_comparison_failures": [
+      {
+        "table": "3.1",
+        "page": 43,
+        "quantity": "throat_circle_radius",
+        "actual": 35.92083945924928,
+        "printed": 36.825,
+        "absolute_error": -0.9041605407507234,
+        "absolute_error_magnitude": 0.9041605407507234,
+        "relative_error": -0.024552899952497577,
+        "units": "mm",
+        "tolerance": 0.0006,
+        "within_printed_tolerance": false,
+        "note": "SOURCE INCONSISTENCY: printed Euclidean-distance result contradicts printed points"
+      },
+      {
+        "table": "3.4",
+        "page": 54,
+        "quantity": "achieved_vs_prescribed_throat",
+        "actual": 34.996752113274404,
+        "printed": 29.890118367857276,
+        "absolute_error": 5.106633745417128,
+        "absolute_error_magnitude": 5.106633745417128,
+        "relative_error": 0.17084688934884285,
+        "units": "mm",
+        "tolerance": 0.001,
+        "within_printed_tolerance": false,
+        "note": "SOURCE DESIGN DOES NOT CLOSE: actual inscribed throat differs from prescribed t*sin(beta)/m"
+      },
+      {
+        "table": "4.1",
+        "page": 69,
+        "quantity": "pressure_contact_x",
+        "actual": 19.867221292880544,
+        "printed": 20.527,
+        "absolute_error": -0.6597787071194574,
+        "absolute_error_magnitude": 0.6597787071194574,
+        "relative_error": -0.03214199381884627,
+        "units": "mm",
+        "tolerance": 0.0006,
+        "within_printed_tolerance": false,
+        "note": "SOURCE INCONSISTENCY: printed root leaves +.685813mm equation residual"
+      }
+    ],
+    "figure": "/home/jovyan/work/Turbinis-Curs/1-Turbinis-Curs-Last/exports/vinogradov/controls/source_controls.png",
+    "status": "EXPERIMENTAL; documented source discrepancies are not silently accepted"
+  },
+  "final_blading_report": "exports/vinogradov/trials/feedback_10000h/iterations/001/report.json"
+}

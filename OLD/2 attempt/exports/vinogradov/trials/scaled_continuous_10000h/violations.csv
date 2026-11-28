@@ -1,0 +1,16 @@
+﻿row,section,name,possible,required_flux_kg_m2_s,critical_flux_kg_m2_s,required_mach,stagnation_temperature_K,stagnation_pressure_Pa,critical_temperature_K,source,value,limit,units,status,reason,message,details
+SA1,2,local streamtube choke conflict,False,471.9788967715772,471.97654888311433,,1249.9999317739803,422749.4410588134,1081.7030258543848,"original variable-cp h, pressure_isentropic, sound",,,,,,,
+SA1,,insufficient choked capacity,,,,,,,,,0.8336561286810448,0.8336628797375195,kg/s,,,,
+RK1,,vibration strength,,,,,,,,,,,,NOT_CHECKED,"NOT_CHECKED: no grade-specific fatigue curve, damping or actual harmonic forcing; beam modes are screening only",,
+SA2,3,local streamtube choke conflict,False,245.01918505473097,245.0191845353256,,1099.3008169721734,205284.8390134603,947.3366346025477,"original variable-cp h, pressure_isentropic, sound",,,,,,,
+SA2,,insufficient choked capacity,,,,,,,,,0.8334020495431521,0.8336628797375195,kg/s,,,,
+RK2,,vibration strength,,,,,,,,,,,,NOT_CHECKED,"NOT_CHECKED: no grade-specific fatigue curve, damping or actual harmonic forcing; beam modes are screening only",,
+RK2,,construction/calculation failure,,,,,,,,,,,,,,Parabola lies outside its source control triangle,"{""first_tangent_distance_m"": 0.00897506995565098, ""last_tangent_distance_m"": -0.0001337255879179956}"
+RK1,,source rotor taper mismatch,,,,,,,,,2.0161216574598875,1.6,,,,,
+RK1,,source rotor areas must decrease,,,,,,,,,"[0.000460946156824257, 0.00031825763757478806, 0.0002728343912490571, 0.0003015749477038428, 0.0002286301300909605]",strict decrease root to tip,,,,,
+RK2,,source rotor taper mismatch,,,,,,,,,1.5794079683592077,1.6,,,,,
+RK2,,source rotor areas must decrease,,,,,,,,,"[7.417139771755688e-05, 7.035259607978181e-05, 7.075895799758491e-05, 6.159881780467985e-05, 4.696151925497183e-05]",strict decrease root to tip,,,,,
+RK2,0,source finite trailing edge,,,,,,,,,0.0004605831397964747,0.0005,,,,,
+RK2,1,source finite trailing edge,,,,,,,,,0.0004791521812901888,0.0005,,,,,
+RK2,3,source finite trailing edge,,,,,,,,,0.0004848847624488851,0.0005,,,,,
+RK2,4,source finite trailing edge,,,,,,,,,0.0004512176577643749,0.0005,,,,,

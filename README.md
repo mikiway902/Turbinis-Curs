@@ -1,192 +1,119 @@
+<div align="center">
+
 # Turbinis-Curs
 
-Engineering study of a three-stage TPE331-class turbine: `N = 110 kW`,
-`T_g* = 1250 K`, `pi_k* = 11`, one shaft, constant hub diameter.
+**Расчёт двухступенчатой турбины — от газодинамики до профилей и прочности пера**
 
-A green test run is not evidence that the physics is correct. Read the
-authority documents before trusting any number produced here.
+Курсовой проект · Python / Jupyter · Чертежи DXF · Расчётные ведомости CSV
 
-## Start here
+[Открыть расчёт](General%20Calc/TVD_1CBK_2st_10000h-General.ipynb) · [Готовые результаты](General%20Calc/export/fixed/) · [Литература](General%20Calc/docs/)
 
-1. `docs/engineering/README.md` — what equation status means.
-2. `docs/engineering/METHOD.md` — calculation layers and the change gate.
-3. `docs/engineering/CONSTRAINTS.md` — hard project limits.
-4. `docs/engineering/EQUATIONS.md` — which relations are accepted.
-5. `docs/engineering/VALIDATION_CASES.md` — required solver evidence.
+</div>
 
-## Authority hierarchy
+---
 
-1. `docs/engineering/CONSTRAINTS.md` and `docs/engineering/EQUATIONS.md`.
-2. `reference/baselines/` — immutable regression baselines; changing one needs
-   a separate, user-approved task that explains the numerical difference.
-3. Code and historical notes in `Turbinis-Calc/`, `Turbinis-Cycle/`,
-   `Optimizer/`, and the notebooks.
+## О проекте
 
-Later sources never override earlier ones. Conflicting closures are not
-averaged. Only the user promotes an equation from `EXPERIMENTAL` to `ACCEPTED`.
+Проект турбовального двигателя с одним центробежным компрессором и двухступенчатой турбиной. Актуальный расчёт собран в одном Jupyter-ноутбуке: исходные данные, формулы, газодинамика, геометрия лопаток, проверки прочности и экспорт.
 
-## Canonical calculation paths
+**Текущий вариант — номинальная рабочая точка с фиксированной проточной частью**, а не подбор геометрии или расчёт вне номинального режима.
 
-| Path | Role |
-|---|---|
-| `turbine_engine/` | new extracted calculation package: stateless single-point cycle (`cycle.py`), gas properties (`gas.py`), scalar meanline stage (`stage.py`), root reaction relation (`reaction.py`), constant-hub three-stage orchestration (`orchestration.py`), turbine expansion iteration and preliminary sizing (`expansion.py`), meridional flowpath geometry (`geometry.py`), turbine aggregate performance (`performance.py`), the conventional multi-stage patched cell-16 baseline (`baseline.py`), and opt-in explicit 0D reference cycles for the three selected architectures (`architecture_cycle.py`); the architecture cycles are not physical validation and the package is not a 3D model |
-| `turbine/` | retained experimental radial-equilibrium package with unit, physics-invariant, regression, and optimization software checks; distinct from `turbine_engine/` |
-| `1-Turbinis-Curs-Last/` | separate two-stage course calculations: `TVD_1CBK_2st_300h.ipynb`, `TVD_1CBK_2st_2000h.ipynb`, and `TVD_1CBK_2st_10000h.ipynb` use fixed shaft speeds of 38,800, 33,200, and 30,700 rpm; `TVD_1CBK_2st_v8.ipynb` retains the previous-layout 2000-hour diagnostic. Larson–Miller normal-stress checks are preliminary, not qualified engine-life assessments |
-| `turbine_engine/README.md` | package scope, provenance, and current limitations |
-| `Turbinis-Cycle/Turbinis-Cycle.ipynb` | cycle boundary conditions: flow, pressure ratio, temperatures, power |
-| `Turbinis-Calc/Main_Turbinis_Calc_Book.ipynb` | legacy `book_approx` meanline, reproducible until each equation is migrated |
-| `Optimizer/` | search and diagnostics that must call the shared core; owns no private copies of physical equations |
-| `reference/baselines/` | frozen JSON baselines (`BOOK-APPROX-001`, `RADIAL-ANALYTIC-001`) |
+| Параметр | Принятое значение |
+| :--- | :--- |
+| Целевая мощность на валу | **110 кВт** |
+| Частота вращения | **30 700 об/мин** |
+| Наружный диаметр проточной части | **216,289 мм** |
+| Степень повышения давления в компрессоре | **5** |
+| Температура газа перед турбиной | **1250 К** |
+| Число лопаток СА1 / РК1 / СА2 / РК2 | **13 / 14 / 17 / 19** |
+| Профилирование | **20 сечений**, по 5 на каждый венец |
+| Основной материал рабочих лопаток | **ЖС6У**, равноосное литьё |
+| База проверки длительной прочности | **10 000 ч** |
 
-The extracted `turbine_engine` package includes opt-in explicit 0D reference
-cycles, but not accepted static-pressure radial equilibrium at
-`turbine_engine/radial/equilibrium.py`, full architecture closure, or 3D validation.
-The engineering authority documents and the separate `turbine/` implementation
-are retained in this merged checkout; their presence does not validate either model.
+> 110 кВт — входное условие баланса мощности. Проверка на 10 000 ч — расчётная оценка длительной прочности пера, не подтверждённый ресурс двигателя.
 
-`Optimizer/` and the notebooks remain `book_approx`; they are not closed
-three-dimensional physics.
+## Что внутри расчёта
 
-## Tests and verifier
+- **Газодинамика двух ступеней:** переменная теплоёмкость, баланс мощности, треугольники скоростей, потери зазора и диска, выходное сопло.
+- **Радиальное распределение:** скорости, углы, числа Маха, радиальное равновесие и замыкание расхода.
+- **Геометрия:** меридиональный контур, параболические профили по Виноградову, горла решёток, густота и межлопаточные проходы.
+- **Потери решёток:** профильные и концевые потери, сопоставление с принятыми коэффициентами скорости.
+- **Прочность РК1 и РК2:** площади и моменты инерции сечений, центробежные и газовые нагрузки, изгибные напряжения.
+- **Длительная прочность:** оценка по Ларсону — Миллеру для ЖС6У, сравнение с ЖС6К для РК2 и отдельные архивные результаты.
+- **Экспорт:** чертёж второй ступени на листе А1, DXF-профили, координаты для сплайнов и подробные CSV-ведомости.
 
-```bash
-python scripts/verify.py
-python scripts/verify.py --executable-checks
-python -m unittest discover -s scripts -p "test_*.py" -v
-python -m unittest discover -s turbine_engine/tests -p "test_*.py" -v
-```
+## Чертёж второй ступени
 
-The `scripts` suite covers the verifier and existing regression anchors; the
-`turbine_engine` suite covers the extracted cycle, gas, stage, reaction,
-const-hub orchestration, turbine expansion/sizing, meridional flowpath
-geometry, turbine aggregate-performance modules, and the conventional
-multi-stage cell-16 baseline. These tests check repository structure and
-software-drift anchors only; they do not run an optimizer search or establish
-calculation correctness.
+[![Чертёж второй ступени: профили, каналы и треугольники скоростей](General%20Calc/export/fixed/stage2_fixed_A1.jpeg)](General%20Calc/export/fixed/stage2_fixed_A1.jpeg)
 
-The default verifier is read-only and static. `--executable-checks` additionally
-selects the retained `turbine/` syntax/import checks, test groups, and baseline
-reproduction runner; it is not physical validation of either calculation family.
+[Скачать чертёж в DXF](General%20Calc/export/fixed/stage2_fixed_A1.dxf)
 
-`turbine_engine/baseline.py` copies the *currently executed patched* notebook
-cell 16, including its stable-flow reset wrapper `_N_of(G)`, iteration limits,
-tolerances, clamps, failure handling, stage sequence and iteration log. It
-changes no equations or physical assumptions. `_evaluate(stage_core=True)`
-skips the notebook cell and installs the module outputs; the cell's pandas
-presentation tables and `display` calls are omitted on that path.
-`_evaluate(stage_core=False)` still executes the patched notebook cell in full
-as the independent comparison path.
+## Быстрый запуск
 
-In the project container:
+Нужен **Python 3.10+**. Ноутбук рассчитан на **NumPy 2.x**; остальные используемые библиотеки перечислены в команде установки.
 
-```bash
-podman exec -i -w /home/jovyan/work/Turbinis-Curs jupyter \
-  python scripts/verify.py --executable-checks --allow-baseline-changes
-```
-
-`--allow-baseline-changes` exists for setup/review only; it is never an
-approval of changed physics.
-
-## Python environment
-
-`pyproject.toml` declares dependencies and installs the extracted `turbine`
-and `turbine_engine` packages. Legacy hyphenated calculation directories retain
-their path-based imports; no CLI entry point is declared.
-
-Runtime dependencies for the calculation and optimizer core:
-
-- Python 3.10 or newer (developed and checked with 3.12).
-- `numpy` (`Optimizer/`, `Turbinis-Calc/constraints.py`).
-- `scipy` (`Optimizer/optimizer_core.py`, `Optimizer/optimize_extended.py`,
-  `Optimizer/rotor_exit_solve.py`, `Turbinis-Calc/constraints.py`).
-- `pandas` (`Optimizer/optimizer_core.py` and the JSON/CSV helper scripts).
-
-Optional groups:
-
-| Group | Packages | Needed for |
-|---|---|---|
-| `plot` | `matplotlib` | `Optimizer/scan2d.py`, `Optimizer/stage6.py`, and notebook plots |
-| `test` | `pytest>=8` | executable package test groups |
-| `notebook` | `jupyterlab`, `nbconvert`, `ipykernel`, `openpyxl`, `jinja2`, `matplotlib` | executing the notebooks; `openpyxl` is used by the workbook export and `jinja2` by pandas `Styler` |
-| `digitize` | `Pillow` | `Turbinis-Calc/plot_user_digitization.py` |
-| `parquet` | `pyarrow>=14` | streaming RAW Parquet export; JSONL remains available without it |
-| `jax` | `jax>=0.12` | optional float64 kernel validation; see `docs/BACKENDS.md` |
-
-The validated CUDA path uses the user-local WSL2 environment described in
-`docs/BACKENDS.md`, not the Windows CPU-only JAX install.
-
-Windows PowerShell:
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -e ".[plot,notebook]"
-```
-
-Linux/macOS:
+Из корня репозитория, в Linux / macOS:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -e ".[plot,notebook]"
+python -m pip install jupyterlab ipykernel "numpy>=2,<3" scipy pandas matplotlib ezdxf
+python -m ipykernel install --user --name turbinis-curs --display-name "Python (Turbinis-Curs)"
+cd "General Calc"
+python -m jupyterlab TVD_1CBK_2st_10000h-General.ipynb
 ```
 
-If you prefer not to install the project, install the libraries directly:
+В Windows создайте окружение командой `py -m venv .venv`, затем активируйте его через `.venv\Scripts\Activate.ps1` в PowerShell. Остальные команды те же.
 
-```bash
-python -m pip install numpy scipy pandas matplotlib
-python -m pip install jupyterlab nbconvert ipykernel openpyxl jinja2
+В JupyterLab:
+
+1. Выберите ядро **Python (Turbinis-Curs)**.
+2. Выполните **Kernel → Restart Kernel and Run All Cells**.
+3. Просмотрите таблицы проверок и расчётные ведомости. Экспорт записывается в `General Calc/export/fixed/` при запуске из указанной папки.
+
+Все исходные данные находятся в ноутбуке. Повторный запуск обновляет экспортируемые файлы. При нарушении проверяемых балансов, неразрывности или контрольной суммы геометрии расчёт останавливается до экспорта.
+
+> Геометрия закреплена в `STAGE_RINGS`, `CHANNEL_NODES` и `BLADE_SECTIONS`. Изменение исходных параметров не запускает автоматическое перепроектирование: согласованность нового варианта нужно проверять отдельно.
+
+## Навигация по результатам
+
+Все файлы ниже находятся в [`General Calc/export/fixed/`](General%20Calc/export/fixed/).
+
+| Результат | Файл / каталог |
+| :--- | :--- |
+| Сводка номинального режима | [`nominal_summary.csv`](General%20Calc/export/fixed/nominal_summary.csv) |
+| Балансы и контрольные проверки | [`balances.csv`](General%20Calc/export/fixed/balances.csv) |
+| Подробный расчёт ступеней | [`stage_calculation.csv`](General%20Calc/export/fixed/stage_calculation.csv) |
+| Параметры газа по сечениям | [`gas_stations.csv`](General%20Calc/export/fixed/gas_stations.csv) |
+| Меридиональный контур | [`meridional_contour.csv`](General%20Calc/export/fixed/meridional_contour.csv) |
+| Проверки профилей | [`profile_checks.csv`](General%20Calc/export/fixed/profile_checks.csv) |
+| Нагрузки и напряжения рабочих лопаток | [`rotor_loads_and_stresses.csv`](General%20Calc/export/fixed/rotor_loads_and_stresses.csv) |
+| Сравнение материалов и оценки ресурса пера | [`resource_material_comparison.csv`](General%20Calc/export/fixed/resource_material_comparison.csv) |
+| Чертёж второй ступени А1 | [`stage2_fixed_A1.dxf`](General%20Calc/export/fixed/stage2_fixed_A1.dxf) |
+| Контуры и координаты профилей второй ступени | [`profiles/`](General%20Calc/export/fixed/profiles/) |
+| Координаты треугольников скоростей | [`triangles/`](General%20Calc/export/fixed/triangles/) |
+
+## Структура репозитория
+
+```text
+Turbinis-Curs/
+├── README.md
+├── General Calc/                         # актуальный расчёт
+│   ├── TVD_1CBK_2st_10000h-General.ipynb  # основной ноутбук
+│   ├── docs/                             # справочная литература
+│   └── export/fixed/                     # чертежи и ведомости
+└── OLD/                                  # предыдущие реализации
+    ├── 1 attempt/
+    └── 2 attempt/
 ```
 
-The documented dependency set was installed in the repository-local `.venv` on
-Windows with Python 3.12.10. The calculation dependencies resolved to NumPy
-2.5.4, SciPy 1.18.1, and pandas 3.1.1. No lock file is checked in, so fresh
-installs may resolve different versions; notebook execution has not yet been
-validated end to end.
+`OLD/` сохраняет историю подходов и экспериментов. Для текущего варианта начинайте с `General Calc/`; инструкции и результаты старых реализаций относятся к своим версиям.
 
-## Model status
+## Методика и границы применимости
 
-- Architecture-specific 0D cycles: `REFERENCE` only. `turbine_engine/architecture_cycle.py`
-  closes the explicit uncooled/no-bleed variant for single-shaft single-CC,
-  single-shaft dual-CC and free-power-turbine topologies, including the
-  GG -> FPT total-state transfer and pre-reducer power sizing. It is not
-  physically validated and does not supply compressor maps, blading, stage
-  inventory, cooling, gear ratio, or propeller load.
-- Static-pressure radial equilibrium: `ACCEPTED` as a governing relation, but
-  its implementation (`turbine_engine/radial/equilibrium.py`) is absent from
-  this checkout.
-- Equivalent thermodynamic and general radial residuals: `ACCEPTED` as
-  independent implementations (they are not extra momentum terms).
-- Rotor energy relation and coupled rotor-exit system B: `EXPERIMENTAL`;
-  stage residuals are roughly 0.4–0.7 % (stage 1), 1.8–2.0 % (stage 2), and
-  12–15 % (stage 3) under the polynomial `c2u` closure. This is diagnostic
-  evidence, not accepted closure.
-- Entropy-augmented pressure residual: `REJECTED` (double-counts entropy).
-- `BOOK-APPROX-001` output is diagnostic: it detects software drift, it does
-  not prove momentum, energy, loss, and integral-flow closure.
-- Temperature-dependent strength, creep/resource, thermal stress, cooling,
-  real blade profiles, and third-stage root reaction: `NOT_CHECKED`.
+Расчёт опирается на работы **В. Е. Михальцева и Д. В. Молякова** по теории и проектированию газовых турбин и **Л. В. Виноградова** по автоматизированному проектированию лопаток. PDF-материалы находятся в [`General Calc/docs/`](General%20Calc/docs/); ссылки на страницы и принятые допущения приведены рядом с формулами в ноутбуке.
 
-## Index
-
-- `docs/README.md` — documentation index (engineering, comparisons, history).
-- `docs/comparisons/` — comparisons against the external Mathcad and
-  `TVD_pi6` models.
-- `archive/README.md` — archived diagnostics and the legacy comparison
-  workbench.
-- `Optimizer/results/README.md` — what the generated result families are.
-- `reference/README.md` — baseline and published-case policy.
-- `exports/pdf/variant_length_only_book_approx.pdf`
-- `exports/pdf/variant_longest_rotor_with_violations.pdf`
-
-## Retained root source notebooks
-
-`Mathcad_ST_cooling_Jupyter.ipynb`, `Anton-Mathcad_ST_cooling_Jupyter (2).ipynb`,
-and `Sergey-TVD_pi6_sequential.ipynb` are external comparison notebooks kept at
-the repository root. They are path-sensitive source files: they are not part
-of the project authority and must not be rebuilt or relocated without an
-explicit instruction.
-
-`reference/published_cases/1Anton-Mathcad_ST_cooling_Jupyter (3).ipynb` is a
-retained external case notebook, byte-identical to the file that used to sit at
-the root.
+- Для работы вне номинальной точки нужен отдельный расчёт режима на заданной геометрии.
+- Радиальный зазор **0,5 мм** — принятый рабочий размер; холодный сборочный зазор требует расчёта температурных деформаций и допусков.
+- Модели потерь и длительной прочности содержат приближения и экстраполяции. Их невязки и ограничения остаются в ведомостях.
+- Назначение гарантированного ресурса требует испытаний реальных отливок и проверки условий эксплуатации; расчёт пера сам по себе этого не заменяет.

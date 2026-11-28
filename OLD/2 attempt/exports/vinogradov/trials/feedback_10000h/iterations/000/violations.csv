@@ -1,0 +1,15 @@
+﻿row,section,name,possible,required_flux_kg_m2_s,critical_flux_kg_m2_s,required_mach,stagnation_temperature_K,stagnation_pressure_Pa,critical_temperature_K,source,value,estimated_error_kg_s,limit,units,radius_m,status,reason
+SA1,0,local streamtube choke conflict,False,538.9756592713645,471.9765445887573,,1249.9999999999998,422749.4491921801,1081.7030867407584,"original variable-cp h, pressure_isentropic, sound",,,,,,,
+SA1,3,local streamtube choke conflict,False,516.470411708975,471.9765440501777,,1249.9999895364103,422749.4468724699,1081.7030774028253,"original variable-cp h, pressure_isentropic, sound",,,,,,,
+SA1,4,local streamtube choke conflict,False,535.0632276786695,471.97654458875684,,1249.9999999999998,422749.44919217966,1081.7030867407584,"original variable-cp h, pressure_isentropic, sound",,,,,,,
+SA1,,insufficient choked capacity,,,,,,,,,0.8101956466970526,1.189898310119674e-09,0.8336628797375195,kg/s,,,
+SA1,,radial local choke conflict,,,,,,,,,-0.1344234629768719,,0.0,,0.10733031653632892,,
+SA1,,radial CAD mesh unconverged,,,,,,,,,2.870801314249063e-05,,2e-05,,,,
+RK1,,vibration strength,,,,,,,,,,,,,,NOT_CHECKED,"NOT_CHECKED: no grade-specific fatigue curve, damping or actual harmonic forcing; beam modes are screening only"
+SA2,1,local streamtube choke conflict,False,253.42595950117192,245.01920054288667,,1099.3007737442865,205284.8482237486,947.3365961042688,"original variable-cp h, pressure_isentropic, sound",,,,,,,
+SA2,2,local streamtube choke conflict,False,276.04766438071323,245.01918982972262,,1099.3008533053826,205284.8469805286,947.336666960503,"original variable-cp h, pressure_isentropic, sound",,,,,,,
+SA2,,insufficient choked capacity,,,,,,,,,0.8249304467205233,1.2496505729244083e-09,0.8336628797375195,kg/s,,,
+SA2,,radial local choke conflict,,,,,,,,,-0.11247698308280774,,0.0,,0.09916211337359318,,
+SA2,,radial CAD mesh unconverged,,,,,,,,,3.3935363010841336e-05,,2e-05,,,,
+RK2,,vibration strength,,,,,,,,,,,,,,NOT_CHECKED,"NOT_CHECKED: no grade-specific fatigue curve, damping or actual harmonic forcing; beam modes are screening only"
+SA2,3,source finite trailing edge,,,,,,,,,0.0004786220488437605,,0.0005,,,,

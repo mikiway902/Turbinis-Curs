@@ -1,0 +1,2 @@
+﻿material,rotor,T_bound_K,sigma_normal_max_MPa,archived_rupture_hours,C_LM,source,life_h,required_margin,recomputed_rupture_hours,design_life_hours,sigma_at_target_MPa,margin_at_target
+ХН70ВМТЮ (ЭИ617),2,1026.015766,358.853117,148.226733,20,"Архивный §32.6. Кривая 7 из «Пример курсового/РПЗ.pdf», печатные с. 59–60, рис. 6.",10000,1.2,148.22673564,33.049622497,184.85415426,0.51512483938

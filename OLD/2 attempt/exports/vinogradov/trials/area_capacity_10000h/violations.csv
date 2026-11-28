@@ -1,0 +1,18 @@
+﻿row,section,name,value,limit,passed,classification,source,units,note,status,reason,message,details
+RK1,1,axial envelope boundary,6.152942788829768e-05,4.474617130550364e-09,False,numerical,Prescribed axial width between leading/trailing outer edge planes,m,,,,,
+RK1,1,axial envelope boundary,6.152942788829768e-05,4.474617130550364e-09,False,numerical,Prescribed axial width between leading/trailing outer edge planes,m,,,,,
+RK1,2,axial envelope boundary,2.7378802694833312e-05,4.396093016083864e-09,False,numerical,Prescribed axial width between leading/trailing outer edge planes,m,,,,,
+RK1,2,axial envelope boundary,2.7378802694833312e-05,4.396093016083864e-09,False,numerical,Prescribed axial width between leading/trailing outer edge planes,m,,,,,
+RK1,3,axial envelope boundary,7.328917099544576e-06,4.525110878264032e-09,False,numerical,Prescribed axial width between leading/trailing outer edge planes,m,,,,,
+RK1,3,axial envelope boundary,7.328917099544576e-06,4.525110878264032e-09,False,numerical,Prescribed axial width between leading/trailing outer edge planes,m,,,,,
+RK1,4,axial envelope boundary,1.3229756347514307e-05,4.112931344530937e-09,False,numerical,Prescribed axial width between leading/trailing outer edge planes,m,,,,,
+RK1,4,axial envelope boundary,1.3229756347514307e-05,4.112931344530937e-09,False,numerical,Prescribed axial width between leading/trailing outer edge planes,m,,,,,
+RK1,,vibration strength,,,,,,,,NOT_CHECKED,"NOT_CHECKED: no grade-specific fatigue curve, damping or actual harmonic forcing; beam modes are screening only",,
+RK1,,construction/calculation failure,,,,,,,,,,Intermediate radial profile fails geometry validation,"{""radius_m"": 0.0959922485092956, ""checks"": [{""name"": ""axial envelope boundary"", ""value"": 6.114424856496559e-05, ""limit"": 4.475128816907197e-09, ""passed"": false, ""classification"": ""numerical"", ""source"": ""Prescribed axial width between leading/trailing outer edge planes"", ""units"": ""m"", ""note"": """"}]}"
+RK2,1,axial envelope boundary,2.4513344319662207e-08,2.276885051369703e-09,False,numerical,Prescribed axial width between leading/trailing outer edge planes,m,,,,,
+RK2,1,axial envelope boundary,2.4513344319662207e-08,2.276885051369703e-09,False,numerical,Prescribed axial width between leading/trailing outer edge planes,m,,,,,
+RK2,2,axial envelope boundary,9.543603167271896e-06,2.204056025328395e-09,False,numerical,Prescribed axial width between leading/trailing outer edge planes,m,,,,,
+RK2,2,axial envelope boundary,9.543603167271896e-06,2.204056025328395e-09,False,numerical,Prescribed axial width between leading/trailing outer edge planes,m,,,,,
+RK2,,vibration strength,,,,,,,,NOT_CHECKED,"NOT_CHECKED: no grade-specific fatigue curve, damping or actual harmonic forcing; beam modes are screening only",,
+RK2,,construction/calculation failure,,,,,,,,,,Intermediate radial profile fails geometry validation,"{""radius_m"": 0.09278951469619766, ""checks"": [{""name"": ""axial envelope boundary"", ""value"": 2.3230826735881203e-08, ""limit"": 2.2770670114543572e-09, ""passed"": false, ""classification"": ""numerical"", ""source"": ""Prescribed axial width between leading/trailing outer edge planes"", ""units"": ""m"", ""note"": """"}]}"
+RK2,3,source finite trailing edge,0.00048638910070414836,0.0005,,,,,,,,,

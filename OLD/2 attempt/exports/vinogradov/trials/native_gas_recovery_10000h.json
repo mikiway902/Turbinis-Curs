@@ -1,0 +1,57 @@
+{
+  "failed": true,
+  "error_type": "Bad",
+  "message": "Ресурсная компоновка не найдена: Positive directional derivative for linesearch; min g=-0.325217",
+  "stress_factors": [
+    1.95,
+    1.95
+  ],
+  "config": {
+    "target_W": 110000.0,
+    "pi_k": 5.0,
+    "Ta": 288.0,
+    "pa": 101300.0,
+    "Tg": 1250.0,
+    "R": 287.4,
+    "eta_pc": 0.85,
+    "eta_burn": 0.98,
+    "eta_mech": 0.99,
+    "eta_gear": 0.98,
+    "sigma_in": 0.98,
+    "sigma_burn": 0.96,
+    "sigma_exhaust": 0.99,
+    "Q_LHV": 43000000.0,
+    "l0": 14.61,
+    "Tref": 288.0,
+    "g_leak": 0.0075,
+    "phi": [
+      0.8818921977644429,
+      0.9002568414422932
+    ],
+    "psi": [
+      0.9230975697395587,
+      0.9371526319047682
+    ],
+    "mu": 0.9,
+    "sigma_mix": 0.995,
+    "delta_rel": 0.007,
+    "delta_min": 0.0005,
+    "epsilon": 1.0,
+    "Kn": 6.8e-06,
+    "sigma_project_MPa": 200.0,
+    "pback_ratio": 1.05,
+    "phi_nozzle": 0.95,
+    "flight_speed": 0.0,
+    "rho_stage1": 0.19460382006761426,
+    "rho_stage2": 0.2323782218109361
+  },
+  "geometry": [
+    30700.0,
+    0.21628855281243597,
+    11.2,
+    17.23138611020823,
+    1.0121808618089065,
+    1.0456293114692594,
+    0.517006670480376
+  ]
+}

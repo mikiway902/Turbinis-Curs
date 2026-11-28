@@ -1,0 +1,15 @@
+﻿row,name,status,reason,section,possible,required_flux_kg_m2_s,critical_flux_kg_m2_s,required_mach,stagnation_temperature_K,stagnation_pressure_Pa,critical_temperature_K,source,value,limit,units,message,details
+RK1,vibration strength,NOT_CHECKED,"NOT_CHECKED: no grade-specific fatigue curve, damping or actual harmonic forcing; beam modes are screening only",,,,,,,,,,,,,,
+SA2,local streamtube choke conflict,,,0,False,245.0519073905243,245.0191897316294,,1099.3008865253757,205284.8501270197,947.3366965458624,"original variable-cp h, pressure_isentropic, sound",,,,,
+SA2,local streamtube choke conflict,,,2,False,245.1098785841171,245.01918982972262,,1099.3008533053826,205284.8469805286,947.336666960503,"original variable-cp h, pressure_isentropic, sound",,,,,
+SA2,insufficient choked capacity,,,,,,,,,,,,0.8334634748676345,0.8336628797375195,kg/s,,
+RK2,vibration strength,NOT_CHECKED,"NOT_CHECKED: no grade-specific fatigue curve, damping or actual harmonic forcing; beam modes are screening only",,,,,,,,,,,,,,
+RK2,construction/calculation failure,,,,,,,,,,,,,,,Parabola lies outside its source control triangle,"{""first_tangent_distance_m"": 0.00809752571296987, ""last_tangent_distance_m"": -3.850236737335106e-05}"
+RK1,source rotor taper mismatch,,,,,,,,,,,,2.0149129288828442,1.6,,,
+RK1,source rotor areas must decrease,,,,,,,,,,,,"[0.0004563888687885201, 0.00031485380872702494, 0.000270163751032729, 0.0002988128119772796, 0.00022650550415672898]",strict decrease root to tip,,,
+RK2,source rotor taper mismatch,,,,,,,,,,,,1.5821067041621235,1.6,,,
+RK2,source rotor areas must decrease,,,,,,,,,,,,"[7.357287847745807e-05, 7.017780735231546e-05, 7.114277298002103e-05, 6.234207176616152e-05, 4.6503107713219595e-05]",strict decrease root to tip,,,
+RK2,source finite trailing edge,,,0,,,,,,,,,0.000475858468384894,0.0005,,,
+RK2,source finite trailing edge,,,1,,,,,,,,,0.0004939678166344679,0.0005,,,
+RK2,source finite trailing edge,,,3,,,,,,,,,0.0004958339773854927,0.0005,,,
+RK2,source finite trailing edge,,,4,,,,,,,,,0.00043960869825547213,0.0005,,,

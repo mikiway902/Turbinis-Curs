@@ -1,0 +1,2 @@
+﻿rotor,material,density_kg_m3,T_bound_C,extrapolation_T_C,life_h,sigma_normal_max_MPa,extrapolated_sigma_MPa,extrapolated_margin,source,source_url,status
+2,"ЖС6К, равноосное литьё",8160,739.27753453,800,10000,168.81982961,277.69230769,1.6449033762,"А. Ф. Белов и др., «Строение и свойства авиационных материалов», раздел о длительной прочности, рис. 99",https://djvu.online/file/VFveSPQ4Ogpea,Оценка по двум точкам. Подтверждение на 10 000 ч требуется.
